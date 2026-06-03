@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     db_validate_on_startup: bool = Field(default=True, validation_alias="DB_VALIDATE_ON_STARTUP")
     startup_diagnostics: bool = Field(default=False, validation_alias="STARTUP_DIAGNOSTICS")
 
+    jwt_secret_key: str = Field(default="change_me", validation_alias="JWT_SECRET_KEY")
+    jwt_algorithm: str = Field(default="HS256", validation_alias="JWT_ALGORITHM")
+    jwt_access_token_expires_minutes: int = Field(default=60, validation_alias="JWT_ACCESS_TOKEN_EXPIRES_MINUTES")
+
     postgres_host: str = Field(default="localhost", validation_alias="POSTGRES_HOST")
     postgres_port: int = Field(default=5432, validation_alias="POSTGRES_PORT")
     postgres_db: str = Field(default="airtel_sales_assistant", validation_alias="POSTGRES_DB")
