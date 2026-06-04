@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+from datetime import datetime
 
 from typing import Protocol
 
@@ -22,3 +23,5 @@ class TaskRepository(Protocol):
         priority: TaskStatus | None,
         due_at: object | None,
     ) -> Task: ...
+
+    def complete_task(self, task: Task, completed_at: datetime) -> Task: ...

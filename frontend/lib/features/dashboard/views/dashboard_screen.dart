@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
+import 'package:frontend/features/customers/providers/customer_provider.dart';
+import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:gap/gap.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -11,6 +13,8 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authProvider).user;
+    final customersAsync = ref.watch(customerListProvider);
+    final tasksAsync = ref.watch(taskListProvider);
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
@@ -69,10 +73,47 @@ class DashboardScreen extends ConsumerWidget {
               crossAxisSpacing: 12,
               childAspectRatio: 1.5,
               children: [
-                _buildMetricCard('Total Customers', '0', Icons.people, Colors.blue),
-                _buildMetricCard('Pending Tasks', '0', Icons.task, Colors.orange),
-                _buildMetricCard('Upcoming Meetings', '0', Icons.event, Colors.green),
-                _buildMetricCard('Recent Notes', '0', Icons.note, Colors.purple),
+                // Total Customers — live from customerListProvider
+                _buildMetricCard(
+                  'Total Customers',
+                  customersAsync.when(
+                    data: (list) => '${list.length}',
+                    loading: () => '…',
+                    error: (_, __) => '–',
+                  ),
+                  Icons.people,
+                  Colors.blue,
+                  onTap: () => context.push('/customers'),
+                ),
+
+                // Pending Tasks — live from taskListProvider (filter applied separately)
+                _buildMetricCard(
+                  'Pending Tasks',
+                  tasksAsync.when(
+                    data: (list) => '${list.where((t) => t.status.name == 'pending').length}',
+                    loading: () => '…',
+                    error: (_, __) => '–',
+                  ),
+                  Icons.task,
+                  Colors.orange,
+                  onTap: () => context.push('/tasks'),
+                ),
+
+                // Upcoming Meetings — placeholder until Phase 4
+                _buildMetricCard(
+                  'Upcoming Meetings',
+                  '–',
+                  Icons.event,
+                  Colors.green,
+                ),
+
+                // Recent Notes — placeholder until Phase 4
+                _buildMetricCard(
+                  'Recent Notes',
+                  '–',
+                  Icons.note,
+                  Colors.purple,
+                ),
               ],
             ),
             const Gap(24),
@@ -89,10 +130,13 @@ class DashboardScreen extends ConsumerWidget {
               children: [
                 _buildActionButton('Add Customer', Icons.person_add,
                     () => context.push('/customers/create')),
-                _buildActionButton('Create Task', Icons.add_task, () {}),
+                _buildActionButton('Create Task', Icons.add_task,
+                    () => context.push('/tasks/create')),
                 _buildActionButton('Schedule Meeting', Icons.calendar_today, () {}),
                 _buildActionButton('View Customers', Icons.people_outline,
                     () => context.push('/customers')),
+                _buildActionButton('View Tasks', Icons.checklist,
+                    () => context.push('/tasks')),
               ],
             ),
           ],
@@ -125,21 +169,33 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMetricCard(String title, String value, IconData icon, Color color) {
+  Widget _buildMetricCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color, {
+    VoidCallback? onTap,
+  }) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 28),
-            const Gap(8),
-            Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const Gap(4),
-            Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey), textAlign: TextAlign.center),
-          ],
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: color, size: 28),
+              const Gap(8),
+              Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              const Gap(4),
+              Text(title,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  textAlign: TextAlign.center),
+            ],
+          ),
         ),
       ),
     );

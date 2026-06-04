@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
 
@@ -47,4 +47,19 @@ class TaskService:
         task = self._tasks.get_by_id(task_id)
         if task is None or task.user_id != user_id:
             raise TaskNotFoundError("Task not found")
+        return task
+
+    def complete_task(self, *, task_id: uuid.UUID, user_id: uuid.UUID) -> Task:
+        """Mark a task as completed. Idempotent — safe to call on an already-completed task."""
+        task = self._tasks.get_by_id(task_id)
+        if task is None or task.user_id != user_id:
+            raise TaskNotFoundError("Task not found")
+
+        # Idempotent: if already completed, return as-is without touching the DB.
+        if task.status == TaskStatus.completed:
+            return task
+
+        task = self._tasks.complete_task(task, completed_at=datetime.now(tz=timezone.utc))
+        self._db.commit()
+        self._db.refresh(task)
         return task

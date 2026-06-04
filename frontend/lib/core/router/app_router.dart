@@ -7,6 +7,9 @@ import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
 import 'package:frontend/features/customers/views/customer_list_screen.dart';
 import 'package:frontend/features/customers/views/customer_create_screen.dart';
 import 'package:frontend/features/customers/views/customer_detail_screen.dart';
+import 'package:frontend/features/tasks/views/task_list_screen.dart';
+import 'package:frontend/features/tasks/views/task_create_screen.dart';
+import 'package:frontend/features/tasks/views/task_detail_screen.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -65,6 +68,23 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           return CustomerDetailScreen(customerId: id);
+        },
+      ),
+
+      // Tasks
+      GoRoute(
+        path: '/tasks',
+        builder: (context, state) => const TaskListScreen(),
+      ),
+      GoRoute(
+        path: '/tasks/create',
+        builder: (context, state) => const TaskCreateScreen(),
+      ),
+      GoRoute(
+        path: '/tasks/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return TaskDetailScreen(taskId: id);
         },
       ),
     ],

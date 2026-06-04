@@ -46,3 +46,9 @@ class SqlAlchemyTaskRepository:
         self._db.add(task)
         self._db.flush()
         return task
+
+    def complete_task(self, task: Task, completed_at: datetime) -> Task:
+        task.status = TaskStatus.completed
+        task.completed_at = completed_at
+        self._db.flush()
+        return task

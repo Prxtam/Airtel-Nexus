@@ -80,3 +80,27 @@ def get_task(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 
     return _task_to_response(task)
+
+
+@router.post(
+    "/{task_id}/complete",
+    response_model=TaskResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Mark a task as completed",
+)
+def complete_task(
+    task_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    service: TaskService = Depends(get_task_service),
+) -> TaskResponse:
+    """
+    Mark a task as completed. Ownership is enforced — users can only complete
+    their own tasks. This endpoint is idempotent: calling it on an already-completed
+    task returns 200 with the unchanged task.
+    """
+    try:
+        task = service.complete_task(task_id=task_id, user_id=current_user.id)
+    except TaskNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+
+    return _task_to_response(task)
