@@ -18,3 +18,4 @@ anyio==4.4.0
 # Security (Auth Phase 1)
 python-jose==3.3.0
 bcrypt==4.2.0
+python-multipart==0.0.30
