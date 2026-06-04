@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:frontend/features/auth/views/login_screen.dart';
 import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
+import 'package:frontend/features/customers/views/customer_list_screen.dart';
+import 'package:frontend/features/customers/views/customer_create_screen.dart';
+import 'package:frontend/features/customers/views/customer_detail_screen.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -46,6 +49,23 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/home',
         builder: (context, state) => const DashboardScreen(),
+      ),
+
+      // Customers
+      GoRoute(
+        path: '/customers',
+        builder: (context, state) => const CustomerListScreen(),
+      ),
+      GoRoute(
+        path: '/customers/create',
+        builder: (context, state) => const CustomerCreateScreen(),
+      ),
+      GoRoute(
+        path: '/customers/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return CustomerDetailScreen(customerId: id);
+        },
       ),
     ],
   );

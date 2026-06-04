@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:gap/gap.dart';
@@ -86,10 +87,12 @@ class DashboardScreen extends ConsumerWidget {
               spacing: 12,
               runSpacing: 12,
               children: [
-                _buildActionButton('Add Customer', Icons.person_add, () {}),
+                _buildActionButton('Add Customer', Icons.person_add,
+                    () => context.push('/customers/create')),
                 _buildActionButton('Create Task', Icons.add_task, () {}),
                 _buildActionButton('Schedule Meeting', Icons.calendar_today, () {}),
-                _buildActionButton('View Customers', Icons.people_outline, () {}),
+                _buildActionButton('View Customers', Icons.people_outline,
+                    () => context.push('/customers')),
               ],
             ),
           ],
