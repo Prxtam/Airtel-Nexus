@@ -120,9 +120,13 @@ def update_note(
     return _note_to_response(note)
 
 
+from fastapi import Response
+
 @router.delete(
     "/{note_id}",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+    response_model=None,
 )
 def delete_note(
     note_id: uuid.UUID,

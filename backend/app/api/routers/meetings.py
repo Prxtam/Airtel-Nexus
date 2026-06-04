@@ -113,9 +113,13 @@ def update_meeting(
     return _meeting_to_response(meeting)
 
 
+from fastapi import Response
+
 @router.delete(
     "/{meeting_id}",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+    response_model=None,
 )
 def delete_meeting(
     meeting_id: uuid.UUID,

@@ -1,7 +1,15 @@
 venv/
+.venv/
+backend/.venv/
+
 .env
+
 __pycache__/
 *.pyc
 .pytest_cache/
+
 .idea/
 .vscode/
+
+frontend/.dart_tool/
+frontend/build/
