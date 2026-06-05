@@ -261,3 +261,34 @@ Architecture:
 - AutoDispose filter state
 - Zero backend changes
 - All features manually tested on Android device
+
+
+## Phase 6A Complete - AI Sales Assistant
+
+Implemented:
+- AI Copilot for Meeting Detail
+- Meeting Summary generation
+- Action Item extraction
+- Follow-up Email drafting
+- LLM abstraction layer
+- MockLLMClient and OpenAIClient support
+
+Development Note:
+- Local development moved to port 8001 due to another process occupying port 8000.
+- adb reverse configured for tcp:8001.
+
+
+## Development Environment Note
+
+During Phase 6A debugging, port 8000 was occupied by another local process.
+Development backend was validated on port 8001 using:
+
+uvicorn app.main:app --reload --port 8001
+
+Flutter:
+AppConstants.baseUrl = http://127.0.0.1:8001
+
+ADB:
+adb reverse tcp:8001 tcp:8001
+
+
