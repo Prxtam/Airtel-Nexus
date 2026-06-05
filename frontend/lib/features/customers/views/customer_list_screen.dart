@@ -6,13 +6,21 @@ import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
+import 'package:frontend/features/customers/providers/customer_filter_provider.dart';
 
 class CustomerListScreen extends ConsumerWidget {
   const CustomerListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final customersAsync = ref.watch(customerListProvider);
+    final customersAsync = ref.watch(filteredCustomerListProvider);
+    final rawCustomersAsync = ref.watch(customerListProvider);
+    final currentSort = ref.watch(customerSortProvider);
+
+    final hasNoCustomersAtAll = rawCustomersAsync.maybeWhen(
+      data: (list) => list.isEmpty,
+      orElse: () => false,
+    );
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
@@ -20,6 +28,32 @@ class CustomerListScreen extends ConsumerWidget {
         title: const Text('Customers'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
+        actions: [
+          if (!hasNoCustomersAtAll)
+            PopupMenuButton<CustomerSort>(
+              icon: const Icon(Icons.sort),
+              initialValue: currentSort,
+              onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: CustomerSort.nameAsc,
+                  child: Text('Name (A-Z)'),
+                ),
+                const PopupMenuItem(
+                  value: CustomerSort.nameDesc,
+                  child: Text('Name (Z-A)'),
+                ),
+                const PopupMenuItem(
+                  value: CustomerSort.newestFirst,
+                  child: Text('Newest First'),
+                ),
+                const PopupMenuItem(
+                  value: CustomerSort.oldestFirst,
+                  child: Text('Oldest First'),
+                ),
+              ],
+            ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/customers/create'),
@@ -33,7 +67,38 @@ class CustomerListScreen extends ConsumerWidget {
           message: e.toString(),
           onRetry: () => ref.read(customerListProvider.notifier).refresh(),
         ),
-        data: (customers) => _buildList(context, ref, customers),
+        data: (customers) {
+          if (hasNoCustomersAtAll) {
+             return AppEmptyWidget(
+              icon: Icons.people_outline,
+              message: 'No customers yet.\nTap + to add your first customer.',
+              actionLabel: 'Add Customer',
+              onAction: () => context.push('/customers/create'),
+            );
+          }
+
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: TextField(
+                  onChanged: (val) => ref.read(customerSearchProvider.notifier).state = val,
+                  decoration: InputDecoration(
+                    hintText: 'Search customers...',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: _buildList(context, ref, customers),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -41,11 +106,11 @@ class CustomerListScreen extends ConsumerWidget {
   Widget _buildList(
       BuildContext context, WidgetRef ref, List<Customer> customers) {
     if (customers.isEmpty) {
-      return AppEmptyWidget(
-        icon: Icons.people_outline,
-        message: 'No customers yet.\nTap + to add your first customer.',
-        actionLabel: 'Add Customer',
-        onAction: () => context.push('/customers/create'),
+      return const Center(
+        child: Text(
+          'No customers found matching your search.',
+          style: TextStyle(color: Colors.grey),
+        ),
       );
     }
 
@@ -53,7 +118,7 @@ class CustomerListScreen extends ConsumerWidget {
       color: AppConstants.primaryColor,
       onRefresh: () => ref.read(customerListProvider.notifier).refresh(),
       child: ListView.separated(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
         itemCount: customers.length,
         separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemBuilder: (context, index) {

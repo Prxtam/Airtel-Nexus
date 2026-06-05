@@ -6,6 +6,7 @@ import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
+import 'package:frontend/features/tasks/providers/task_filter_provider.dart';
 import 'package:gap/gap.dart';
 
 class TaskListScreen extends ConsumerWidget {
@@ -13,7 +14,7 @@ class TaskListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasksAsync = ref.watch(taskListProvider);
+    final tasksAsync = ref.watch(filteredTaskListProvider);
     final notifier = ref.read(taskListProvider.notifier);
 
     return Scaffold(
@@ -31,8 +32,27 @@ class TaskListScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          // Filter chips
+          // Status filter (API level)
           _FilterBar(notifier: notifier),
+
+          // Priority filter (Client level)
+          const _PriorityFilterBar(),
+
+          // Search bar
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: TextField(
+              onChanged: (val) => ref.read(taskSearchProvider.notifier).state = val,
+              decoration: InputDecoration(
+                hintText: 'Search tasks...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+              ),
+            ),
+          ),
 
           // Task list
           Expanded(
@@ -53,18 +73,33 @@ class TaskListScreen extends ConsumerWidget {
   Widget _buildList(BuildContext context, WidgetRef ref, List<Task> tasks,
       TaskListNotifier notifier) {
     if (tasks.isEmpty) {
-      final filter = notifier.currentFilter;
-      final msg = filter == TaskStatusFilter.all
-          ? 'No tasks yet.\nTap + to create your first task.'
-          : 'No ${filter.label.toLowerCase()} tasks.';
-      return AppEmptyWidget(
-        icon: Icons.task_outlined,
-        message: msg,
-        actionLabel: filter == TaskStatusFilter.all ? 'Create Task' : null,
-        onAction: filter == TaskStatusFilter.all
-            ? () => context.push('/tasks/create')
-            : null,
+      final rawTasksAsync = ref.read(taskListProvider);
+      final hasNoTasksAtAll = rawTasksAsync.maybeWhen(
+        data: (list) => list.isEmpty,
+        orElse: () => false,
       );
+
+      if (hasNoTasksAtAll) {
+        final filter = notifier.currentFilter;
+        final msg = filter == TaskStatusFilter.all
+            ? 'No tasks yet.\nTap + to create your first task.'
+            : 'No ${filter.label.toLowerCase()} tasks.';
+        return AppEmptyWidget(
+          icon: Icons.task_outlined,
+          message: msg,
+          actionLabel: filter == TaskStatusFilter.all ? 'Create Task' : null,
+          onAction: filter == TaskStatusFilter.all
+              ? () => context.push('/tasks/create')
+              : null,
+        );
+      } else {
+         return const Center(
+          child: Text(
+            'No tasks match your search or filters.',
+            style: TextStyle(color: Colors.grey),
+          ),
+        );
+      }
     }
 
     return RefreshIndicator(
@@ -92,7 +127,7 @@ class _FilterBar extends ConsumerWidget {
 
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: TaskStatusFilter.values.map((filter) {
           final isSelected = currentFilter == filter;
@@ -114,6 +149,51 @@ class _FilterBar extends ConsumerWidget {
             ),
           );
         }).toList(),
+      ),
+    );
+  }
+}
+
+class _PriorityFilterBar extends ConsumerWidget {
+  const _PriorityFilterBar();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentPriority = ref.watch(taskPriorityFilterProvider);
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: Row(
+        children: [
+           const Text('Priority:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.grey)),
+           const Gap(8),
+           ...TaskPriorityFilter.values.map((priority) {
+            final isSelected = currentPriority == priority;
+            String label = priority.name[0].toUpperCase() + priority.name.substring(1);
+            return Padding(
+              padding: const EdgeInsets.only(right: 6),
+              child: ChoiceChip(
+                label: Text(label, style: const TextStyle(fontSize: 12)),
+                selected: isSelected,
+                onSelected: (selected) {
+                  if (selected) {
+                     ref.read(taskPriorityFilterProvider.notifier).state = priority;
+                  }
+                },
+                selectedColor: Colors.blue.withValues(alpha: 0.15),
+                labelStyle: TextStyle(
+                  color: isSelected ? Colors.blue.shade700 : Colors.grey.shade700,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+                side: BorderSide(
+                  color: isSelected ? Colors.blue.shade300 : Colors.grey.shade300,
+                ),
+                padding: EdgeInsets.zero,
+              ),
+            );
+          }),
+        ]
       ),
     );
   }

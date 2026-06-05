@@ -114,12 +114,17 @@ class DashboardScreen extends ConsumerWidget {
                   onTap: () => context.push('/meetings'),
                 ),
 
-                // Recent Notes — placeholder until further phases
+                // Completed Tasks — live from taskListProvider
                 _buildMetricCard(
-                  'Recent Notes',
-                  '–',
-                  Icons.note,
-                  Colors.purple,
+                  'Completed Tasks',
+                  tasksAsync.when(
+                    data: (list) => '${list.where((t) => t.status.name == 'completed').length}',
+                    loading: () => '…',
+                    error: (_, __) => '–',
+                  ),
+                  Icons.check_circle_outline,
+                  Colors.green,
+                  onTap: () => context.push('/tasks'),
                 ),
               ],
             ),

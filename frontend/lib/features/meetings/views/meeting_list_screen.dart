@@ -6,6 +6,8 @@ import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
+import 'package:frontend/features/meetings/providers/meeting_filter_provider.dart';
+import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:gap/gap.dart';
 
 class MeetingListScreen extends ConsumerWidget {
@@ -13,7 +15,7 @@ class MeetingListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final meetingsAsync = ref.watch(meetingListProvider);
+    final meetingsAsync = ref.watch(filteredMeetingListProvider);
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
@@ -28,13 +30,23 @@ class MeetingListScreen extends ConsumerWidget {
         foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
-      body: meetingsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(
-          message: e.toString(),
-          onRetry: () => ref.read(meetingListProvider.notifier).refresh(),
-        ),
-        data: (meetings) => _buildList(context, ref, meetings),
+      body: Column(
+        children: [
+          // Filters
+          const _MeetingFilters(),
+
+          // List
+          Expanded(
+            child: meetingsAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => AppErrorWidget(
+                message: e.toString(),
+                onRetry: () => ref.read(meetingListProvider.notifier).refresh(),
+              ),
+              data: (meetings) => _buildList(context, ref, meetings),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -42,12 +54,27 @@ class MeetingListScreen extends ConsumerWidget {
   Widget _buildList(
       BuildContext context, WidgetRef ref, List<Meeting> meetings) {
     if (meetings.isEmpty) {
-      return AppEmptyWidget(
-        icon: Icons.event_outlined,
-        message: 'No meetings yet.\nTap + to schedule your first meeting.',
-        actionLabel: 'Schedule Meeting',
-        onAction: () => context.push('/meetings/create'),
+      final rawAsync = ref.read(meetingListProvider);
+      final hasNoMeetingsAtAll = rawAsync.maybeWhen(
+        data: (list) => list.isEmpty,
+        orElse: () => false,
       );
+
+      if (hasNoMeetingsAtAll) {
+         return AppEmptyWidget(
+          icon: Icons.event_outlined,
+          message: 'No meetings yet.\nTap + to schedule your first meeting.',
+          actionLabel: 'Schedule Meeting',
+          onAction: () => context.push('/meetings/create'),
+        );
+      } else {
+        return const Center(
+          child: Text(
+            'No meetings match your search or filters.',
+            style: TextStyle(color: Colors.grey),
+          ),
+        );
+      }
     }
 
     return RefreshIndicator(
@@ -59,6 +86,94 @@ class MeetingListScreen extends ConsumerWidget {
         separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemBuilder: (context, index) =>
             _MeetingTile(meeting: meetings[index]),
+      ),
+    );
+  }
+}
+
+class _MeetingFilters extends ConsumerWidget {
+  const _MeetingFilters();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentTimeFilter = ref.watch(meetingTimeFilterProvider);
+    final currentCustomerId = ref.watch(meetingCustomerFilterProvider);
+    final customersAsync = ref.watch(customerListProvider);
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Search
+          TextField(
+            onChanged: (val) => ref.read(meetingSearchProvider.notifier).state = val,
+            decoration: InputDecoration(
+              hintText: 'Search meetings...',
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+            ),
+          ),
+          const Gap(12),
+          
+          Row(
+            children: [
+              // Time Filter
+              Expanded(
+                child: SegmentedButton<MeetingTimeFilter>(
+                  segments: const [
+                    ButtonSegment(value: MeetingTimeFilter.all, label: Text('All')),
+                    ButtonSegment(value: MeetingTimeFilter.upcoming, label: Text('Upcoming')),
+                    ButtonSegment(value: MeetingTimeFilter.past, label: Text('Past')),
+                  ],
+                  selected: {currentTimeFilter},
+                  onSelectionChanged: (set) {
+                    ref.read(meetingTimeFilterProvider.notifier).state = set.first;
+                  },
+                  style: SegmentedButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Gap(12),
+
+          // Customer Filter
+          customersAsync.maybeWhen(
+            data: (customers) {
+              if (customers.isEmpty) return const SizedBox.shrink();
+              return DropdownButtonFormField<String?>(
+                initialValue: currentCustomerId,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.business, size: 20),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  isDense: true,
+                ),
+                hint: const Text('Filter by Customer'),
+                items: [
+                  const DropdownMenuItem(
+                    value: null,
+                    child: Text('All Customers'),
+                  ),
+                  ...customers.map((c) => DropdownMenuItem(
+                        value: c.id,
+                        child: Text(c.name, overflow: TextOverflow.ellipsis),
+                      )),
+                ],
+                onChanged: (val) {
+                  ref.read(meetingCustomerFilterProvider.notifier).state = val;
+                },
+              );
+            },
+            orElse: () => const SizedBox.shrink(),
+          ),
+        ],
       ),
     );
   }
