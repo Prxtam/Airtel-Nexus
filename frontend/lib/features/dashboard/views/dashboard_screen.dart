@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
+import 'package:frontend/features/meetings/providers/meeting_provider.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:gap/gap.dart';
 
@@ -15,6 +16,7 @@ class DashboardScreen extends ConsumerWidget {
     final user = ref.watch(authProvider).user;
     final customersAsync = ref.watch(customerListProvider);
     final tasksAsync = ref.watch(taskListProvider);
+    final meetingsAsync = ref.watch(meetingListProvider);
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
@@ -99,15 +101,20 @@ class DashboardScreen extends ConsumerWidget {
                   onTap: () => context.push('/tasks'),
                 ),
 
-                // Upcoming Meetings — placeholder until Phase 4
+                // Upcoming Meetings — live from meetingListProvider
                 _buildMetricCard(
                   'Upcoming Meetings',
-                  '–',
+                  meetingsAsync.when(
+                    data: (list) => '${list.where((m) => m.meetingAt.isAfter(DateTime.now())).length}',
+                    loading: () => '…',
+                    error: (_, __) => '–',
+                  ),
                   Icons.event,
                   Colors.green,
+                  onTap: () => context.push('/meetings'),
                 ),
 
-                // Recent Notes — placeholder until Phase 4
+                // Recent Notes — placeholder until further phases
                 _buildMetricCard(
                   'Recent Notes',
                   '–',
@@ -132,11 +139,14 @@ class DashboardScreen extends ConsumerWidget {
                     () => context.push('/customers/create')),
                 _buildActionButton('Create Task', Icons.add_task,
                     () => context.push('/tasks/create')),
-                _buildActionButton('Schedule Meeting', Icons.calendar_today, () {}),
+                _buildActionButton('Schedule Meeting', Icons.calendar_today,
+                    () => context.push('/meetings/create')),
                 _buildActionButton('View Customers', Icons.people_outline,
                     () => context.push('/customers')),
                 _buildActionButton('View Tasks', Icons.checklist,
                     () => context.push('/tasks')),
+                _buildActionButton('View Meetings', Icons.event_note,
+                    () => context.push('/meetings')),
               ],
             ),
           ],

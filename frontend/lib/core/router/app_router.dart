@@ -10,6 +10,11 @@ import 'package:frontend/features/customers/views/customer_detail_screen.dart';
 import 'package:frontend/features/tasks/views/task_list_screen.dart';
 import 'package:frontend/features/tasks/views/task_create_screen.dart';
 import 'package:frontend/features/tasks/views/task_detail_screen.dart';
+import 'package:frontend/features/meetings/views/meeting_list_screen.dart';
+import 'package:frontend/features/meetings/views/meeting_create_screen.dart';
+import 'package:frontend/features/meetings/views/meeting_detail_screen.dart';
+import 'package:frontend/features/meeting_notes/views/note_create_screen.dart';
+import 'package:frontend/features/meeting_notes/views/note_detail_screen.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -21,21 +26,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       final isLoggingIn = state.uri.toString() == '/login';
 
       if (authState.status == AuthStatus.initial) {
-        return null; // Stay on splash while loading
+        return null;
       }
-
       if (!isAuth && !isLoggingIn) {
         return '/login';
       }
-
       if (isAuth && isLoggingIn) {
         return '/home';
       }
-
       if (isAuth && state.uri.toString() == '/') {
         return '/home';
       }
-
       return null;
     },
     routes: [
@@ -54,7 +55,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const DashboardScreen(),
       ),
 
-      // Customers
+      // ── Customers ──────────────────────────────────────────
       GoRoute(
         path: '/customers',
         builder: (context, state) => const CustomerListScreen(),
@@ -71,7 +72,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Tasks
+      // ── Tasks ───────────────────────────────────────────────
       GoRoute(
         path: '/tasks',
         builder: (context, state) => const TaskListScreen(),
@@ -85,6 +86,40 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           return TaskDetailScreen(taskId: id);
+        },
+      ),
+
+      // ── Meetings ────────────────────────────────────────────
+      GoRoute(
+        path: '/meetings',
+        builder: (context, state) => const MeetingListScreen(),
+      ),
+      GoRoute(
+        path: '/meetings/create',
+        builder: (context, state) => const MeetingCreateScreen(),
+      ),
+      GoRoute(
+        path: '/meetings/:meetingId',
+        builder: (context, state) {
+          final meetingId = state.pathParameters['meetingId']!;
+          return MeetingDetailScreen(meetingId: meetingId);
+        },
+      ),
+
+      // ── Meeting Notes (scoped under meetings) ──────────────
+      GoRoute(
+        path: '/meetings/:meetingId/notes/create',
+        builder: (context, state) {
+          final meetingId = state.pathParameters['meetingId']!;
+          return NoteCreateScreen(meetingId: meetingId);
+        },
+      ),
+      GoRoute(
+        path: '/meetings/:meetingId/notes/:noteId',
+        builder: (context, state) {
+          final meetingId = state.pathParameters['meetingId']!;
+          final noteId = state.pathParameters['noteId']!;
+          return NoteDetailScreen(meetingId: meetingId, noteId: noteId);
         },
       ),
     ],
