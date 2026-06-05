@@ -1,514 +1,243 @@
-# Airtel B2B Sales Assistant
+# Airtel B2B Sales Assistant - Project Context
 
-## Project Overview
+## Project Goal
 
-A mobile-first Airtel B2B Sales Assistant application designed to help sales representatives manage customers, tasks, meetings, and meeting notes from a single platform.
+Build a production-style Airtel Enterprise Sales Assistant mobile application for B2B account managers.
 
-The application consists of:
+The application helps account managers manage:
 
-* FastAPI backend
-* PostgreSQL database
-* Flutter mobile frontend
-* JWT authentication
-* Riverpod state management
-* GoRouter navigation
-
-The project is being developed incrementally with business functionality prioritized before UI redesigns.
-
----
-
-# Current Development Status
-
-## Backend Status
-
-### Foundation
-
-Completed and tested:
-
-* FastAPI setup
-* PostgreSQL integration
-* SQLAlchemy ORM
-* Alembic migrations
-* Environment configuration
-* Repository structure
-* GitHub integration
-
-### Authentication
-
-Completed and tested:
-
-* User registration
-* User login
-* JWT access tokens
-* Password hashing (bcrypt)
-* Protected routes
-* Current user endpoint (`/auth/me`)
-
-All authentication flows verified through Swagger.
-
----
-
-## Backend Modules
-
-### Customers Module
-
-Completed and tested.
-
-Endpoints:
-
-* POST `/customers`
-* GET `/customers`
-* GET `/customers/{id}`
-* PATCH `/customers/{id}`
-* DELETE `/customers/{id}`
-
-Features:
-
-* Ownership validation
-* CRUD operations
-* Swagger tested
-* Database persistence verified
-
-Schema:
-
-```json
-{
-  "id": "uuid",
-  "name": "string",
-  "created_at": "datetime",
-  "updated_at": "datetime"
-}
-```
-
----
-
-### Tasks Module
-
-Completed and tested on backend.
-
-Status:
-
-* API implementation complete
-* Swagger testing complete
-
-Frontend not yet implemented.
-
----
-
-### Meetings Module
-
-Completed and tested on backend.
-
-Status:
-
-* API implementation complete
-* Swagger testing complete
-
-Frontend not yet implemented.
-
----
-
-### Meeting Notes Module
-
-Completed and tested on backend.
-
-Status:
-
-* API implementation complete
-* Swagger testing complete
-
-Frontend not yet implemented.
-
----
-
-## Database Features
-
-Verified:
-
-* Foreign key relationships
-* Ownership validation
-* Cascade delete behavior
-* Alembic migrations
-* Data persistence
-
----
-
-# Frontend Status
-
-## Foundation
-
-Completed:
-
-* Flutter setup
-* Riverpod
-* Dio
-* GoRouter
-* Secure storage
-* JWT persistence
-* API integration
-
----
-
-## Authentication Flow
-
-Completed and tested on Android device.
-
-Features:
-
-* Login screen
-* Token persistence
-* Automatic session restoration
-* Protected navigation
-* Logout functionality
-
-Behavior:
-
-* User remains logged in after app restart when token is valid.
-* App automatically routes authenticated users to dashboard.
-
----
-
-## Dashboard
-
-Completed.
-
-Current dashboard serves as a temporary landing page.
-
-Features:
-
-* Welcome section
-* Metrics cards
-* Quick actions
-* Airtel-themed styling
-* Navigation entry points
-
-Current quick actions:
-
-* Add Customer
-* View Customers
-* Create Task (placeholder)
-* Schedule Meeting (placeholder)
-
----
-
-# Customers Frontend Module
-
-Status: COMPLETE
-
-Implemented and tested on physical Android device (Pixel 9).
-
----
-
-## Customer List Screen
-
-Route:
-
-```text
-/customers
-```
-
-Features:
-
-* Customer list retrieval
-* Pull-to-refresh
-* Loading state
-* Error state
-* Empty state
-* FAB for customer creation
-* Customer detail navigation
-
-Verified working.
-
----
-
-## Customer Detail Screen
-
-Route:
-
-```text
-/customers/:id
-```
-
-Features:
-
-* Fetch by customer ID
-* Independent detail provider
-* Customer information display
-* Inline editing
-* Delete action
-* Timestamp display
-
-Verified working.
-
----
-
-## Customer Creation
-
-Route:
-
-```text
-/customers/create
-```
-
-Features:
-
-* Form validation
-* Backend integration
-* Successful list refresh after creation
-* Validation errors displayed inline
-
-Verified working.
-
----
-
-## Customer Editing
-
-Features:
-
-* Inline edit mode
-* PATCH integration
-* Automatic detail refresh
-* Automatic list synchronization
-
-Verified working.
-
----
-
-## Customer Deletion
-
-Features:
-
-* Confirmation dialog
-* DELETE integration
-* Automatic navigation back
-* Automatic list refresh
-
-Verified working.
-
----
-
-## Shared Components
-
-Created:
-
-### AppErrorWidget
-
-Reusable error state widget.
-
-Intended for:
-
-* Customers
-* Tasks
-* Meetings
-* Notes
-
-### AppEmptyWidget
-
-Reusable empty state widget.
-
-Intended for:
-
-* Customers
-* Tasks
-* Meetings
-* Notes
-
----
-
-# Flutter Architecture
-
-Feature-first architecture.
-
-Current structure:
-
-```text
-lib/
-|
-├── core/
-│   ├── api/
-│   ├── constants/
-│   ├── router/
-│   ├── storage/
-│   └── widgets/
-│
-├── features/
-│   ├── auth/
-│   ├── dashboard/
-│   └── customers/
-```
-
----
-
-## State Management
-
-Riverpod
-
-Patterns currently used:
-
-* Provider
-* StateNotifierProvider
-* StateNotifierProvider.family
-
-Customer module includes:
-
-* customerListProvider
-* customerDetailProvider(id)
-
----
-
-## API Layer
-
-Dio-based networking.
-
-Shared infrastructure:
-
-* JWT interceptor
-* Secure token storage
-* Centralized API configuration
-
-No duplicate API clients should be introduced.
-
----
-
-# Important Product Decisions
-
-## Mobile First
-
-The application is optimized primarily for mobile devices.
-
-Current testing device:
-
-* Google Pixel 9
-
----
-
-## Navigation Strategy
-
-Current state:
-
-Dashboard → Feature Screens
-
-Intentionally postponed:
-
-* Bottom navigation bar
-* Home redesign
-* Navigation restructuring
-
-Reason:
-
-Business functionality takes priority over UI polish.
-
----
-
-## UI Strategy
-
-Current UI is functional but temporary.
-
-Planned future phase:
-
-### Airtel UX Refresh
-
-Includes:
-
-* Dedicated Airtel Home Screen
-* Bottom Navigation
-* Improved spacing and typography
-* Better business-focused dashboard
-* Improved customer/task/meeting cards
-* Stronger Airtel branding
-
-This redesign should occur only after all business modules are complete.
-
----
-
-# Current Milestone
-
-Completed:
-
-* Backend foundation
-* Authentication
-* Customers backend
-* Tasks backend
-* Meetings backend
-* Meeting Notes backend
-* Flutter foundation
-* Authentication frontend
-* Dashboard frontend
-* Customers frontend
-
----
-
-# Next Phase
-
-## Tasks Frontend Module
-
-Before implementation:
-
-1. Inspect backend Tasks API.
-2. Verify schemas.
-3. Verify validation rules.
-4. Verify relationships.
-5. Produce implementation plan.
-6. Review plan before coding.
-
-Do not begin implementation before plan approval.
-
----
-
-# Testing Status
-
-## Backend
-
-Swagger tested.
-
-Verified:
-
-* Authentication
 * Customers
 * Tasks
 * Meetings
 * Meeting Notes
 
+Future phases may include:
+
+* Role-based access control
+* AI assistant integration
+* Dashboard analytics
+* Search and filtering
+* UI/UX redesign
+
 ---
 
-## Frontend
+## Tech Stack
 
-Android device tested.
+### Backend
+
+* FastAPI
+* PostgreSQL
+* SQLAlchemy
+* Alembic
+* JWT Authentication
+* bcrypt password hashing
+
+### Frontend
+
+* Flutter
+* Riverpod
+* GoRouter
+* Dio
+* Flutter Secure Storage
+* JsonSerializable
+
+---
+
+## Current Architecture
+
+### Backend
+
+Implemented modules:
+
+#### Authentication
+
+* Login
+* JWT token generation
+* Protected endpoints
+
+#### Customers
+
+Endpoints:
+
+* GET /customers
+* POST /customers
+* GET /customers/{id}
+* PATCH /customers/{id}
+* DELETE /customers/{id}
+
+#### Tasks
+
+Endpoints:
+
+* POST /tasks
+* GET /tasks
+* GET /tasks/{id}
+* POST /tasks/{id}/complete
+
+Task completion is intentionally implemented as an action endpoint rather than a generic PATCH.
+
+Completion endpoint is idempotent.
+
+#### Meetings
+
+CRUD implemented.
+
+#### Meeting Notes
+
+CRUD implemented.
+
+---
+
+## Frontend Modules
+
+### Phase 1 - Authentication
+
+Status: Complete
+
+Features:
+
+* Login
+* Token persistence
+* Auto-login after restart
+* Protected routes
+
+### Phase 2 - Customers
+
+Status: Complete
+
+Features:
+
+* Customer list
+* Customer detail
+* Create customer
+* Edit customer
+* Delete customer
+
+### Phase 3 - Tasks
+
+Status: Complete
+
+Features:
+
+* Task list
+* Task detail
+* Create task
+* Mark task complete
+* Pending/completed filters
+* Confirmation before completion
+
+Known business rule:
+
+* Completed tasks cannot currently be reverted.
+
+### Phase 4 - Meetings & Notes
+
+Status: Complete
+
+Features:
+
+* Meeting list
+* Schedule meeting
+* Edit meeting
+* Delete meeting
+* Meeting notes
+* Create note
+* Edit note
+* Delete note
+
+Meeting creation requires an existing customer.
+
+No-customer empty state implemented.
+
+---
+
+## Dashboard
+
+Live metrics:
+
+* Total Customers
+* Pending Tasks
+* Upcoming Meetings
+
+Placeholder:
+
+* Recent Notes
+
+Navigation:
+
+* Add Customer
+* View Customers
+* Create Task
+* View Tasks
+* Schedule Meeting
+* View Meetings
+
+---
+
+## Important Business Decisions
+
+### Tasks
+
+Current model:
+
+Users can create personal tasks.
+
+Users can complete their own tasks.
+
+Future enhancement planned:
+
+* Employee-created tasks:
+
+  * Editable
+  * Deletable
+
+* Manager-assigned tasks:
+
+  * Not editable by employee
+  * Not deletable by employee
+  * Can only be completed
+
+This role-based permission system is NOT yet implemented.
+
+### Meetings
+
+Customer selection uses a dropdown.
+
+Searchable customer picker was intentionally deferred.
+
+---
+
+## Manual Verification Status
+
+All phases manually tested on physical Android device.
 
 Verified:
 
-* Login
-* Session persistence
-* Dashboard
-* Customer list
-* Customer creation
-* Customer editing
-* Customer deletion
-* Pull-to-refresh
-* Navigation
+* Authentication
+* Customer CRUD
+* Task creation
+* Task completion
+* Dashboard metrics
+* Meeting CRUD
+* Meeting Notes CRUD
+* Navigation flows
+
+Application currently functions end-to-end.
 
 ---
 
-# Latest Completed Milestone
+## Current Priority
 
-Frontend Customers Module completed and approved after manual testing on physical Android device.
+Do NOT redesign architecture.
 
-Recommended commit:
+Core CRUD foundation is complete.
 
-feat(customers): implement customer management frontend module
+Next development should focus on one of:
 
-Tasks Frontend Module completed
+1. UI/UX redesign (recommended)
+2. Role-based permissions
+3. Search and filtering
+4. AI assistant integration
+5. Advanced dashboard analytics
 
-Features:
-- Task List
-- Task Details
-- Create Task
-- Task Completion
-- Status Filtering
-- Priority Levels
-- Due Date Support
-- Dashboard Integration
-- Real-time Metrics
-- Android Device Tested
-
-
+Existing functionality should remain stable while future phases are added.
