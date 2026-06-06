@@ -11,16 +11,21 @@ final customerSearchProvider = StateProvider.autoDispose<String>((ref) => '');
 final customerSortProvider =
     StateProvider.autoDispose<CustomerSort>((ref) => CustomerSort.nameAsc);
 
+// Team filter state (null = show all)
+final customerTeamFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
+
 // Derived filtered & sorted list
 final filteredCustomerListProvider =
     Provider.autoDispose<AsyncValue<List<Customer>>>((ref) {
   final rawAsync = ref.watch(customerListProvider);
   final search = ref.watch(customerSearchProvider);
   final sort = ref.watch(customerSortProvider);
+  final teamFilterId = ref.watch(customerTeamFilterProvider);
 
   return rawAsync.whenData((list) {
-    // 1. Filter by search query
+    // 1. Filter by search query and team
     var result = list.where((c) {
+      if (teamFilterId != null && c.ownerId != teamFilterId) return false;
       if (search.isEmpty) return true;
       return c.name.toLowerCase().contains(search.toLowerCase());
     }).toList();

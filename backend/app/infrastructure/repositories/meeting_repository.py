@@ -31,6 +31,22 @@ class SqlAlchemyMeetingRepository:
 
         return list(self._db.execute(stmt).scalars().all())
 
+    def list_scoped(
+        self,
+        allowed_user_ids: list[uuid.UUID] | None = None,
+        *,
+        customer_id: uuid.UUID | None = None,
+    ) -> list[Meeting]:
+        stmt = select(Meeting)
+        if allowed_user_ids is not None:
+            stmt = stmt.where(Meeting.created_by_user_id.in_(allowed_user_ids))
+            
+        if customer_id is not None:
+            stmt = stmt.where(Meeting.customer_id == customer_id)
+            
+        stmt = stmt.order_by(Meeting.meeting_at.desc())
+        return list(self._db.execute(stmt).scalars().all())
+
     def create_meeting(
         self,
         *,

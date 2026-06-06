@@ -27,6 +27,18 @@ class SqlAlchemyTaskRepository:
 
         return list(self._db.execute(stmt).scalars().all())
 
+    def list_scoped(self, allowed_user_ids: list[uuid.UUID] | None = None, *, status: TaskStatus | None = None) -> list[Task]:
+        stmt = select(Task)
+        if allowed_user_ids is not None:
+            stmt = stmt.where(Task.user_id.in_(allowed_user_ids))
+
+        if status is not None:
+            stmt = stmt.where(Task.status == status)
+
+        stmt = stmt.order_by(Task.created_at.desc())
+
+        return list(self._db.execute(stmt).scalars().all())
+
     def create_task(
         self,
         *,

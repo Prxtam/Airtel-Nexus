@@ -7,6 +7,8 @@ import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:frontend/features/tasks/providers/task_filter_provider.dart';
+import 'package:frontend/features/users/views/team_filter_dropdown.dart';
+import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:gap/gap.dart';
 
 class TaskListScreen extends ConsumerWidget {
@@ -23,6 +25,12 @@ class TaskListScreen extends ConsumerWidget {
         title: const Text('Tasks'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
+        actions: [
+          TeamFilterDropdown(
+            currentValue: ref.watch(taskTeamFilterProvider),
+            onChanged: (val) => ref.read(taskTeamFilterProvider.notifier).state = val,
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/tasks/create'),
@@ -243,6 +251,7 @@ class _TaskTile extends StatelessWidget {
                 ],
               ],
             ),
+            OwnerBadge(ownerId: task.userId),
           ],
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),

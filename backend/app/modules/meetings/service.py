@@ -49,10 +49,10 @@ class MeetingService:
     def list_meetings(
         self,
         *,
-        user_id: uuid.UUID,
+        allowed_user_ids: list[uuid.UUID] | None = None,
         customer_id: uuid.UUID | None = None,
     ) -> list[Meeting]:
-        return self._meetings.list_by_user(user_id, customer_id=customer_id)
+        return self._meetings.list_scoped(allowed_user_ids=allowed_user_ids, customer_id=customer_id)
 
     def get_meeting(self, *, meeting_id: uuid.UUID, user_id: uuid.UUID) -> Meeting:
         meeting = self._meetings.get_by_id(meeting_id)

@@ -22,13 +22,13 @@ class CustomerService:
         self._db = db
         self._customers = customers
 
-    def create_customer(self, *, name: str) -> Customer:
+    def create_customer(self, *, name: str, owner_id: uuid.UUID | None = None) -> Customer:
         existing = self._customers.get_by_name(name.strip())
         if existing is not None:
             raise CustomerAlreadyExistsError("Customer with this name already exists")
 
         try:
-            customer = self._customers.create_customer(name=name.strip())
+            customer = self._customers.create_customer(name=name.strip(), owner_id=owner_id)
             self._db.commit()
             self._db.refresh(customer)
             return customer
@@ -36,8 +36,8 @@ class CustomerService:
             self._db.rollback()
             raise CustomerAlreadyExistsError("Customer with this name already exists")
 
-    def list_customers(self) -> list[Customer]:
-        return self._customers.list_all()
+    def list_customers(self, allowed_user_ids: list[uuid.UUID] | None = None) -> list[Customer]:
+        return self._customers.list_scoped(allowed_user_ids)
 
     def get_customer(self, *, customer_id: uuid.UUID) -> Customer:
         customer = self._customers.get_by_id(customer_id)

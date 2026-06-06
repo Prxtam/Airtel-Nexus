@@ -39,8 +39,8 @@ class TaskService:
         self._db.refresh(task)
         return task
 
-    def list_tasks(self, *, user_id: uuid.UUID, status: TaskStatus | None = None) -> list[Task]:
-        return self._tasks.list_by_user(user_id, status=status)
+    def list_tasks(self, *, allowed_user_ids: list[uuid.UUID] | None = None, status: TaskStatus | None = None) -> list[Task]:
+        return self._tasks.list_scoped(allowed_user_ids, status=status)
 
     def get_task(self, *, task_id: uuid.UUID, user_id: uuid.UUID) -> Task:
         """Return a task owned by the user, or raise TaskNotFoundError."""

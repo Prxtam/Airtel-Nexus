@@ -152,6 +152,12 @@ class DashboardScreen extends ConsumerWidget {
                     () => context.push('/tasks')),
                 _buildActionButton('View Meetings', Icons.event_note,
                     () => context.push('/meetings')),
+                if (user?.isAdmin ?? false)
+                  _buildActionButton('Admin Panel', Icons.admin_panel_settings, 
+                      () => context.push('/admin')),
+                if (user != null && user.isZSM && !user.isAdmin && !user.isCBH)
+                  _buildActionButton('Team Dashboard', Icons.group, 
+                      () => context.push('/team')),
               ],
             ),
           ],

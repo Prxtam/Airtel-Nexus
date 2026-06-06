@@ -306,3 +306,243 @@ Notes:
 - Customer Insights currently uses MockLLMClient in development mode.
 - Production OpenAIClient supports dynamic customer-specific analysis.
 - No database migrations required.
+
+
+# Airtel Employee App – Project Context Update (Post Phase 7)
+
+## Project Overview
+
+Building an internal Airtel B2B Employee CRM application using:
+
+* Flutter (Frontend)
+* FastAPI (Backend)
+* PostgreSQL (Database)
+* SQLAlchemy
+* Riverpod
+* JWT Authentication
+* OpenAI-ready AI Copilot architecture
+
+Target organizational hierarchy:
+
+Circle Business Head (CBH)
+→ Zonal Sales Manager (ZSM)
+→ Account Manager (AM)
+
+The application is intended for Airtel campus-level B2B sales operations.
+
+---
+
+## Completed Phases
+
+### Core CRM
+
+Implemented:
+
+* Authentication & JWT login
+* Customers module
+* Meetings module
+* Meeting Notes
+* Tasks module
+* Dashboard metrics
+
+### AI Copilot
+
+Implemented:
+
+* Meeting Summary generation
+* Action Item extraction
+* Follow-up Email drafting
+
+Architecture supports:
+
+* MockLLMClient (current testing)
+* OpenAIClient (production-ready)
+
+### AI Workflow Automation (Phase 6B)
+
+Implemented:
+
+#### Action Items → Tasks
+
+Users can:
+
+* Extract action items from meeting notes
+* Select desired items
+* Create Tasks directly from AI output
+
+#### Email Draft → Meeting Note
+
+Users can:
+
+* Generate follow-up email drafts
+* Save generated content directly as meeting notes
+
+#### Customer Insights
+
+Implemented:
+
+* AI Insights button on Customer Detail screen
+* Backend context aggregation
+* OpenAI-ready insight generation
+
+Current limitation:
+MockLLMClient returns static insights. Dynamic insights will automatically work once OpenAIClient is enabled.
+
+---
+
+## RBAC & Airtel Hierarchy (Phase 7)
+
+### Database Changes
+
+Added:
+
+users.manager_id
+customers.owner_id
+
+Role hierarchy:
+
+* account_manager
+* zonal_sales_manager
+* circle_business_head
+* admin
+
+### Backend RBAC
+
+Implemented:
+
+* Role-based authorization
+* Data scoping
+* Team visibility
+* Manager hierarchy resolution
+* User management APIs
+
+Admin capabilities:
+
+* Assign role
+* Assign manager
+* Activate/deactivate users
+* Reset passwords
+
+### Frontend RBAC
+
+Implemented:
+
+#### Admin Panel
+
+* User listing
+* Single-role assignment
+* Manager assignment
+* Active status toggle
+* Password reset
+
+#### Team Dashboard
+
+Visible only to:
+
+* Zonal Sales Managers
+
+Hidden for:
+
+* Admin
+* CBH
+* AM
+
+#### Team Visibility
+
+Implemented:
+
+* Owner badges
+* Team filtering
+* Record ownership display
+
+### Role Rules
+
+Single-role enforcement implemented.
+
+A user can only have ONE role:
+
+* account_manager
+* zonal_sales_manager
+* circle_business_head
+* admin
+
+No multi-role assignments allowed.
+
+---
+
+## Current Test Accounts
+
+Admin account:
+
+Email:
+[admin@airtel.com](mailto:admin@airtel.com)
+
+Password:
+secure
+
+Hierarchy test users:
+
+CBH:
+[pritam@test.com](mailto:pritam@test.com)
+
+ZSM:
+[manager@airtel.com](mailto:manager@airtel.com)
+
+AM:
+[test@airtel.com](mailto:test@airtel.com)
+
+Additional AM:
+[user1@example.com](mailto:user1@example.com)
+
+Passwords may be reset through Admin Panel.
+
+---
+
+## Known Non-Blocking Improvements
+
+Deferred intentionally:
+
+* Additional dashboard polish
+* Better analytics visualizations
+* Enhanced AI prompts
+* Audit logging
+* Production-grade password recovery
+* Notification system
+* Advanced reporting
+
+These are future enhancements and not blockers.
+
+---
+
+## Current Status
+
+Phase 7 is functionally complete and tested.
+
+The application now includes:
+
+* CRM
+* Meetings
+* Notes
+* Tasks
+* AI Copilot
+* AI Workflow Automation
+* Airtel Sales Hierarchy
+* RBAC
+* Admin Panel
+* Team Dashboard
+* Team Filtering
+* Password Reset
+
+The next major development phase is:
+
+### Phase 8 – Airtel Enterprise UI/UX Redesign
+
+Focus areas:
+
+* Modern Airtel-inspired design system
+* Enterprise dashboard redesign
+* Better navigation
+* Improved cards/tables
+* Data visualization
+* Responsive layouts
+* Professional production-ready appearance

@@ -23,8 +23,15 @@ class SqlAlchemyCustomerRepository:
         stmt = select(Customer).order_by(Customer.name.asc())
         return list(self._db.execute(stmt).scalars().all())
 
-    def create_customer(self, *, name: str) -> Customer:
-        customer = Customer(name=name)
+    def list_scoped(self, allowed_user_ids: list[uuid.UUID] | None = None) -> list[Customer]:
+        stmt = select(Customer)
+        if allowed_user_ids is not None:
+            stmt = stmt.where(Customer.owner_id.in_(allowed_user_ids))
+        stmt = stmt.order_by(Customer.name.asc())
+        return list(self._db.execute(stmt).scalars().all())
+
+    def create_customer(self, *, name: str, owner_id: uuid.UUID | None = None) -> Customer:
+        customer = Customer(name=name, owner_id=owner_id)
         self._db.add(customer)
         self._db.flush()
         return customer

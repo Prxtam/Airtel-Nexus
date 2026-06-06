@@ -10,7 +10,19 @@ from app.infrastructure.db.models.meeting import Meeting
 class MeetingRepository(Protocol):
     def get_by_id(self, meeting_id: uuid.UUID) -> Meeting | None: ...
 
-    def list_by_user(self, user_id: uuid.UUID, *, customer_id: uuid.UUID | None = None) -> list[Meeting]: ...
+    def list_by_user(
+        self,
+        user_id: uuid.UUID,
+        *,
+        customer_id: uuid.UUID | None = None,
+    ) -> list[Meeting]: ...
+
+    def list_scoped(
+        self,
+        allowed_user_ids: list[uuid.UUID] | None = None,
+        *,
+        customer_id: uuid.UUID | None = None,
+    ) -> list[Meeting]: ...
 
     def create_meeting(
         self,

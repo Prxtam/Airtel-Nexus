@@ -16,6 +16,9 @@ final meetingTimeFilterProvider =
 final meetingCustomerFilterProvider =
     StateProvider.autoDispose<String?>((ref) => null);
 
+// Team filter state (null = show all)
+final meetingTeamFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
+
 // Derived filtered list
 final filteredMeetingListProvider =
     Provider.autoDispose<AsyncValue<List<Meeting>>>((ref) {
@@ -23,9 +26,15 @@ final filteredMeetingListProvider =
   final search = ref.watch(meetingSearchProvider);
   final timeFilter = ref.watch(meetingTimeFilterProvider);
   final customerId = ref.watch(meetingCustomerFilterProvider);
+  final teamFilterId = ref.watch(meetingTeamFilterProvider);
 
   return rawAsync.whenData((list) {
     var result = list;
+
+    // 0. Filter by team
+    if (teamFilterId != null) {
+      result = result.where((m) => m.createdByUserId == teamFilterId).toList();
+    }
 
     // 1. Filter by customer
     if (customerId != null) {

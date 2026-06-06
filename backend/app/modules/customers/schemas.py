@@ -16,6 +16,7 @@ class CustomerUpdateRequest(BaseModel):
 
 class CustomerResponse(BaseModel):
     id: uuid.UUID
+    owner_id: uuid.UUID | None = None
     name: str
     created_at: datetime
     updated_at: datetime

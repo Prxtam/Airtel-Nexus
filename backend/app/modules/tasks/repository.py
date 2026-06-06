@@ -14,6 +14,8 @@ class TaskRepository(Protocol):
 
     def list_by_user(self, user_id: uuid.UUID, *, status: TaskStatus | None = None) -> list[Task]: ...
 
+    def list_scoped(self, allowed_user_ids: list[uuid.UUID] | None = None, *, status: TaskStatus | None = None) -> list[Task]: ...
+
     def create_task(
         self,
         *,

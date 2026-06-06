@@ -18,4 +18,11 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  bool get isAdmin => roles.contains('admin');
+  bool get isCBH => roles.contains('circle_business_head');
+  bool get isZSM => roles.contains('zonal_sales_manager');
+  bool get isAM => roles.contains('account_manager');
+  
+  bool get hasManagerAccess => isAdmin || isCBH || isZSM;
 }

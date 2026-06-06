@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from sqlalchemy import String
+import uuid
+
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.infrastructure.db.base import Base
@@ -11,6 +13,7 @@ class Customer(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     __tablename__ = "customers"
 
     name: Mapped[str] = mapped_column(String(250), nullable=False, unique=True, index=True)
+    owner_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
 
     meetings = relationship(
         "Meeting",

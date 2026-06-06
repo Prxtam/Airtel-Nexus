@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:frontend/features/auth/views/login_screen.dart';
 import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
+import 'package:frontend/features/dashboard/views/admin_dashboard_screen.dart';
+import 'package:frontend/features/dashboard/views/team_dashboard_screen.dart';
 import 'package:frontend/features/customers/views/customer_list_screen.dart';
 import 'package:frontend/features/customers/views/customer_create_screen.dart';
 import 'package:frontend/features/customers/views/customer_detail_screen.dart';
@@ -53,6 +55,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/home',
         builder: (context, state) => const DashboardScreen(),
+      ),
+
+      GoRoute(
+        path: '/admin',
+        builder: (context, state) => const AdminDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/team',
+        builder: (context, state) => const TeamDashboardScreen(),
       ),
 
       // ── Customers ──────────────────────────────────────────

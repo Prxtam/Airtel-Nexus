@@ -12,6 +12,7 @@ from app.api.routers.health import router as health_router
 from app.api.routers.meetings import router as meetings_router
 from app.api.routers.meeting_notes import router as meeting_notes_router
 from app.api.routers.tasks import router as tasks_router
+from app.api.routers.users import router as users_router
 from app.api.routers.ai import router as ai_router
 from app.core.config import get_settings
 from app.core.config.diagnostics import env_file_diagnostics, resolve_postgres_setting_sources
@@ -77,6 +78,7 @@ def create_app() -> FastAPI:
     app.include_router(meetings_router)
     app.include_router(meeting_notes_router)
     app.include_router(ai_router)
+    app.include_router(users_router)
 
     return app
 

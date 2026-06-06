@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.core.di.auth import get_current_user
 from app.core.di.tasks import get_task_service
+from app.core.di.rbac import get_allowed_user_ids
 from app.infrastructure.db.models.enums import TaskStatus
 from app.infrastructure.db.models.user import User
 from app.modules.tasks.schemas import TaskCreateRequest, TaskListResponse, TaskResponse
@@ -56,10 +57,10 @@ def create_task(
 )
 def list_tasks(
     task_status: TaskStatus | None = Query(default=None, alias="status"),
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: TaskService = Depends(get_task_service),
 ) -> TaskListResponse:
-    tasks = service.list_tasks(user_id=current_user.id, status=task_status)
+    tasks = service.list_tasks(allowed_user_ids=allowed_user_ids, status=task_status)
     items = [_task_to_response(t) for t in tasks]
     return TaskListResponse(tasks=items, count=len(items))
 

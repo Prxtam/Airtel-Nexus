@@ -29,3 +29,20 @@ class SqlAlchemyUserRepository:
         self._db.add(user)
         self._db.flush()  # allocate PK
         return user
+
+    def list_all(self) -> list[User]:
+        stmt = select(User).order_by(User.created_at.desc())
+        return list(self._db.execute(stmt).scalars().all())
+
+    def get_direct_reports(self, manager_id: uuid.UUID) -> list[User]:
+        stmt = select(User).where(User.manager_id == manager_id)
+        return list(self._db.execute(stmt).scalars().all())
+
+    def get_all_subordinates(self, manager_id: uuid.UUID) -> list[User]:
+        # Recursive CTE to get all subordinates down the tree
+        hierarchy = select(User.id).where(User.manager_id == manager_id).cte(name="hierarchy", recursive=True)
+        hierarchy = hierarchy.union_all(
+            select(User.id).where(User.manager_id == hierarchy.c.id)
+        )
+        stmt = select(User).join(hierarchy, User.id == hierarchy.c.id)
+        return list(self._db.execute(stmt).scalars().all())

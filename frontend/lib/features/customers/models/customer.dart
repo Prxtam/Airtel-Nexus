@@ -5,12 +5,14 @@ part 'customer.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Customer {
   final String id;
+  final String? ownerId;
   final String name;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   Customer({
     required this.id,
+    this.ownerId,
     required this.name,
     required this.createdAt,
     required this.updatedAt,

@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.core.di.auth import get_current_user
 from app.core.di.customers import get_customer_service
+from app.core.di.rbac import get_allowed_user_ids
 from app.infrastructure.db.models.user import User
 from app.modules.customers.schemas import (
     CustomerCreateRequest,
@@ -21,6 +22,7 @@ router = APIRouter(prefix="/customers", tags=["customers"])
 def _customer_to_response(customer) -> CustomerResponse:
     return CustomerResponse(
         id=customer.id,
+        owner_id=getattr(customer, "owner_id", None),
         name=customer.name,
         created_at=customer.created_at,
         updated_at=customer.updated_at,
@@ -38,7 +40,7 @@ def create_customer(
     service: CustomerService = Depends(get_customer_service),
 ) -> CustomerResponse:
     try:
-        customer = service.create_customer(name=payload.name)
+        customer = service.create_customer(name=payload.name, owner_id=current_user.id)
     except CustomerAlreadyExistsError as exc:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc))
 
@@ -51,10 +53,10 @@ def create_customer(
     status_code=status.HTTP_200_OK,
 )
 def list_customers(
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: CustomerService = Depends(get_customer_service),
 ) -> CustomerListResponse:
-    customers = service.list_customers()
+    customers = service.list_customers(allowed_user_ids=allowed_user_ids)
     items = [_customer_to_response(c) for c in customers]
     return CustomerListResponse(customers=items, count=len(items))
 

@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.core.di.auth import get_current_user
 from app.core.di.meetings import get_meeting_service
+from app.core.di.rbac import get_allowed_user_ids
 from app.infrastructure.db.models.user import User
 from app.modules.meetings.schemas import (
     MeetingCreateRequest,
@@ -63,10 +64,10 @@ def create_meeting(
 )
 def list_meetings(
     customer_id: uuid.UUID | None = Query(default=None),
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingService = Depends(get_meeting_service),
 ) -> MeetingListResponse:
-    meetings = service.list_meetings(user_id=current_user.id, customer_id=customer_id)
+    meetings = service.list_meetings(allowed_user_ids=allowed_user_ids, customer_id=customer_id)
     items = [_meeting_to_response(m) for m in meetings]
     return MeetingListResponse(meetings=items, count=len(items))
 

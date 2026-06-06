@@ -7,6 +7,8 @@ import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/customers/providers/customer_filter_provider.dart';
+import 'package:frontend/features/users/views/team_filter_dropdown.dart';
+import 'package:frontend/features/users/views/owner_badge.dart';
 
 class CustomerListScreen extends ConsumerWidget {
   const CustomerListScreen({super.key});
@@ -29,6 +31,10 @@ class CustomerListScreen extends ConsumerWidget {
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
         actions: [
+          TeamFilterDropdown(
+            currentValue: ref.watch(customerTeamFilterProvider),
+            onChanged: (val) => ref.read(customerTeamFilterProvider.notifier).state = val,
+          ),
           if (!hasNoCustomersAtAll)
             PopupMenuButton<CustomerSort>(
               icon: const Icon(Icons.sort),
@@ -158,9 +164,16 @@ class _CustomerTile extends StatelessWidget {
           customer.name,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: Text(
-          'Added ${_formatDate(customer.createdAt)}',
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Added ${_formatDate(customer.createdAt)}',
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            if (customer.ownerId != null) OwnerBadge(ownerId: customer.ownerId!),
+          ],
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: () => context.push('/customers/${customer.id}'),
