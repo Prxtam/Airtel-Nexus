@@ -22,6 +22,11 @@ class AIRepository {
     final response = await _dio.post('/ai/meetings/$meetingId/email');
     return AIEmailDraftResponse.fromJson(response.data);
   }
+
+  Future<AISummaryResponse> generateCustomerInsights(String customerId) async {
+    final response = await _dio.post('/ai/customers/$customerId/insights');
+    return AISummaryResponse.fromJson(response.data);
+  }
 }
 
 final aiRepositoryProvider = Provider<AIRepository>((ref) {

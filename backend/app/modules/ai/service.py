@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.infrastructure.ai.llm_client import LLMClient
 from app.modules.customers.repository import CustomerRepository
+from app.modules.customers.service import CustomerNotFoundError
 from app.modules.meeting_notes.repository import MeetingNoteRepository
 from app.modules.meetings.repository import MeetingRepository
 from app.modules.meetings.service import MeetingNotFoundError
@@ -65,3 +66,28 @@ class AIService:
         meeting_title = meeting.title or "Recent Meeting"
 
         return self._llm.draft_follow_up_email(customer_name, meeting_title, notes_content)
+
+    def generate_customer_insights(self, customer_id: uuid.UUID, user_id: uuid.UUID) -> str:
+        customer = self._customers.get_by_id(customer_id)
+        if customer is None:
+            raise CustomerNotFoundError("Customer not found")
+
+        meetings = self._meetings.list_by_user(user_id=user_id, customer_id=customer_id)
+        
+        context_lines = []
+        context_lines.append(f"Customer Name: {customer.name}")
+        context_lines.append(f"Customer Since: {customer.created_at.strftime('%Y-%m-%d')}")
+        context_lines.append(f"Total Meetings: {len(meetings)}")
+        context_lines.append("\n--- Meeting History & Notes ---")
+        
+        for m in meetings:
+            context_lines.append(f"\nMeeting: {m.title or 'Untitled'} (Date: {m.meeting_at.strftime('%Y-%m-%d %H:%M')})")
+            notes = self._notes.list_notes_by_meeting_owner(user_id=user_id, meeting_id=m.id)
+            if notes:
+                for n in notes:
+                    context_lines.append(f"  Note ({n.created_at.strftime('%Y-%m-%d %H:%M')}): {n.note_text}")
+            else:
+                context_lines.append("  (No notes)")
+
+        context_data = "\n".join(context_lines)
+        return self._llm.generate_customer_insights(context_data)

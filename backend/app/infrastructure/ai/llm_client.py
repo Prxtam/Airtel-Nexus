@@ -12,3 +12,7 @@ class LLMClient(Protocol):
     def draft_follow_up_email(self, customer_name: str, meeting_title: str, notes_content: str) -> str:
         """Generates a professional follow-up email draft based on the meeting notes."""
         ...
+
+    def generate_customer_insights(self, context_data: str) -> str:
+        """Generates a comprehensive summary of a customer relationship."""
+        ...

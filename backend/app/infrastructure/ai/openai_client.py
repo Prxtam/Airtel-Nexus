@@ -82,3 +82,16 @@ class OpenAIClient(LLMClient):
             f"Please draft the follow-up email."
         )
         return self._call_llm(system, user)
+
+    def generate_customer_insights(self, context_data: str) -> str:
+        system = (
+            "You are an expert B2B Sales Assistant. Your task is to analyze customer data, meeting history, "
+            "and meeting notes to generate a comprehensive 'Customer Insights' report in Markdown format.\n\n"
+            "Include exactly these sections:\n"
+            "1. **Relationship Summary**: A brief synthesis of the relationship status.\n"
+            "2. **Outstanding Commitments**: A bulleted list of commitments made to or from the customer.\n"
+            "3. **Next Recommended Actions**: A numbered list of recommended next steps.\n"
+            "4. **Risk Indicators**: A bulleted list highlighting any risks (e.g., missed deadlines, competitor mentions)."
+        )
+        user = f"Here is the context data for the customer:\n\n{context_data}"
+        return self._call_llm(system, user)

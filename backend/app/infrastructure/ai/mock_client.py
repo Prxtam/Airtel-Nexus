@@ -57,3 +57,26 @@ Best regards,
 [Your Name]
 Airtel Enterprise Sales
 """
+
+    def generate_customer_insights(self, context_data: str) -> str:
+        time.sleep(2.0)
+        
+        return """### Customer Insights
+
+**Relationship Summary:**
+The relationship with this customer is actively developing. They have shown strong interest in upgrading their enterprise connectivity and are currently evaluating our dedicated leased line solutions.
+
+**Outstanding Commitments:**
+* Deliver an updated pricing proposal for the enterprise leased line.
+* Provide technical documentation regarding network security compliance.
+* Set up a technical deep-dive meeting next Tuesday.
+
+**Next Recommended Actions:**
+1. Follow up on the pricing proposal to ensure alignment with their budget.
+2. Prepare the engineering team for the deep-dive to address any remaining technical roadblocks.
+3. Check in on the status of the 30-day proof-of-concept (POC) setup.
+
+**Risk Indicators:**
+* **Moderate Risk**: Delays in providing security documentation could stall the POC approval process.
+* **Low Risk**: Competitor pricing might become a factor if our proposal exceeds expectations without clear ROI justification.
+"""
