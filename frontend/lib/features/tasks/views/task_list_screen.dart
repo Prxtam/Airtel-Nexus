@@ -12,7 +12,8 @@ import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:gap/gap.dart';
 
 class TaskListScreen extends ConsumerWidget {
-  const TaskListScreen({super.key});
+  final bool hideAppBar;
+  const TaskListScreen({super.key, this.hideAppBar = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +22,7 @@ class TaskListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
+      appBar: hideAppBar ? null : AppBar(
         title: const Text('Tasks'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,

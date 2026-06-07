@@ -67,7 +67,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               const Gap(16),
               const Text(
-                'Airtel B2B',
+                'Airtel Nexus',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
@@ -76,10 +76,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               const Text(
-                'Sales Assistant',
+                'Empowering Enterprise Relationships',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: AppConstants.textColor,
                 ),
               ),

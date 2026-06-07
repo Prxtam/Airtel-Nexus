@@ -13,7 +13,8 @@ import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:gap/gap.dart';
 
 class MeetingListScreen extends ConsumerWidget {
-  const MeetingListScreen({super.key});
+  final bool hideAppBar;
+  const MeetingListScreen({super.key, this.hideAppBar = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +22,7 @@ class MeetingListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
+      appBar: hideAppBar ? null : AppBar(
         title: const Text('Meetings'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,

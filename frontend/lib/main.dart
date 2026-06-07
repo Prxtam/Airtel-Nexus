@@ -16,7 +16,7 @@ class MyApp extends ConsumerWidget {
     final router = ref.watch(goRouterProvider);
 
     return MaterialApp.router(
-      title: 'Airtel B2B Assistant',
+      title: 'Airtel Nexus',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppConstants.primaryColor,
