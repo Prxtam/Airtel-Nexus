@@ -5,6 +5,7 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.core.di.auth import get_current_user
+from app.core.di.rbac import get_allowed_user_ids
 from app.core.di.meeting_notes import get_meeting_note_service
 from app.infrastructure.db.models.user import User
 from app.modules.meeting_notes.schemas import (
@@ -41,12 +42,14 @@ def _note_to_response(note) -> MeetingNoteResponse:
 def create_note(
     payload: MeetingNoteCreateRequest,
     current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingNoteService = Depends(get_meeting_note_service),
 ) -> MeetingNoteResponse:
     try:
         note = service.create_note(
             meeting_id=payload.meeting_id,
             author_user_id=current_user.id,
+            allowed_user_ids=allowed_user_ids,
             note_text=payload.note_text,
         )
     except MeetingNotFoundForNoteError:
@@ -65,10 +68,10 @@ def create_note(
 )
 def list_notes(
     meeting_id: uuid.UUID | None = Query(default=None),
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingNoteService = Depends(get_meeting_note_service),
 ) -> MeetingNoteListResponse:
-    notes = service.list_notes(user_id=current_user.id, meeting_id=meeting_id)
+    notes = service.list_notes(allowed_user_ids=allowed_user_ids, meeting_id=meeting_id)
     items = [_note_to_response(n) for n in notes]
     return MeetingNoteListResponse(notes=items, count=len(items))
 
@@ -80,11 +83,11 @@ def list_notes(
 )
 def get_note(
     note_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingNoteService = Depends(get_meeting_note_service),
 ) -> MeetingNoteResponse:
     try:
-        note = service.get_note(note_id=note_id, user_id=current_user.id)
+        note = service.get_note(note_id=note_id, allowed_user_ids=allowed_user_ids)
     except MeetingNoteNotFoundError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -103,12 +106,14 @@ def update_note(
     note_id: uuid.UUID,
     payload: MeetingNoteUpdateRequest,
     current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingNoteService = Depends(get_meeting_note_service),
 ) -> MeetingNoteResponse:
     try:
         note = service.update_note(
             note_id=note_id,
             user_id=current_user.id,
+            allowed_user_ids=allowed_user_ids,
             note_text=payload.note_text,
         )
     except MeetingNoteNotFoundError:
@@ -131,10 +136,11 @@ from fastapi import Response
 def delete_note(
     note_id: uuid.UUID,
     current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingNoteService = Depends(get_meeting_note_service),
 ) -> None:
     try:
-        service.delete_note(note_id=note_id, user_id=current_user.id)
+        service.delete_note(note_id=note_id, user_id=current_user.id, allowed_user_ids=allowed_user_ids)
     except MeetingNoteNotFoundError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -79,11 +79,11 @@ def list_meetings(
 )
 def get_meeting(
     meeting_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingService = Depends(get_meeting_service),
 ) -> MeetingResponse:
     try:
-        meeting = service.get_meeting(meeting_id=meeting_id, user_id=current_user.id)
+        meeting = service.get_meeting(meeting_id=meeting_id, allowed_user_ids=allowed_user_ids)
     except MeetingNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Meeting not found")
 
@@ -98,13 +98,13 @@ def get_meeting(
 def update_meeting(
     meeting_id: uuid.UUID,
     payload: MeetingUpdateRequest,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingService = Depends(get_meeting_service),
 ) -> MeetingResponse:
     try:
         meeting = service.update_meeting(
             meeting_id=meeting_id,
-            user_id=current_user.id,
+            allowed_user_ids=allowed_user_ids,
             title=payload.title,
             meeting_at=payload.meeting_at,
         )
@@ -124,10 +124,10 @@ from fastapi import Response
 )
 def delete_meeting(
     meeting_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: MeetingService = Depends(get_meeting_service),
 ) -> None:
     try:
-        service.delete_meeting(meeting_id=meeting_id, user_id=current_user.id)
+        service.delete_meeting(meeting_id=meeting_id, allowed_user_ids=allowed_user_ids)
     except MeetingNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Meeting not found")

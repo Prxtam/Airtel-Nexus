@@ -68,11 +68,11 @@ def list_customers(
 )
 def get_customer(
     customer_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: CustomerService = Depends(get_customer_service),
 ) -> CustomerResponse:
     try:
-        customer = service.get_customer(customer_id=customer_id)
+        customer = service.get_customer(customer_id=customer_id, allowed_user_ids=allowed_user_ids)
     except CustomerNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Customer not found")
 
@@ -87,11 +87,11 @@ def get_customer(
 def update_customer(
     customer_id: uuid.UUID,
     payload: CustomerUpdateRequest,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: CustomerService = Depends(get_customer_service),
 ) -> CustomerResponse:
     try:
-        customer = service.update_customer(customer_id=customer_id, name=payload.name)
+        customer = service.update_customer(customer_id=customer_id, allowed_user_ids=allowed_user_ids, name=payload.name)
     except CustomerNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Customer not found")
     except CustomerAlreadyExistsError as exc:
@@ -110,10 +110,10 @@ from fastapi import Response
 )
 def delete_customer(
     customer_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: CustomerService = Depends(get_customer_service),
 ) -> None:
     try:
-        service.delete_customer(customer_id=customer_id)
+        service.delete_customer(customer_id=customer_id, allowed_user_ids=allowed_user_ids)
     except CustomerNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Customer not found")

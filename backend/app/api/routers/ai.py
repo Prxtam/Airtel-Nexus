@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.core.di.ai import get_ai_service
 from app.core.di.auth import get_current_user
+from app.core.di.rbac import get_allowed_user_ids
 from app.infrastructure.db.models.user import User
 from app.modules.ai.schemas import AIActionItemsResponse, AIEmailDraftResponse, AISummaryResponse
 from app.modules.ai.service import AIService
@@ -20,11 +21,11 @@ router = APIRouter(prefix="/ai", tags=["ai"])
 )
 def generate_summary(
     meeting_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: AIService = Depends(get_ai_service),
 ) -> AISummaryResponse:
     try:
-        summary = service.generate_meeting_summary(meeting_id=meeting_id, user_id=current_user.id)
+        summary = service.generate_meeting_summary(meeting_id=meeting_id, allowed_user_ids=allowed_user_ids)
     except MeetingNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Meeting not found")
         
@@ -38,11 +39,11 @@ def generate_summary(
 )
 def extract_actions(
     meeting_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: AIService = Depends(get_ai_service),
 ) -> AIActionItemsResponse:
     try:
-        actions = service.extract_action_items(meeting_id=meeting_id, user_id=current_user.id)
+        actions = service.extract_action_items(meeting_id=meeting_id, allowed_user_ids=allowed_user_ids)
     except MeetingNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Meeting not found")
         
@@ -56,11 +57,11 @@ def extract_actions(
 )
 def draft_email(
     meeting_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: AIService = Depends(get_ai_service),
 ) -> AIEmailDraftResponse:
     try:
-        email = service.draft_follow_up_email(meeting_id=meeting_id, user_id=current_user.id)
+        email = service.draft_follow_up_email(meeting_id=meeting_id, allowed_user_ids=allowed_user_ids)
     except MeetingNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Meeting not found")
         
@@ -73,11 +74,11 @@ def draft_email(
 )
 def generate_customer_insights(
     customer_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: AIService = Depends(get_ai_service),
 ) -> AISummaryResponse:
     try:
-        insights = service.generate_customer_insights(customer_id=customer_id, user_id=current_user.id)
+        insights = service.generate_customer_insights(customer_id=customer_id, allowed_user_ids=allowed_user_ids)
     except CustomerNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Customer not found")
         

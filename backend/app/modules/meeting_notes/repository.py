@@ -9,10 +9,10 @@ from app.infrastructure.db.models.meeting_note import MeetingNote
 class MeetingNoteRepository(Protocol):
     def get_by_id(self, note_id: uuid.UUID) -> MeetingNote | None: ...
 
-    def list_notes_by_meeting_owner(
+    def list_scoped(
         self,
         *,
-        user_id: uuid.UUID,
+        allowed_user_ids: list[uuid.UUID] | None = None,
         meeting_id: uuid.UUID | None = None,
     ) -> list[MeetingNote]: ...
 

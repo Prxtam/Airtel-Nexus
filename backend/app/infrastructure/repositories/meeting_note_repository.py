@@ -16,13 +16,15 @@ class SqlAlchemyMeetingNoteRepository:
     def get_by_id(self, note_id: uuid.UUID) -> MeetingNote | None:
         return self._db.get(MeetingNote, note_id)
 
-    def list_notes_by_meeting_owner(
+    def list_scoped(
         self,
         *,
-        user_id: uuid.UUID,
+        allowed_user_ids: list[uuid.UUID] | None = None,
         meeting_id: uuid.UUID | None = None,
     ) -> list[MeetingNote]:
-        stmt = select(MeetingNote).join(Meeting).where(Meeting.created_by_user_id == user_id)
+        stmt = select(MeetingNote).join(Meeting)
+        if allowed_user_ids is not None:
+            stmt = stmt.where(Meeting.created_by_user_id.in_(allowed_user_ids))
 
         if meeting_id is not None:
             stmt = stmt.where(MeetingNote.meeting_id == meeting_id)

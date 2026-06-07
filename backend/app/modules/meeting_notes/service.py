@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.infrastructure.db.models.meeting_note import MeetingNote
 from app.modules.meetings.repository import MeetingRepository
 from app.modules.meeting_notes.repository import MeetingNoteRepository
+from app.core.di.rbac import is_in_rbac_scope
 
 
 class MeetingNoteNotFoundError(Exception):
@@ -33,11 +34,12 @@ class MeetingNoteService:
         *,
         meeting_id: uuid.UUID,
         author_user_id: uuid.UUID,
+        allowed_user_ids: list[uuid.UUID] | None,
         note_text: str,
     ) -> MeetingNote:
         # Validate meeting existence and ownership
         meeting = self._meetings.get_by_id(meeting_id)
-        if meeting is None or meeting.created_by_user_id != author_user_id:
+        if meeting is None or not is_in_rbac_scope(meeting.created_by_user_id, allowed_user_ids):
             raise MeetingNotFoundForNoteError("Meeting not found")
 
         note = self._notes.create_note(
@@ -52,20 +54,19 @@ class MeetingNoteService:
     def list_notes(
         self,
         *,
-        user_id: uuid.UUID,
+        allowed_user_ids: list[uuid.UUID] | None = None,
         meeting_id: uuid.UUID | None = None,
     ) -> list[MeetingNote]:
-        # A user should only be able to access notes belonging to meetings they own.
-        # This is handled directly in the repository by filtering notes by meeting owner.
-        return self._notes.list_notes_by_meeting_owner(user_id=user_id, meeting_id=meeting_id)
+        # A user should only be able to access notes belonging to meetings in their scope.
+        return self._notes.list_scoped(allowed_user_ids=allowed_user_ids, meeting_id=meeting_id)
 
-    def get_note(self, *, note_id: uuid.UUID, user_id: uuid.UUID) -> MeetingNote:
+    def get_note(self, *, note_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None) -> MeetingNote:
         note = self._notes.get_by_id(note_id)
         if note is None:
             raise MeetingNoteNotFoundError("Meeting note not found")
 
-        # Validate that the meeting belongs to the user
-        if note.meeting.created_by_user_id != user_id:
+        # Validate that the meeting is in scope
+        if not is_in_rbac_scope(note.meeting.created_by_user_id, allowed_user_ids):
             raise MeetingNoteNotFoundError("Meeting note not found")
 
         return note
@@ -75,19 +76,19 @@ class MeetingNoteService:
         *,
         note_id: uuid.UUID,
         user_id: uuid.UUID,
+        allowed_user_ids: list[uuid.UUID] | None,
         note_text: str | None = None,
     ) -> MeetingNote:
         note = self._notes.get_by_id(note_id)
         if note is None:
             raise MeetingNoteNotFoundError("Meeting note not found")
 
-        # Ensure only the meeting owner can access it
-        if note.meeting.created_by_user_id != user_id:
+        # Ensure only a manager in scope can access it
+        if not is_in_rbac_scope(note.meeting.created_by_user_id, allowed_user_ids):
             raise MeetingNoteNotFoundError("Meeting note not found")
 
-        # Ensure only the author can modify the note
-        if note.author_user_id != user_id:
-            raise MeetingNoteNotFoundError("Meeting note not found")
+        # In RBAC, if it's in scope, allow the update.
+        # No strict author_user_id == user_id check here, allowing ZSMs to update team notes.
 
         if note_text is not None:
             note.note_text = note_text
@@ -96,17 +97,13 @@ class MeetingNoteService:
         self._db.refresh(note)
         return note
 
-    def delete_note(self, *, note_id: uuid.UUID, user_id: uuid.UUID) -> None:
+    def delete_note(self, *, note_id: uuid.UUID, user_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None) -> None:
         note = self._notes.get_by_id(note_id)
         if note is None:
             raise MeetingNoteNotFoundError("Meeting note not found")
 
-        # Ensure only the meeting owner can access it
-        if note.meeting.created_by_user_id != user_id:
-            raise MeetingNoteNotFoundError("Meeting note not found")
-
-        # Ensure only the author can delete the note
-        if note.author_user_id != user_id:
+        # Ensure only a manager in scope can access it
+        if not is_in_rbac_scope(note.meeting.created_by_user_id, allowed_user_ids):
             raise MeetingNoteNotFoundError("Meeting note not found")
 
         self._notes.delete_note(note)

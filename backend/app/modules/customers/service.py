@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.infrastructure.db.models.customer import Customer
 from app.modules.customers.repository import CustomerRepository
+from app.core.di.rbac import is_in_rbac_scope
 
 
 class CustomerNotFoundError(Exception):
@@ -39,15 +40,15 @@ class CustomerService:
     def list_customers(self, allowed_user_ids: list[uuid.UUID] | None = None) -> list[Customer]:
         return self._customers.list_scoped(allowed_user_ids)
 
-    def get_customer(self, *, customer_id: uuid.UUID) -> Customer:
+    def get_customer(self, *, customer_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None) -> Customer:
         customer = self._customers.get_by_id(customer_id)
-        if customer is None:
+        if customer is None or not is_in_rbac_scope(customer.owner_id, allowed_user_ids):
             raise CustomerNotFoundError("Customer not found")
         return customer
 
-    def update_customer(self, *, customer_id: uuid.UUID, name: str | None) -> Customer:
+    def update_customer(self, *, customer_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None, name: str | None) -> Customer:
         customer = self._customers.get_by_id(customer_id)
-        if customer is None:
+        if customer is None or not is_in_rbac_scope(customer.owner_id, allowed_user_ids):
             raise CustomerNotFoundError("Customer not found")
 
         if name is not None:
@@ -61,9 +62,9 @@ class CustomerService:
         self._db.refresh(customer)
         return customer
 
-    def delete_customer(self, *, customer_id: uuid.UUID) -> None:
+    def delete_customer(self, *, customer_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None) -> None:
         customer = self._customers.get_by_id(customer_id)
-        if customer is None:
+        if customer is None or not is_in_rbac_scope(customer.owner_id, allowed_user_ids):
             raise CustomerNotFoundError("Customer not found")
 
         self._customers.delete_customer(customer)

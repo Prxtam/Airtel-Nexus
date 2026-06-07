@@ -72,11 +72,11 @@ def list_tasks(
 )
 def get_task(
     task_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: TaskService = Depends(get_task_service),
 ) -> TaskResponse:
     try:
-        task = service.get_task(task_id=task_id, user_id=current_user.id)
+        task = service.get_task(task_id=task_id, allowed_user_ids=allowed_user_ids)
     except TaskNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 
@@ -91,16 +91,16 @@ def get_task(
 )
 def complete_task(
     task_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    allowed_user_ids: list[uuid.UUID] | None = Depends(get_allowed_user_ids),
     service: TaskService = Depends(get_task_service),
 ) -> TaskResponse:
     """
-    Mark a task as completed. Ownership is enforced — users can only complete
-    their own tasks. This endpoint is idempotent: calling it on an already-completed
+    Mark a task as completed. Ownership is enforced via RBAC.
+    This endpoint is idempotent: calling it on an already-completed
     task returns 200 with the unchanged task.
     """
     try:
-        task = service.complete_task(task_id=task_id, user_id=current_user.id)
+        task = service.complete_task(task_id=task_id, allowed_user_ids=allowed_user_ids)
     except TaskNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 

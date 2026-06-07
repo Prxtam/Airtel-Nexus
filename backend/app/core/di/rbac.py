@@ -26,3 +26,16 @@ def get_allowed_user_ids(
             allowed_ids.append(sub.id)
             
     return allowed_ids
+
+def is_in_rbac_scope(owner_id: uuid.UUID | None, allowed_user_ids: list[uuid.UUID] | None) -> bool:
+    """
+    Checks whether a resource owner is within the current user's allowed RBAC scope.
+    - If allowed_user_ids is None, returns True (Admin/CBH unrestricted access).
+    - If owner_id is None, returns False (cannot verify ownership).
+    - Otherwise returns True if owner_id is in allowed_user_ids.
+    """
+    if allowed_user_ids is None:
+        return True
+    if owner_id is None:
+        return False
+    return owner_id in allowed_user_ids

@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.infrastructure.db.models.meeting import Meeting
 from app.modules.customers.repository import CustomerRepository
 from app.modules.meetings.repository import MeetingRepository
+from app.core.di.rbac import is_in_rbac_scope
 
 
 class MeetingNotFoundError(Exception):
@@ -54,9 +55,9 @@ class MeetingService:
     ) -> list[Meeting]:
         return self._meetings.list_scoped(allowed_user_ids=allowed_user_ids, customer_id=customer_id)
 
-    def get_meeting(self, *, meeting_id: uuid.UUID, user_id: uuid.UUID) -> Meeting:
+    def get_meeting(self, *, meeting_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None) -> Meeting:
         meeting = self._meetings.get_by_id(meeting_id)
-        if meeting is None or meeting.created_by_user_id != user_id:
+        if meeting is None or not is_in_rbac_scope(meeting.created_by_user_id, allowed_user_ids):
             raise MeetingNotFoundError("Meeting not found")
         return meeting
 
@@ -64,12 +65,12 @@ class MeetingService:
         self,
         *,
         meeting_id: uuid.UUID,
-        user_id: uuid.UUID,
+        allowed_user_ids: list[uuid.UUID] | None,
         title: str | None = None,
         meeting_at: datetime | None = None,
     ) -> Meeting:
         meeting = self._meetings.get_by_id(meeting_id)
-        if meeting is None or meeting.created_by_user_id != user_id:
+        if meeting is None or not is_in_rbac_scope(meeting.created_by_user_id, allowed_user_ids):
             raise MeetingNotFoundError("Meeting not found")
 
         if title is not None:
@@ -81,9 +82,9 @@ class MeetingService:
         self._db.refresh(meeting)
         return meeting
 
-    def delete_meeting(self, *, meeting_id: uuid.UUID, user_id: uuid.UUID) -> None:
+    def delete_meeting(self, *, meeting_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None) -> None:
         meeting = self._meetings.get_by_id(meeting_id)
-        if meeting is None or meeting.created_by_user_id != user_id:
+        if meeting is None or not is_in_rbac_scope(meeting.created_by_user_id, allowed_user_ids):
             raise MeetingNotFoundError("Meeting not found")
 
         self._meetings.delete_meeting(meeting)

@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.infrastructure.db.models.enums import TaskPriority, TaskStatus
 from app.infrastructure.db.models.task import Task
 from app.modules.tasks.repository import TaskRepository
+from app.core.di.rbac import is_in_rbac_scope
 
 
 class TaskNotFoundError(Exception):
@@ -42,17 +43,17 @@ class TaskService:
     def list_tasks(self, *, allowed_user_ids: list[uuid.UUID] | None = None, status: TaskStatus | None = None) -> list[Task]:
         return self._tasks.list_scoped(allowed_user_ids, status=status)
 
-    def get_task(self, *, task_id: uuid.UUID, user_id: uuid.UUID) -> Task:
-        """Return a task owned by the user, or raise TaskNotFoundError."""
+    def get_task(self, *, task_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None) -> Task:
+        """Return a task within the RBAC scope, or raise TaskNotFoundError."""
         task = self._tasks.get_by_id(task_id)
-        if task is None or task.user_id != user_id:
+        if task is None or not is_in_rbac_scope(task.user_id, allowed_user_ids):
             raise TaskNotFoundError("Task not found")
         return task
 
-    def complete_task(self, *, task_id: uuid.UUID, user_id: uuid.UUID) -> Task:
+    def complete_task(self, *, task_id: uuid.UUID, allowed_user_ids: list[uuid.UUID] | None) -> Task:
         """Mark a task as completed. Idempotent — safe to call on an already-completed task."""
         task = self._tasks.get_by_id(task_id)
-        if task is None or task.user_id != user_id:
+        if task is None or not is_in_rbac_scope(task.user_id, allowed_user_ids):
             raise TaskNotFoundError("Task not found")
 
         # Idempotent: if already completed, return as-is without touching the DB.
