@@ -5,6 +5,16 @@ import 'package:frontend/core/views/app_shell.dart';
 import 'package:frontend/core/views/splash_screen.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:frontend/features/auth/views/login_screen.dart';
+import 'package:frontend/features/airtel_iq/views/airtel_iq_dashboard_screen.dart';
+import 'package:frontend/features/airtel_iq/views/products/products_list_screen.dart';
+import 'package:frontend/features/airtel_iq/views/products/product_detail_screen.dart';
+import 'package:frontend/features/airtel_iq/views/knowledge/knowledge_list_screen.dart';
+import 'package:frontend/features/airtel_iq/views/knowledge/knowledge_detail_screen.dart';
+import 'package:frontend/features/airtel_iq/views/faq/faq_screen.dart';
+import 'package:frontend/features/airtel_iq/views/playbooks/playbooks_list_screen.dart';
+import 'package:frontend/features/airtel_iq/views/playbooks/playbook_detail_screen.dart';
+import 'package:frontend/features/airtel_iq/views/objections/objection_handling_screen.dart';
+import 'package:frontend/features/airtel_iq/views/ai_coach/ai_coach_placeholder_screen.dart';
 import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
 import 'package:frontend/features/dashboard/views/admin_dashboard_screen.dart';
 import 'package:frontend/features/dashboard/views/team_dashboard_screen.dart';
@@ -106,6 +116,62 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => const KnowledgeScreen(),
               ),
             ],
+          ),
+        ],
+      ),
+
+      // Airtel IQ Routes (Outside Shell for full-screen focus)
+      GoRoute(
+        path: '/airtel-iq',
+        builder: (context, state) => const AirtelIqDashboardScreen(),
+        routes: [
+          GoRoute(
+            path: 'products',
+            builder: (context, state) => const ProductsListScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => ProductDetailScreen(
+                  productId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'knowledge',
+            builder: (context, state) => const KnowledgeListScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => KnowledgeDetailScreen(
+                  articleId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'faq',
+            builder: (context, state) => const FaqScreen(),
+          ),
+          GoRoute(
+            path: 'playbooks',
+            builder: (context, state) => const PlaybooksListScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => PlaybookDetailScreen(
+                  playbookId: state.pathParameters['id']!,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'objections',
+            builder: (context, state) => const ObjectionHandlingScreen(),
+          ),
+          GoRoute(
+            path: 'ai-coach',
+            builder: (context, state) => const AiCoachPlaceholderScreen(),
           ),
         ],
       ),

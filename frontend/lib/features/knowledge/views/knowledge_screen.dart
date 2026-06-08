@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 
 class KnowledgeScreen extends StatelessWidget {
@@ -120,9 +121,17 @@ class KnowledgeScreen extends StatelessWidget {
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('$title coming in Phase 8B')),
-          );
+          if (title == 'Airtel Products') {
+            context.push('/airtel-iq/products');
+          } else if (title == 'Sales Playbooks') {
+            context.push('/airtel-iq/playbooks');
+          } else if (title == 'AI Sales Coach') {
+            context.push('/airtel-iq/ai-coach');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('$title coming in Phase 8B')),
+            );
+          }
         },
       ),
     );
