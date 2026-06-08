@@ -38,39 +38,79 @@ class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen> with Single
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Activities'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
-          indicatorColor: Colors.white,
-          tabs: const [
-            Tab(text: 'Meetings'),
-            Tab(text: 'Tasks'),
-          ],
-        ),
-        actions: [
-          // Render the appropriate filter based on the active tab
-          if (_tabController.index == 0)
-            TeamFilterDropdown(
-              currentValue: ref.watch(meetingTeamFilterProvider),
-              onChanged: (val) => ref.read(meetingTeamFilterProvider.notifier).state = val,
-            )
-          else
-            TeamFilterDropdown(
-              currentValue: ref.watch(taskTeamFilterProvider),
-              onChanged: (val) => ref.read(taskTeamFilterProvider.notifier).state = val,
+      body: Column(
+        children: [
+          _buildHeader(context),
+          Container(
+            color: Colors.white,
+            child: TabBar(
+              controller: _tabController,
+              labelColor: AppConstants.primaryColor,
+              unselectedLabelColor: Colors.grey.shade600,
+              indicatorColor: AppConstants.primaryColor,
+              indicatorWeight: 3,
+              labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              tabs: const [
+                Tab(text: 'Meetings'),
+                Tab(text: 'Tasks'),
+              ],
             ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: const [
+                MeetingListScreen(hideAppBar: true),
+                TaskListScreen(hideAppBar: true),
+              ],
+            ),
+          ),
         ],
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: const [
-          MeetingListScreen(hideAppBar: true),
-          TaskListScreen(hideAppBar: true),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.fromLTRB(16, MediaQuery.of(context).padding.top + 16, 16, 24),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppConstants.primaryColor, Color(0xFFC00000)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Activities',
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              // Dropdowns
+              Theme(
+                data: Theme.of(context).copyWith(canvasColor: Colors.white),
+                child: _tabController.index == 0
+                    ? TeamFilterDropdown(
+                        currentValue: ref.watch(meetingTeamFilterProvider),
+                        onChanged: (val) => ref.read(meetingTeamFilterProvider.notifier).state = val,
+                      )
+                    : TeamFilterDropdown(
+                        currentValue: ref.watch(taskTeamFilterProvider),
+                        onChanged: (val) => ref.read(taskTeamFilterProvider.notifier).state = val,
+                      ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Track meetings and tasks',
+            style: TextStyle(color: Colors.white70, fontSize: 14),
+          ),
         ],
       ),
     );

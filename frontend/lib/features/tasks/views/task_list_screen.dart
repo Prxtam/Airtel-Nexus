@@ -55,8 +55,15 @@ class TaskListScreen extends ConsumerWidget {
               decoration: InputDecoration(
                 hintText: 'Search tasks...',
                 prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.white,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
               ),
@@ -217,14 +224,24 @@ class _TaskTile extends StatelessWidget {
     final isCompleted = task.status == TaskStatus.completed;
 
     return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: Icon(
-          isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
-          color: isCompleted ? Colors.green : Colors.grey,
-          size: 28,
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: (isCompleted ? Colors.green : Colors.orange).withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            isCompleted ? Icons.check_circle : Icons.pending_actions,
+            color: isCompleted ? Colors.green.shade700 : Colors.orange.shade700,
+          ),
         ),
         title: Text(
           task.title,
@@ -234,26 +251,29 @@ class _TaskTile extends StatelessWidget {
             color: isCompleted ? Colors.grey : AppConstants.textColor,
           ),
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Gap(4),
-            Row(
-              children: [
-                _PriorityBadge(priority: task.priority),
-                if (task.dueAt != null) ...[
-                  const Gap(8),
-                  Icon(Icons.schedule, size: 12, color: Colors.grey.shade500),
-                  const Gap(2),
-                  Text(
-                    _formatDate(task.dueAt!),
-                    style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
-                  ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              OwnerBadge(ownerId: task.userId),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  _PriorityBadge(priority: task.priority),
+                  if (task.dueAt != null) ...[
+                    const Gap(8),
+                    Icon(Icons.schedule, size: 12, color: Colors.grey.shade500),
+                    const Gap(2),
+                    Text(
+                      _formatDate(task.dueAt!),
+                      style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                    ),
+                  ],
                 ],
-              ],
-            ),
-            OwnerBadge(ownerId: task.userId),
-          ],
+              ),
+            ],
+          ),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: () => context.push('/tasks/${task.id}'),

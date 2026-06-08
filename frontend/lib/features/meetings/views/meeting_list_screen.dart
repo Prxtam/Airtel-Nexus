@@ -121,8 +121,15 @@ class _MeetingFilters extends ConsumerWidget {
             decoration: InputDecoration(
               hintText: 'Search meetings...',
               prefixIcon: const Icon(Icons.search),
+              filled: true,
+              fillColor: Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
             ),
@@ -158,10 +165,17 @@ class _MeetingFilters extends ConsumerWidget {
               if (customers.isEmpty) return const SizedBox.shrink();
               return DropdownButtonFormField<String?>(
                 initialValue: currentCustomerId,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.business, size: 20),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  prefixIcon: const Icon(Icons.business, size: 20),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   isDense: true,
                 ),
                 hint: const Text('Filter by Customer'),
@@ -196,35 +210,44 @@ class _MeetingTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isUpcoming = meeting.meetingAt.isAfter(DateTime.now());
     return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
       child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: CircleAvatar(
-          backgroundColor: (isUpcoming ? Colors.green : Colors.grey)
-              .withValues(alpha: 0.12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: (isUpcoming ? Colors.green : Colors.grey).withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Icon(
             isUpcoming ? Icons.event : Icons.event_available,
-            color: isUpcoming ? Colors.green : Colors.grey,
+            color: isUpcoming ? Colors.green.shade700 : Colors.grey.shade700,
           ),
         ),
         title: Text(
           meeting.title ?? 'Untitled Meeting',
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Gap(2),
-            Text(
-              _formatDateTime(meeting.meetingAt),
-              style: TextStyle(
-                  fontSize: 12,
-                  color: isUpcoming ? Colors.green.shade700 : Colors.grey),
-            ),
-            OwnerBadge(ownerId: meeting.createdByUserId),
-          ],
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              OwnerBadge(ownerId: meeting.createdByUserId),
+              const SizedBox(height: 4),
+              Text(
+                _formatDateTime(meeting.meetingAt),
+                style: TextStyle(
+                    fontSize: 12,
+                    color: isUpcoming ? Colors.green.shade700 : Colors.grey),
+              ),
+            ],
+          ),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: () => context.push('/meetings/${meeting.id}'),

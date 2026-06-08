@@ -26,91 +26,127 @@ class CustomerListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Customers'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
-        actions: [
-          TeamFilterDropdown(
-            currentValue: ref.watch(customerTeamFilterProvider),
-            onChanged: (val) => ref.read(customerTeamFilterProvider.notifier).state = val,
-          ),
-          if (!hasNoCustomersAtAll)
-            PopupMenuButton<CustomerSort>(
-              icon: const Icon(Icons.sort),
-              initialValue: currentSort,
-              onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: CustomerSort.nameAsc,
-                  child: Text('Name (A-Z)'),
-                ),
-                const PopupMenuItem(
-                  value: CustomerSort.nameDesc,
-                  child: Text('Name (Z-A)'),
-                ),
-                const PopupMenuItem(
-                  value: CustomerSort.newestFirst,
-                  child: Text('Newest First'),
-                ),
-                const PopupMenuItem(
-                  value: CustomerSort.oldestFirst,
-                  child: Text('Oldest First'),
-                ),
-              ],
-            ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/customers/create'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
-      body: customersAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(
-          message: e.toString(),
-          onRetry: () => ref.read(customerListProvider.notifier).refresh(),
-        ),
-        data: (customers) {
-          if (hasNoCustomersAtAll) {
-             return AppEmptyWidget(
-              icon: Icons.people_outline,
-              message: 'No customers yet.\nTap + to add your first customer.',
-              actionLabel: 'Add Customer',
-              onAction: () => context.push('/customers/create'),
-            );
-          }
+      body: Column(
+        children: [
+          _buildHeader(context, currentSort, hasNoCustomersAtAll, ref),
+          Expanded(
+            child: customersAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => AppErrorWidget(
+                message: e.toString(),
+                onRetry: () => ref.read(customerListProvider.notifier).refresh(),
+              ),
+              data: (customers) {
+                if (hasNoCustomersAtAll) {
+                  return AppEmptyWidget(
+                    icon: Icons.people_outline,
+                    message: 'No customers yet.\nTap + to add your first customer.',
+                    actionLabel: 'Add Customer',
+                    onAction: () => context.push('/customers/create'),
+                  );
+                }
 
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: TextField(
-                  onChanged: (val) => ref.read(customerSearchProvider.notifier).state = val,
-                  decoration: InputDecoration(
-                    hintText: 'Search customers...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: TextField(
+                        onChanged: (val) => ref.read(customerSearchProvider.notifier).state = val,
+                        decoration: InputDecoration(
+                          hintText: 'Search customers...',
+                          prefixIcon: const Icon(Icons.search),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                        ),
+                      ),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: _buildList(context, ref, customers),
-              ),
-            ],
-          );
-        },
+                    Expanded(
+                      child: _buildList(context, ref, customers),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildList(
-      BuildContext context, WidgetRef ref, List<Customer> customers) {
+  Widget _buildHeader(BuildContext context, CustomerSort currentSort, bool hasNoCustomersAtAll, WidgetRef ref) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.fromLTRB(16, MediaQuery.of(context).padding.top + 16, 16, 24),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppConstants.primaryColor, Color(0xFFC00000)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Customers',
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                children: [
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      canvasColor: Colors.white,
+                    ),
+                    child: TeamFilterDropdown(
+                      currentValue: ref.watch(customerTeamFilterProvider),
+                      onChanged: (val) => ref.read(customerTeamFilterProvider.notifier).state = val,
+                    ),
+                  ),
+                  if (!hasNoCustomersAtAll)
+                    PopupMenuButton<CustomerSort>(
+                      icon: const Icon(Icons.sort, color: Colors.white),
+                      initialValue: currentSort,
+                      onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(value: CustomerSort.nameAsc, child: Text('Name (A-Z)')),
+                        const PopupMenuItem(value: CustomerSort.nameDesc, child: Text('Name (Z-A)')),
+                        const PopupMenuItem(value: CustomerSort.newestFirst, child: Text('Newest First')),
+                        const PopupMenuItem(value: CustomerSort.oldestFirst, child: Text('Oldest First')),
+                      ],
+                    ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Manage enterprise relationships',
+            style: TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildList(BuildContext context, WidgetRef ref, List<Customer> customers) {
     if (customers.isEmpty) {
       return const Center(
         child: Text(
@@ -143,37 +179,36 @@ class _CustomerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
       child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: CircleAvatar(
-          backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
-          child: Text(
-            customer.name.isNotEmpty
-                ? customer.name[0].toUpperCase()
-                : '?',
-            style: const TextStyle(
-              color: AppConstants.primaryColor,
-              fontWeight: FontWeight.bold,
-            ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(12),
           ),
+          child: Icon(Icons.business, color: Colors.blue.shade700),
         ),
-        title: Text(
-          customer.name,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Added ${_formatDate(customer.createdAt)}',
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            if (customer.ownerId != null) OwnerBadge(ownerId: customer.ownerId!),
-          ],
+        title: Text(customer.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (customer.ownerId != null) OwnerBadge(ownerId: customer.ownerId!),
+              const SizedBox(height: 4),
+              Text(
+                'Added ${_formatDate(customer.createdAt)}',
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ],
+          ),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: () => context.push('/customers/${customer.id}'),
