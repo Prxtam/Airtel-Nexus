@@ -14,7 +14,11 @@ import 'package:frontend/features/airtel_iq/views/faq/faq_screen.dart';
 import 'package:frontend/features/airtel_iq/views/playbooks/playbooks_list_screen.dart';
 import 'package:frontend/features/airtel_iq/views/playbooks/playbook_detail_screen.dart';
 import 'package:frontend/features/airtel_iq/views/objections/objection_handling_screen.dart';
-import 'package:frontend/features/airtel_iq/views/ai_coach/ai_coach_placeholder_screen.dart';
+import 'package:frontend/features/airtel_iq/views/ai_coach/ai_coach_dashboard_screen.dart';
+import 'package:frontend/features/airtel_iq/views/ai_coach/meeting_prep_screen.dart';
+import 'package:frontend/features/airtel_iq/views/ai_coach/opportunity_insights_screen.dart';
+import 'package:frontend/features/airtel_iq/views/ai_coach/follow_up_generator_screen.dart';
+import 'package:frontend/features/airtel_iq/views/ai_coach/ask_airtel_iq_screen.dart';
 import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
 import 'package:frontend/features/dashboard/views/admin_dashboard_screen.dart';
 import 'package:frontend/features/dashboard/views/team_dashboard_screen.dart';
@@ -171,7 +175,25 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'ai-coach',
-            builder: (context, state) => const AiCoachPlaceholderScreen(),
+            builder: (context, state) => const AiCoachDashboardScreen(),
+            routes: [
+              GoRoute(
+                path: 'meeting-prep',
+                builder: (context, state) => const MeetingPrepScreen(),
+              ),
+              GoRoute(
+                path: 'insights',
+                builder: (context, state) => const OpportunityInsightsScreen(),
+              ),
+              GoRoute(
+                path: 'follow-ups',
+                builder: (context, state) => const FollowUpGeneratorScreen(),
+              ),
+              GoRoute(
+                path: 'ask',
+                builder: (context, state) => const AskAirtelIqScreen(),
+              ),
+            ],
           ),
         ],
       ),
