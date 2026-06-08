@@ -19,7 +19,6 @@ import 'package:frontend/features/meeting_notes/views/note_create_screen.dart';
 import 'package:frontend/features/meeting_notes/views/note_detail_screen.dart';
 import 'package:frontend/features/activities/views/activities_screen.dart';
 import 'package:frontend/features/knowledge/views/knowledge_screen.dart';
-import 'package:frontend/features/more/views/more_screen.dart';
 import 'package:frontend/features/profile/views/profile_screen.dart';
 
 // Standalone lists for quick access if needed, but mainly embedded in activities
@@ -31,8 +30,6 @@ final _homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final _customersNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'customers');
 final _activitiesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'activities');
 final _knowledgeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'knowledge');
-final _moreNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'more');
-
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
 
@@ -107,16 +104,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/knowledge',
                 builder: (context, state) => const KnowledgeScreen(),
-              ),
-            ],
-          ),
-          // Branch 4: More
-          StatefulShellBranch(
-            navigatorKey: _moreNavigatorKey,
-            routes: [
-              GoRoute(
-                path: '/more',
-                builder: (context, state) => const MoreScreen(),
               ),
             ],
           ),

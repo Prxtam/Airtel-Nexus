@@ -44,11 +44,6 @@ class AppShell extends StatelessWidget {
             activeIcon: Icon(Icons.lightbulb),
             label: 'Knowledge',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            activeIcon: Icon(Icons.menu),
-            label: 'More',
-          ),
         ],
       ),
     );

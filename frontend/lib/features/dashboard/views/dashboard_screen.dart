@@ -6,6 +6,12 @@ import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
+import 'package:frontend/features/auth/models/user.dart';
+import 'package:frontend/features/meetings/models/meeting.dart';
+import 'package:frontend/features/customers/models/customer.dart';
+import 'package:frontend/features/users/views/owner_badge.dart';
+import 'package:frontend/features/tasks/models/task.dart';
+import 'package:frontend/core/widgets/app_drawer.dart';
 import 'package:gap/gap.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -20,201 +26,42 @@ class DashboardScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              ref.read(authProvider.notifier).logout();
-            },
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Welcome Section
-            Text(
-              'Welcome, ${user?.fullName ?? user?.email ?? "User"}',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const Gap(24),
-
-            // Airtel Overview Section
-            _buildSectionCard(
-              title: 'Airtel Enterprise Services',
-              icon: Icons.business,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Empowering businesses with seamless connectivity, IoT solutions, and secure cloud networks. Your partner in digital transformation.',
-                    style: TextStyle(color: AppConstants.textColor, height: 1.5),
-                  ),
-                ],
-              ),
-            ),
-            const Gap(16),
-
-            // Metrics Section
-            const Text(
-              'Your Metrics',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const Gap(12),
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.5,
-              children: [
-                // Total Customers — live from customerListProvider
-                _buildMetricCard(
-                  'Total Customers',
-                  customersAsync.when(
-                    data: (list) => '${list.length}',
-                    loading: () => '…',
-                    error: (_, __) => '–',
-                  ),
-                  Icons.people,
-                  Colors.blue,
-                  onTap: () => context.push('/customers'),
-                ),
-
-                // Pending Tasks — live from taskListProvider (filter applied separately)
-                _buildMetricCard(
-                  'Pending Tasks',
-                  tasksAsync.when(
-                    data: (list) => '${list.where((t) => t.status.name == 'pending').length}',
-                    loading: () => '…',
-                    error: (_, __) => '–',
-                  ),
-                  Icons.task,
-                  Colors.orange,
-                  onTap: () => context.push('/tasks'),
-                ),
-
-                // Upcoming Meetings — live from meetingListProvider
-                _buildMetricCard(
-                  'Upcoming Meetings',
-                  meetingsAsync.when(
-                    data: (list) => '${list.where((m) => m.meetingAt.isAfter(DateTime.now())).length}',
-                    loading: () => '…',
-                    error: (_, __) => '–',
-                  ),
-                  Icons.event,
-                  Colors.green,
-                  onTap: () => context.push('/meetings'),
-                ),
-
-                // Completed Tasks — live from taskListProvider
-                _buildMetricCard(
-                  'Completed Tasks',
-                  tasksAsync.when(
-                    data: (list) => '${list.where((t) => t.status.name == 'completed').length}',
-                    loading: () => '…',
-                    error: (_, __) => '–',
-                  ),
-                  Icons.check_circle_outline,
-                  Colors.green,
-                  onTap: () => context.push('/tasks'),
-                ),
-              ],
-            ),
-            const Gap(24),
-
-            // Quick Actions Section
-            const Text(
-              'Quick Actions',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const Gap(12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                _buildActionButton('Add Customer', Icons.person_add,
-                    () => context.push('/customers/create')),
-                _buildActionButton('Create Task', Icons.add_task,
-                    () => context.push('/tasks/create')),
-                _buildActionButton('Schedule Meeting', Icons.calendar_today,
-                    () => context.push('/meetings/create')),
-                _buildActionButton('View Customers', Icons.people_outline,
-                    () => context.push('/customers')),
-                _buildActionButton('View Tasks', Icons.checklist,
-                    () => context.push('/tasks')),
-                _buildActionButton('View Meetings', Icons.event_note,
-                    () => context.push('/meetings')),
-                if (user?.isAdmin ?? false)
-                  _buildActionButton('Admin Panel', Icons.admin_panel_settings, 
-                      () => context.push('/admin')),
-                if (user != null && user.isZSM && !user.isAdmin && !user.isCBH)
-                  _buildActionButton('Team Dashboard', Icons.group, 
-                      () => context.push('/team')),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionCard({required String title, required IconData icon, required Widget child}) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: AppConstants.primaryColor),
-                const Gap(8),
-                Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              ],
-            ),
-            const Gap(12),
-            child,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMetricCard(
-    String title,
-    String value,
-    IconData icon,
-    Color color, {
-    VoidCallback? onTap,
-  }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
+      drawer: const AppDrawer(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Icon(icon, color: color, size: 28),
-              const Gap(8),
-              Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              const Gap(4),
-              Text(title,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  textAlign: TextAlign.center),
+              // 1. Greeting Section
+              _buildGreetingSection(context, user),
+              const Gap(24),
+
+              // 2. Hero Card (Personalized Workspace)
+              _buildHeroCard(context, user, customersAsync, meetingsAsync, tasksAsync),
+              const Gap(24),
+
+              // 3. Primary Actions (Airtel Thanks Style Shortcuts)
+              _buildPrimaryActions(context),
+              const Gap(32),
+
+              // 4. Upcoming Meetings Section
+              _buildSectionHeader('Upcoming Meetings', () => context.push('/activities')),
+              const Gap(12),
+              _buildUpcomingMeetings(context, meetingsAsync),
+              const Gap(32),
+
+              // 5. Recent Customers Section
+              _buildSectionHeader('Recent Customers', () => context.push('/customers')),
+              const Gap(12),
+              _buildRecentCustomers(context, customersAsync),
+              const Gap(32),
+
+              // 6. Key Metrics Row (Analytics moved to bottom)
+              const Text('Analytics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Gap(12),
+              _buildAnalyticsGrid(customersAsync, meetingsAsync, tasksAsync),
+              const Gap(24),
             ],
           ),
         ),
@@ -222,25 +69,466 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionButton(String title, IconData icon, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+  Widget _buildGreetingSection(BuildContext context, User? user) {
+    final hour = DateTime.now().hour;
+    final greeting = hour < 12 ? 'Good Morning' : (hour < 17 ? 'Good Afternoon' : 'Good Evening');
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(icon, size: 18, color: AppConstants.primaryColor),
-            const Gap(8),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu, size: 28),
+                padding: EdgeInsets.zero,
+                alignment: Alignment.centerLeft,
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.notifications_none, size: 28),
+              padding: EdgeInsets.zero,
+              alignment: Alignment.centerRight,
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Notifications coming soon')),
+                );
+              },
+            ),
           ],
         ),
+        const Gap(16),
+        Text(
+          greeting,
+          style: TextStyle(fontSize: 14, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
+        ),
+        const Gap(4),
+        Text(
+          user?.fullName ?? user?.email ?? 'User',
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: -0.5),
+        ),
+        const Gap(8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            color: AppConstants.primaryColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            user != null && user.roles.isNotEmpty ? user.roles.first : 'No Role',
+            style: const TextStyle(fontSize: 12, color: AppConstants.primaryColor, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeroCard(
+    BuildContext context,
+    User? user,
+    AsyncValue<List<Customer>> customersAsync,
+    AsyncValue<List<Meeting>> meetingsAsync,
+    AsyncValue<dynamic> tasksAsync,
+  ) {
+    final now = DateTime.now();
+
+    final customerCount = customersAsync.maybeWhen(data: (list) => '${list.length}', orElse: () => '...');
+    final pendingTasksCount = tasksAsync.maybeWhen(
+      data: (list) => '${list.where((t) => t.status == TaskStatus.pending).length}',
+      orElse: () => '...',
+    );
+    final meetingsTodayCount = meetingsAsync.maybeWhen(
+      data: (list) {
+        return '${list.where((m) => m.meetingAt.year == now.year && m.meetingAt.month == now.month && m.meetingAt.day == now.day).length}';
+      },
+      orElse: () => '...',
+    );
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [AppConstants.primaryColor, Color(0xFFC00000)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: AppConstants.primaryColor.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${_getGreetingWord()}, ${user?.fullName?.split(' ').first ?? 'there'}.',
+              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const Gap(16),
+            const Text(
+              'You have:',
+              style: TextStyle(color: Colors.white70, fontSize: 14),
+            ),
+            const Gap(12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _HeroStatItem(customerCount, 'Customers'),
+                _HeroStatItem(meetingsTodayCount, 'Meetings\nToday'),
+                _HeroStatItem(pendingTasksCount, 'Pending\nTasks'),
+              ],
+            ),
+            const Gap(24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Expanded(
+                  child: Text(
+                    'Stay on top of your enterprise relationships.',
+                    style: TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => context.push('/activities'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('View Activities', style: TextStyle(fontWeight: FontWeight.w600)),
+                      Gap(4),
+                      Icon(Icons.arrow_forward, size: 16),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getGreetingWord() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Morning';
+    if (hour < 17) return 'Afternoon';
+    return 'Evening';
+  }
+
+  Widget _buildPrimaryActions(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(child: _ServiceShortcutCard(icon: Icons.person_add, label: "Add\nCustomer", onTap: () => context.push('/customers/create'))),
+        const Gap(12),
+        Expanded(child: _ServiceShortcutCard(icon: Icons.calendar_today, label: "Schedule\nMeeting", onTap: () => context.push('/meetings/create'))),
+        const Gap(12),
+        Expanded(child: _ServiceShortcutCard(icon: Icons.add_task, label: "Create\nTask", onTap: () => context.push('/tasks/create'))),
+      ],
+    );
+  }
+
+  Widget _buildSectionHeader(String title, VoidCallback onViewAll) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        TextButton(
+          onPressed: onViewAll,
+          style: TextButton.styleFrom(
+            foregroundColor: AppConstants.primaryColor,
+            padding: EdgeInsets.zero,
+            minimumSize: const Size(0, 0),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: const Text('View All', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUpcomingMeetings(BuildContext context, AsyncValue<List<Meeting>> meetingsAsync) {
+    return meetingsAsync.when(
+      data: (list) {
+        final upcoming = list.where((m) => m.meetingAt.isAfter(DateTime.now())).toList()
+          ..sort((a, b) => a.meetingAt.compareTo(b.meetingAt));
+        
+        if (upcoming.isEmpty) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text("No upcoming meetings", style: TextStyle(color: Colors.grey)),
+            ),
+          );
+        }
+
+        return ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: upcoming.length > 3 ? 3 : upcoming.length,
+          separatorBuilder: (_, __) => const Gap(8),
+          itemBuilder: (context, index) => _ModernMeetingTile(meeting: upcoming[index]),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => const Center(child: Text('Error loading meetings')),
+    );
+  }
+
+  Widget _buildRecentCustomers(BuildContext context, AsyncValue<List<Customer>> customersAsync) {
+    return customersAsync.when(
+      data: (list) {
+        if (list.isEmpty) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text("No recent customers", style: TextStyle(color: Colors.grey)),
+            ),
+          );
+        }
+
+        final sorted = List<Customer>.from(list)..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+        return ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: sorted.length > 3 ? 3 : sorted.length,
+          separatorBuilder: (_, __) => const Gap(8),
+          itemBuilder: (context, index) => _ModernCustomerTile(customer: sorted[index]),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => const Center(child: Text('Error loading customers')),
+    );
+  }
+
+  Widget _buildAnalyticsGrid(
+    AsyncValue<List<Customer>> customersAsync,
+    AsyncValue<List<Meeting>> meetingsAsync,
+    AsyncValue<dynamic> tasksAsync,
+  ) {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      childAspectRatio: 1.5,
+      children: [
+        _buildAnalyticsCard(
+          'Total Customers',
+          customersAsync.maybeWhen(data: (list) => '${list.length}', orElse: () => '…'),
+          Icons.people_outline,
+        ),
+        _buildAnalyticsCard(
+          'Total Meetings',
+          meetingsAsync.maybeWhen(data: (list) => '${list.length}', orElse: () => '…'),
+          Icons.event_note,
+        ),
+        _buildAnalyticsCard(
+          'Pending Tasks',
+          tasksAsync.maybeWhen(data: (list) => '${list.where((t) => t.status == TaskStatus.pending).length}', orElse: () => '…'),
+          Icons.pending_actions,
+        ),
+        _buildAnalyticsCard(
+          'Completed Tasks',
+          tasksAsync.maybeWhen(data: (list) => '${list.where((t) => t.status == TaskStatus.completed).length}', orElse: () => '…'),
+          Icons.task_alt,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAnalyticsCard(String title, String value, IconData icon) {
+    return Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 20, color: AppConstants.primaryColor),
+                const Spacer(),
+                Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            const Gap(8),
+            Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroStatItem extends StatelessWidget {
+  final String count;
+  final String label;
+
+  const _HeroStatItem(this.count, this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(count, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white)),
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.white70, height: 1.2)),
+      ],
+    );
+  }
+}
+
+class _ServiceShortcutCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _ServiceShortcutCard({required this.icon, required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+          border: Border.all(color: Colors.grey.shade100),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
+                radius: 16,
+                child: Icon(icon, color: AppConstants.primaryColor, size: 18),
+              ),
+              const Gap(12),
+              Text(
+                label,
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, height: 1.2),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ModernMeetingTile extends StatelessWidget {
+  final Meeting meeting;
+  const _ModernMeetingTile({required this.meeting});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.green.shade50,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(Icons.event, color: Colors.green.shade700),
+        ),
+        title: Text(meeting.title ?? 'Untitled Meeting', style: const TextStyle(fontWeight: FontWeight.w600)),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: Text(
+            _formatDateTime(meeting.meetingAt),
+            style: TextStyle(fontSize: 12, color: Colors.green.shade700, fontWeight: FontWeight.w500),
+          ),
+        ),
+        trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+        onTap: () => context.push('/meetings/${meeting.id}'),
+      ),
+    );
+  }
+
+  String _formatDateTime(DateTime dt) {
+    final local = dt.toLocal();
+    final today = DateTime.now();
+    final isToday = local.year == today.year && local.month == today.month && local.day == today.day;
+    final timeStr = '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
+    if (isToday) return 'Today, $timeStr';
+    return '${local.day}/${local.month}/${local.year} $timeStr';
+  }
+}
+
+class _ModernCustomerTile extends StatelessWidget {
+  final Customer customer;
+  const _ModernCustomerTile({required this.customer});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(Icons.business, color: Colors.blue.shade700),
+        ),
+        title: Text(customer.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6.0),
+          child: customer.ownerId != null 
+              ? OwnerBadge(ownerId: customer.ownerId!)
+              : const Text('No Owner', style: TextStyle(fontSize: 12, color: Colors.grey)),
+        ),
+        trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+        onTap: () => context.push('/customers/${customer.id}'),
       ),
     );
   }
