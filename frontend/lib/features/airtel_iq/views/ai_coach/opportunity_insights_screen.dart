@@ -128,7 +128,7 @@ class _OpportunityInsightsScreenState extends ConsumerState<OpportunityInsightsS
           title: 'Reasoning & Context',
           icon: Icons.analytics_outlined,
           iconColor: Colors.blue,
-          content: Text(_result!.reasoning, style: TextStyle(color: Colors.grey.shade800, height: 1.5, fontSize: 15)),
+          content: Text(_result!.overallReasoning, style: TextStyle(color: Colors.grey.shade800, height: 1.5, fontSize: 15)),
         ),
 
         const SizedBox(height: 8),
@@ -154,14 +154,14 @@ class _OpportunityInsightsScreenState extends ConsumerState<OpportunityInsightsS
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        product.name,
+                        product.product.name,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.amber.shade900),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(product.shortDescription, style: TextStyle(color: Colors.amber.shade900)),
+                Text(product.product.shortDescription, style: TextStyle(color: Colors.amber.shade900)),
               ],
             ),
           ),

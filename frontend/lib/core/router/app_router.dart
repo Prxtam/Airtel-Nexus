@@ -19,6 +19,7 @@ import 'package:frontend/features/airtel_iq/views/ai_coach/meeting_prep_screen.d
 import 'package:frontend/features/airtel_iq/views/ai_coach/opportunity_insights_screen.dart';
 import 'package:frontend/features/airtel_iq/views/ai_coach/follow_up_generator_screen.dart';
 import 'package:frontend/features/airtel_iq/views/ai_coach/ask_airtel_iq_screen.dart';
+import 'package:frontend/features/airtel_iq/views/ai_coach/meeting_intelligence_screen.dart';
 import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
 import 'package:frontend/features/dashboard/views/admin_dashboard_screen.dart';
 import 'package:frontend/features/dashboard/views/team_dashboard_screen.dart';
@@ -269,6 +270,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final meetingId = state.pathParameters['meetingId']!;
           return MeetingDetailScreen(meetingId: meetingId);
+        },
+      ),
+
+      // Meeting Intelligence
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/meetings/:meetingId/intelligence',
+        builder: (context, state) {
+          final meetingId = state.pathParameters['meetingId']!;
+          return MeetingIntelligenceScreen(meetingId: meetingId);
         },
       ),
 

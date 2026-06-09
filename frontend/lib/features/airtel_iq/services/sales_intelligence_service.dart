@@ -58,7 +58,7 @@ class SalesIntelligenceService {
         "What happens to client continuity when a field agent leaves the company?",
         "Are you experiencing any security concerns with employees using personal devices for corporate tasks?",
       ],
-      recommendedSolutions: recommendations.recommendedProducts,
+      recommendedSolutions: recommendations.recommendedProducts.map((e) => e.product).toList(),
       potentialRisks: [
         "Decision-maker might push back on perceived migration costs.",
         "Competitor lock-in on existing mobility contracts.",
