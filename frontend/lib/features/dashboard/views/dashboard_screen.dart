@@ -57,10 +57,10 @@ class DashboardScreen extends ConsumerWidget {
               _buildRecentCustomers(context, customersAsync),
               const Gap(32),
 
-              // 6. Key Metrics Row (Analytics moved to bottom)
-              const Text('Analytics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              // 6. Key Metrics Row
+              const Text('Performance This Month', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const Gap(12),
-              _buildAnalyticsGrid(customersAsync, meetingsAsync, tasksAsync),
+              _buildMonthlyAnalyticsGrid(customersAsync, meetingsAsync, tasksAsync),
               const Gap(24),
             ],
           ),
@@ -72,6 +72,7 @@ class DashboardScreen extends ConsumerWidget {
   Widget _buildGreetingSection(BuildContext context, User? user) {
     final hour = DateTime.now().hour;
     final greeting = hour < 12 ? 'Good Morning' : (hour < 17 ? 'Good Afternoon' : 'Good Evening');
+    final firstName = user?.fullName?.split(' ').first ?? user?.email.split('@').first ?? 'User';
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,25 +102,8 @@ class DashboardScreen extends ConsumerWidget {
         ),
         const Gap(16),
         Text(
-          greeting,
-          style: TextStyle(fontSize: 14, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
-        ),
-        const Gap(4),
-        Text(
-          user?.fullName ?? user?.email ?? 'User',
+          '$greeting, $firstName',
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: -0.5),
-        ),
-        const Gap(8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-          decoration: BoxDecoration(
-            color: AppConstants.primaryColor.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Text(
-            user != null && user.roles.isNotEmpty ? user.roles.first : 'No Role',
-            style: const TextStyle(fontSize: 12, color: AppConstants.primaryColor, fontWeight: FontWeight.w600),
-          ),
         ),
       ],
     );
@@ -167,9 +151,9 @@ class DashboardScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${_getGreetingWord()}, ${user?.fullName?.split(' ').first ?? 'there'}.',
-              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            const Text(
+              'Today\'s Overview',
+              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const Gap(16),
             const Text(
@@ -221,12 +205,7 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  String _getGreetingWord() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Morning';
-    if (hour < 17) return 'Afternoon';
-    return 'Evening';
-  }
+
 
   Widget _buildPrimaryActions(BuildContext context) {
     return Row(
@@ -315,7 +294,58 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAnalyticsGrid(
+  Widget _buildMonthlyAnalyticsGrid(
+    AsyncValue<List<Customer>> customersAsync,
+    AsyncValue<List<Meeting>> meetingsAsync,
+    AsyncValue<dynamic> tasksAsync,
+  ) {
+    final now = DateTime.now();
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      childAspectRatio: 1.5,
+      children: [
+        _buildAnalyticsCard(
+          'Customers Added',
+          customersAsync.maybeWhen(
+            data: (list) => '${list.where((c) => c.createdAt.year == now.year && c.createdAt.month == now.month).length}', 
+            orElse: () => '…'
+          ),
+          Icons.people_outline,
+        ),
+        _buildAnalyticsCard(
+          'Meetings Conducted',
+          meetingsAsync.maybeWhen(
+            data: (list) => '${list.where((m) => m.meetingAt.year == now.year && m.meetingAt.month == now.month && m.meetingAt.isBefore(now.add(const Duration(days: 1)))).length}', 
+            orElse: () => '…'
+          ),
+          Icons.event_note,
+        ),
+        _buildAnalyticsCard(
+          'Pending Tasks',
+          tasksAsync.maybeWhen(
+            data: (list) => '${list.where((t) => t.status == TaskStatus.pending && t.createdAt.year == now.year && t.createdAt.month == now.month).length}', 
+            orElse: () => '…'
+          ),
+          Icons.pending_actions,
+        ),
+        _buildAnalyticsCard(
+          'Completed Tasks',
+          tasksAsync.maybeWhen(
+            data: (list) => '${list.where((t) => t.status == TaskStatus.completed && t.updatedAt.year == now.year && t.updatedAt.month == now.month).length}', 
+            orElse: () => '…'
+          ),
+          Icons.task_alt,
+        ),
+      ],
+    );
+  }
+
+  /* Preserved for future Profile page
+  Widget _buildLifetimeAnalyticsGrid(
     AsyncValue<List<Customer>> customersAsync,
     AsyncValue<List<Meeting>> meetingsAsync,
     AsyncValue<dynamic> tasksAsync,
@@ -351,6 +381,7 @@ class DashboardScreen extends ConsumerWidget {
       ],
     );
   }
+  */
 
   Widget _buildAnalyticsCard(String title, String value, IconData icon) {
     return Card(
