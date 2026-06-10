@@ -1,0 +1,116 @@
+import 'knowledge_models.dart';
+
+final List<ProductIntelligence> productIntelligenceRepo = [
+  const ProductIntelligence(
+    id: 'prod_corp_postpaid',
+    name: 'Airtel Corporate Postpaid',
+    overview: 'Enterprise mobile connectivity solution designed for organizations that require centralized management of employee mobile usage, roaming, communication expenses, and workforce connectivity.',
+    idealCustomers: [
+      'Banking & Financial Services',
+      'Retail Chains',
+      'Manufacturing Companies',
+      'Logistics Organizations',
+      'IT Services Firms',
+      'Enterprises with 100+ employees',
+    ],
+    industries: [
+      'Banking & Financial Services',
+      'Retail',
+      'Manufacturing',
+      'Logistics',
+      'IT Services',
+    ],
+    painPointsSolved: [
+      'High mobile communication costs',
+      'Roaming expense management',
+      'Multiple disconnected mobile plans',
+      'Lack of centralized billing',
+      'Workforce communication inefficiencies',
+    ],
+    businessOutcomes: [
+      'Centralized telecom management',
+      'Reduced administrative overhead',
+      'Better cost visibility',
+      'Improved workforce productivity',
+      'Simplified roaming management',
+    ],
+    discoveryQuestions: [
+      'How many employees currently require mobile connectivity?',
+      'How are mobile expenses tracked today?',
+      'Do employees frequently travel across India or internationally?',
+      'How many mobile providers are currently being used?',
+      'Is telecom billing managed centrally?',
+    ],
+    objections: [
+      'Pricing: "Our current provider is cheaper."',
+      'Migration: "Migration will disrupt operations."',
+      'Existing Contract: "We are locked into another provider."',
+    ],
+    objectionResponses: [
+      'Pricing: Focus on total cost of ownership rather than plan cost.',
+      'Migration: Highlight phased migration and onboarding support.',
+      'Existing Contract: Position Airtel as a future transition option and explore pilot deployments.',
+    ],
+    crossSellOpportunities: [
+      'Business Connect',
+      'Airtel IQ Solutions',
+      'Cloud Services',
+      'IoT Solutions',
+    ],
+    elevatorPitch: 'Airtel Corporate Postpaid simplifies enterprise mobility through centralized management, better visibility, and seamless workforce communication.',
+    executivePitch: 'Help your organization manage employee connectivity at scale while reducing administrative effort and improving visibility into telecom spending.',
+    meetingTalkingPoints: [],
+  ),
+  const ProductIntelligence(
+    id: 'prod_biz_connect',
+    name: 'Airtel IQ Business Connect',
+    overview: 'A unified communication and engagement platform enabling organizations to connect with employees, customers, and distributed teams more effectively.',
+    idealCustomers: [
+      'Retail Organizations',
+      'Banking Institutions',
+      'Logistics Companies',
+      'Large Field Sales Organizations',
+      'Multi-location Enterprises',
+    ],
+    industries: [
+      'Retail',
+      'Banking & Financial Services',
+      'Logistics',
+    ],
+    painPointsSolved: [
+      'Fragmented communication channels',
+      'Poor employee engagement',
+      'Distributed workforce coordination',
+      'Customer communication inefficiencies',
+    ],
+    businessOutcomes: [
+      'Better communication consistency',
+      'Faster information dissemination',
+      'Improved workforce engagement',
+      'Increased operational efficiency',
+    ],
+    discoveryQuestions: [
+      'How do employees currently communicate?',
+      'Are teams spread across multiple locations?',
+      'How are important updates distributed today?',
+      'What communication challenges exist today?',
+      'How do managers communicate with field staff?',
+    ],
+    objections: [
+      'Existing Tools: "We already use WhatsApp/Teams."',
+      'Adoption: "Employees may not use another platform."',
+      'Budget: "We don\'t have budget for another communication tool."',
+    ],
+    objectionResponses: [
+      'Focus on governance, scalability, enterprise control, and operational consistency.',
+    ],
+    crossSellOpportunities: [
+      'Corporate Postpaid',
+      'Mobility Solutions',
+      'Contact Center Solutions',
+    ],
+    elevatorPitch: 'Business Connect helps organizations communicate consistently across distributed teams while improving engagement and operational effectiveness.',
+    executivePitch: 'Create a single, enterprise-ready communication layer that scales across your workforce and locations.',
+    meetingTalkingPoints: [],
+  ),
+];
