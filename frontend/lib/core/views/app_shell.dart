@@ -40,9 +40,9 @@ class AppShell extends StatelessWidget {
             label: 'Activities',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.lightbulb_outline),
-            activeIcon: Icon(Icons.lightbulb),
-            label: 'Knowledge',
+            icon: Icon(Icons.smart_toy_outlined),
+            activeIcon: Icon(Icons.smart_toy),
+            label: 'Airtel IQ',
           ),
         ],
       ),

@@ -124,19 +124,11 @@ class AppDrawer extends ConsumerWidget {
           // 3. Sales Tools
           _buildSectionHeader('Sales Tools'),
           _buildDrawerItem(
-            icon: Icons.lightbulb_outline,
-            title: 'Knowledge Center',
-            onTap: () {
-              Navigator.pop(context);
-              context.push('/knowledge');
-            },
-          ),
-          _buildDrawerItem(
             icon: Icons.smart_toy_outlined,
             title: 'Airtel IQ',
             onTap: () {
               Navigator.pop(context);
-              _showComingSoonPhase8B(context, 'Airtel IQ');
+              context.push('/knowledge');
             },
           ),
           _buildDrawerItem(
