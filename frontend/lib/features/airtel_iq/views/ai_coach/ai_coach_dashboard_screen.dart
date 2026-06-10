@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
-import 'package:frontend/features/airtel_iq/widgets/airtel_iq_feature_card.dart';
+
 
 class AiCoachDashboardScreen extends StatelessWidget {
   const AiCoachDashboardScreen({super.key});
@@ -16,128 +16,123 @@ class AiCoachDashboardScreen extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppConstants.primaryColor, Colors.red.shade900],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.smart_toy, color: Colors.white, size: 32),
-                  SizedBox(height: 16),
-                  Text(
-                    'Sales Intelligence',
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Your context-aware copilot for meeting prep, insights, and follow-ups.',
-                    style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.4),
-                  ),
-                ],
+            const Text(
+              'Your AI-powered sales workspace',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(height: 24),
-            
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.85,
-              children: [
-                AirtelIqFeatureCard(
-                  title: 'Meeting Prep',
-                  subtitle: 'Briefs & discovery questions',
-                  icon: Icons.event_note,
-                  iconColor: Colors.blue.shade700,
-                  isFeatured: true,
-                  onTap: () => context.push('/airtel-iq/ai-coach/meeting-prep'),
-                ),
-                AirtelIqFeatureCard(
-                  title: 'Opportunity Insights',
-                  subtitle: 'Upsell & cross-sell logic',
-                  icon: Icons.lightbulb,
-                  iconColor: Colors.amber.shade700,
-                  isFeatured: true,
-                  onTap: () => context.push('/airtel-iq/ai-coach/insights'),
-                ),
-                AirtelIqFeatureCard(
-                  title: 'Follow-Up Gen',
-                  subtitle: 'Exec summaries & emails',
-                  icon: Icons.mark_email_read,
-                  iconColor: Colors.green.shade700,
-                  onTap: () => context.push('/airtel-iq/ai-coach/follow-ups'),
-                ),
-                AirtelIqFeatureCard(
-                  title: 'Objection Coach',
-                  subtitle: 'Recommended responses',
-                  icon: Icons.shield,
-                  iconColor: AppConstants.primaryColor,
-                  onTap: () => context.push('/airtel-iq/objections'), // Routes to existing Phase 8B.1
-                ),
-              ],
+            _buildActionCard(
+              context: context,
+              title: 'Meeting Prep',
+              subtitle: 'Briefs, stakeholder context and discovery questions',
+              icon: Icons.event_note_outlined,
+              route: '/airtel-iq/ai-coach/meeting-prep',
             ),
-            
-            const SizedBox(height: 12),
-            Card(
-              elevation: 0,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: Colors.grey.shade200),
-              ),
-              child: InkWell(
-                onTap: () => context.push('/airtel-iq/ai-coach/ask'),
-                borderRadius: BorderRadius.circular(16),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.purple.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(Icons.search, color: Colors.purple.shade700, size: 28),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Ask Airtel IQ',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Enterprise knowledge search experience.',
-                              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right, color: Colors.grey),
-                    ],
-                  ),
-                ),
-              ),
+            _buildActionCard(
+              context: context,
+              title: 'Opportunity Insights',
+              subtitle: 'Cross-sell, upsell and expansion opportunities',
+              icon: Icons.lightbulb_outline,
+              route: '/airtel-iq/ai-coach/insights',
+            ),
+            _buildActionCard(
+              context: context,
+              title: 'Follow-Up Generator',
+              subtitle: 'Executive summaries and customer emails',
+              icon: Icons.mark_email_read_outlined,
+              route: '/airtel-iq/ai-coach/follow-ups',
+            ),
+            _buildActionCard(
+              context: context,
+              title: 'Objection Coach',
+              subtitle: 'Recommended responses to customer concerns',
+              icon: Icons.shield_outlined,
+              route: '/airtel-iq/objections',
+            ),
+            _buildActionCard(
+              context: context,
+              title: 'Ask Airtel IQ',
+              subtitle: 'Enterprise knowledge search',
+              icon: Icons.search,
+              route: '/airtel-iq/ai-coach/ask',
             ),
             const SizedBox(height: 32),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionCard({
+    required BuildContext context,
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required String route,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => context.push(route),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppConstants.primaryColor.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: AppConstants.primaryColor, size: 28),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700, 
+                          fontSize: 16, 
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right, color: Colors.grey.shade400),
+              ],
+            ),
+          ),
         ),
       ),
     );
