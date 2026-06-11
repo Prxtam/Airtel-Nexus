@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_feature_card.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_section_header.dart';
+import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
 
 class AirtelIqDashboardScreen extends StatelessWidget {
   const AirtelIqDashboardScreen({super.key});
@@ -59,18 +60,25 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                     childAspectRatio: 0.85,
                     children: [
                       AirtelIqFeatureCard(
+                        title: 'Knowledge Explorer',
+                        subtitle: 'Browse Airtel IQ Repository',
+                        icon: Icons.travel_explore,
+                        iconColor: Colors.teal,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const KnowledgeExplorerScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      AirtelIqFeatureCard(
                         title: 'Airtel Products',
                         subtitle: 'Enterprise solutions details',
                         icon: Icons.shopping_bag_outlined,
                         iconColor: Colors.purple,
                         onTap: () => context.push('/airtel-iq/products'),
-                      ),
-                      AirtelIqFeatureCard(
-                        title: 'Product Knowledge',
-                        subtitle: 'Articles & key takeaways',
-                        icon: Icons.menu_book_outlined,
-                        iconColor: Colors.blue,
-                        onTap: () => context.push('/airtel-iq/knowledge'),
                       ),
                     ],
                   ),
@@ -86,11 +94,11 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                     childAspectRatio: 0.85,
                     children: [
                       AirtelIqFeatureCard(
-                        title: 'FAQ Library',
-                        subtitle: 'Answers to common questions',
-                        icon: Icons.question_answer_outlined,
-                        iconColor: Colors.orange,
-                        onTap: () => context.push('/airtel-iq/faq'),
+                        title: 'Product Knowledge',
+                        subtitle: 'Articles & key takeaways',
+                        icon: Icons.menu_book_outlined,
+                        iconColor: Colors.blue,
+                        onTap: () => context.push('/airtel-iq/knowledge'),
                       ),
                       AirtelIqFeatureCard(
                         title: 'Sales Playbooks',

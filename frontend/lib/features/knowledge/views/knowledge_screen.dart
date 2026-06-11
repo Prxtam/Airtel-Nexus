@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
 
 class KnowledgeScreen extends StatelessWidget {
   const KnowledgeScreen({super.key});
@@ -64,6 +65,14 @@ class KnowledgeScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   _buildKnowledgeCategory(
                     context: context,
+                    icon: Icons.travel_explore,
+                    title: 'Knowledge Explorer',
+                    subtitle: 'Browse Airtel IQ Repository',
+                    color: Colors.teal,
+                  ),
+                  const SizedBox(height: 12),
+                  _buildKnowledgeCategory(
+                    context: context,
                     icon: Icons.info_outline,
                     title: 'About Airtel',
                     subtitle: 'Company information and updates',
@@ -111,8 +120,6 @@ class KnowledgeScreen extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildKnowledgeCategory({
     required BuildContext context,
     required IconData icon,
@@ -144,6 +151,13 @@ class KnowledgeScreen extends StatelessWidget {
               context.push('/airtel-iq/playbooks');
             } else if (title == 'AI Sales Coach') {
               context.push('/airtel-iq/ai-coach');
+            } else if (title == 'Knowledge Explorer') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const KnowledgeExplorerScreen(),
+                ),
+              );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('$title coming in Phase 8B')),
