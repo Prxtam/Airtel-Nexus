@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
@@ -48,6 +49,29 @@ class _OpportunityInsightsScreenState extends ConsumerState<OpportunityInsightsS
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
       }
     }
+  }
+
+  void _copyInsightsToClipboard() {
+    if (_result == null) return;
+    final sb = StringBuffer();
+    sb.writeln('OPPORTUNITY INSIGHTS');
+    sb.writeln();
+    sb.writeln('REASONING & CONTEXT');
+    sb.writeln(_result!.overallReasoning);
+    sb.writeln();
+    sb.writeln('SUGGESTED PRODUCTS');
+    if (_result!.recommendedProducts.isEmpty) {
+      sb.writeln('None');
+    } else {
+      for (var p in _result!.recommendedProducts) {
+        sb.writeln('• ${p.product.name}: ${p.product.shortDescription}');
+      }
+    }
+    
+    Clipboard.setData(ClipboardData(text: sb.toString().trimRight()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Insights copied to clipboard')),
+    );
   }
 
   @override
@@ -121,51 +145,72 @@ class _OpportunityInsightsScreenState extends ConsumerState<OpportunityInsightsS
       children: [
         const Divider(),
         const SizedBox(height: 16),
-        const Text('AI Recommendations', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('AI Recommendations', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            TextButton.icon(
+              icon: const Icon(Icons.copy, size: 16),
+              label: const Text('Copy Insights'),
+              style: TextButton.styleFrom(
+                foregroundColor: AppConstants.primaryColor,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              ),
+              onPressed: _copyInsightsToClipboard,
+            ),
+          ],
+        ),
         const SizedBox(height: 16),
 
-        AiResultCard(
-          title: 'Reasoning & Context',
-          icon: Icons.analytics_outlined,
-          iconColor: Colors.blue,
-          content: Text(_result!.overallReasoning, style: TextStyle(color: Colors.grey.shade800, height: 1.5, fontSize: 15)),
-        ),
+        SelectionArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AiResultCard(
+                title: 'Reasoning & Context',
+                icon: Icons.analytics_outlined,
+                iconColor: Colors.blue,
+                content: Text(_result!.overallReasoning, style: TextStyle(color: Colors.grey.shade800, height: 1.5, fontSize: 15)),
+              ),
 
-        const SizedBox(height: 8),
-        const Text('Suggested Products', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 12),
+              const SizedBox(height: 8),
+              const Text('Suggested Products', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 12),
 
-        ..._result!.recommendedProducts.map((product) => Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.amber.shade200),
-          ),
-          elevation: 0,
-          color: Colors.amber.shade50,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.star, color: Colors.amber.shade700, size: 20),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        product.product.name,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.amber.shade900),
-                      ),
-                    ),
-                  ],
+              ..._result!.recommendedProducts.map((product) => Card(
+                margin: const EdgeInsets.only(bottom: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: Colors.amber.shade200),
                 ),
-                const SizedBox(height: 8),
-                Text(product.product.shortDescription, style: TextStyle(color: Colors.amber.shade900)),
-              ],
-            ),
+                elevation: 0,
+                color: Colors.amber.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.amber.shade700, size: 20),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              product.product.name,
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.amber.shade900),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(product.product.shortDescription, style: TextStyle(color: Colors.amber.shade900)),
+                    ],
+                  ),
+                ),
+              )),
+            ],
           ),
-        )),
+        ),
       ],
     );
   }

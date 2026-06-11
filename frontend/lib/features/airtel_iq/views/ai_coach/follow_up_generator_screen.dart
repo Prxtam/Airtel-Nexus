@@ -49,6 +49,44 @@ class _FollowUpGeneratorScreenState extends ConsumerState<FollowUpGeneratorScree
     }
   }
 
+  void _copyOutputToClipboard() {
+    if (_result == null) return;
+    final sb = StringBuffer();
+    sb.writeln('FOLLOW-UP GENERATOR OUTPUT');
+    sb.writeln();
+    sb.writeln('EXECUTIVE SUMMARY');
+    sb.writeln(_result!.executiveSummary);
+    sb.writeln();
+    
+    sb.writeln('KEY DECISIONS');
+    if (_result!.keyDecisions.isEmpty) {
+      sb.writeln('None');
+    } else {
+      for (var d in _result!.keyDecisions) {
+        sb.writeln('• $d');
+      }
+    }
+    sb.writeln();
+
+    sb.writeln('ACTION ITEMS');
+    if (_result!.actionItems.isEmpty) {
+      sb.writeln('None');
+    } else {
+      for (var a in _result!.actionItems) {
+        sb.writeln('• $a');
+      }
+    }
+    sb.writeln();
+
+    sb.writeln('EMAIL DRAFT');
+    sb.writeln(_result!.emailDraft);
+
+    Clipboard.setData(ClipboardData(text: sb.toString().trimRight()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Follow-up output copied to clipboard')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final customersState = ref.watch(customerListProvider);
@@ -146,61 +184,82 @@ class _FollowUpGeneratorScreenState extends ConsumerState<FollowUpGeneratorScree
       children: [
         const Divider(),
         const SizedBox(height: 16),
-        const Text('Generated Output', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Generated Output', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            TextButton.icon(
+              icon: const Icon(Icons.copy, size: 16),
+              label: const Text('Copy Output'),
+              style: TextButton.styleFrom(
+                foregroundColor: AppConstants.primaryColor,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              ),
+              onPressed: _copyOutputToClipboard,
+            ),
+          ],
+        ),
         const SizedBox(height: 16),
 
-        AiResultCard(
-          title: 'Executive Summary',
-          icon: Icons.summarize_outlined,
-          iconColor: Colors.blue,
-          content: Text(_result!.executiveSummary, style: TextStyle(color: Colors.grey.shade800, height: 1.5)),
-        ),
-
-        AiResultCard(
-          title: 'Key Decisions',
-          icon: Icons.gavel_outlined,
-          iconColor: Colors.orange,
-          content: _buildList(_result!.keyDecisions),
-        ),
-
-        AiResultCard(
-          title: 'Action Items',
-          icon: Icons.check_circle_outline,
-          iconColor: Colors.green,
-          content: _buildList(_result!.actionItems),
-        ),
-
-        AiResultCard(
-          title: 'Suggested Email Draft',
-          icon: Icons.mark_email_unread_outlined,
-          iconColor: Colors.purple,
-          content: Column(
+        SelectionArea(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: SelectableText(
-                  _result!.emailDraft,
-                  style: TextStyle(fontFamily: 'monospace', color: Colors.grey.shade800, height: 1.5),
-                ),
+              AiResultCard(
+                title: 'Executive Summary',
+                icon: Icons.summarize_outlined,
+                iconColor: Colors.blue,
+                content: Text(_result!.executiveSummary, style: TextStyle(color: Colors.grey.shade800, height: 1.5)),
               ),
-              const SizedBox(height: 12),
-              OutlinedButton.icon(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: _result!.emailDraft));
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Email copied to clipboard!')));
-                },
-                icon: const Icon(Icons.copy),
-                label: const Text('Copy to Clipboard'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppConstants.primaryColor,
-                  side: const BorderSide(color: AppConstants.primaryColor),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
+              AiResultCard(
+                title: 'Key Decisions',
+                icon: Icons.gavel_outlined,
+                iconColor: Colors.orange,
+                content: _buildList(_result!.keyDecisions),
+              ),
+
+              AiResultCard(
+                title: 'Action Items',
+                icon: Icons.check_circle_outline,
+                iconColor: Colors.green,
+                content: _buildList(_result!.actionItems),
+              ),
+
+              AiResultCard(
+                title: 'Suggested Email Draft',
+                icon: Icons.mark_email_unread_outlined,
+                iconColor: Colors.purple,
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Text(
+                        _result!.emailDraft,
+                        style: TextStyle(fontFamily: 'monospace', color: Colors.grey.shade800, height: 1.5),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: _result!.emailDraft));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Email copied to clipboard!')));
+                      },
+                      icon: const Icon(Icons.copy),
+                      label: const Text('Copy Email to Clipboard'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppConstants.primaryColor,
+                        side: const BorderSide(color: AppConstants.primaryColor),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

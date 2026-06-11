@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/airtel_iq/mock_data/airtel_iq_mock_data.dart';
 import 'package:frontend/features/airtel_iq/models/airtel_iq_models.dart';
@@ -33,6 +34,27 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
     });
   }
 
+  void _copyAllResponses() {
+    if (_objections.isEmpty) return;
+    final sb = StringBuffer();
+    sb.writeln('OBJECTIONS & RESPONSES');
+    sb.writeln();
+    for (var obj in _objections) {
+      sb.writeln('OBJECTION: ${obj.objection}');
+      sb.writeln('CATEGORY: ${obj.category}');
+      sb.writeln('RECOMMENDED RESPONSE:');
+      sb.writeln(obj.recommendedResponse);
+      sb.writeln('FOLLOW-UP QUESTION:');
+      sb.writeln(obj.suggestedFollowUp);
+      sb.writeln('--------------------------------------------------');
+      sb.writeln();
+    }
+    Clipboard.setData(ClipboardData(text: sb.toString().trimRight()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Responses copied to clipboard')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,9 +68,27 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: AirtelIqSearchBar(
-              hintText: 'Search objections (e.g. pricing, competition)...',
-              onChanged: _onSearchChanged,
+            child: Column(
+              children: [
+                AirtelIqSearchBar(
+                  hintText: 'Search objections (e.g. pricing, competition)...',
+                  onChanged: _onSearchChanged,
+                ),
+                if (_objections.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton.icon(
+                      icon: const Icon(Icons.copy, size: 16),
+                      label: const Text('Copy All Responses'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppConstants.primaryColor,
+                      ),
+                      onPressed: _copyAllResponses,
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
           Expanded(
@@ -59,13 +99,15 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
                       style: TextStyle(color: Colors.grey),
                     ),
                   )
-                : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    itemCount: _objections.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      return _ObjectionCard(objection: _objections[index]);
-                    },
+                : SelectionArea(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      itemCount: _objections.length,
+                      separatorBuilder: (context, index) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        return _ObjectionCard(objection: _objections[index]);
+                      },
+                    ),
                   ),
           ),
         ],

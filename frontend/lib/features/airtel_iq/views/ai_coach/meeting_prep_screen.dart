@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
@@ -143,6 +144,40 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     } else {
       return _selectedCustomer != null && _selectedMeeting != null;
     }
+  }
+
+  void _copyBriefToClipboard() {
+    if (_result == null) return;
+    final sb = StringBuffer();
+    sb.writeln('MEETING PREPARATION BRIEF');
+    sb.writeln();
+    sb.writeln('EXECUTIVE BRIEF');
+    sb.writeln(_result!.executiveBrief);
+    sb.writeln();
+    _appendList(sb, 'DISCUSSION TOPICS', _result!.discussionTopics);
+    _appendList(sb, 'DISCOVERY QUESTIONS', _result!.discoveryQuestions);
+    _appendList(sb, 'RECOMMENDED SOLUTIONS', _result!.recommendedProducts);
+    _appendList(sb, 'LIKELY OBJECTIONS', _result!.likelyObjections);
+    _appendList(sb, 'SUGGESTED RESPONSES', _result!.suggestedResponses);
+    sb.writeln('NEXT BEST ACTION');
+    sb.writeln(_result!.nextBestAction);
+    
+    Clipboard.setData(ClipboardData(text: sb.toString().trimRight()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Meeting brief copied to clipboard')),
+    );
+  }
+
+  void _appendList(StringBuffer sb, String title, List<String> items) {
+    sb.writeln(title);
+    if (items.isEmpty) {
+      sb.writeln('None identified for this context.');
+    } else {
+      for (var item in items) {
+        sb.writeln('• $item');
+      }
+    }
+    sb.writeln();
   }
 
   @override
@@ -326,56 +361,71 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
       children: [
         const Divider(),
         const SizedBox(height: 16),
-        const Text('AI Sales Coach Insights', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('AI Sales Coach Insights', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            TextButton.icon(
+              icon: const Icon(Icons.copy, size: 16),
+              label: const Text('Copy Brief'),
+              style: TextButton.styleFrom(
+                foregroundColor: AppConstants.primaryColor,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              ),
+              onPressed: _copyBriefToClipboard,
+            ),
+          ],
+        ),
         const SizedBox(height: 16),
 
-        AiResultCard(
-          title: 'Executive Brief',
-          icon: Icons.article_outlined,
-          iconColor: Colors.blue,
-          content: Text(_result!.executiveBrief, style: TextStyle(color: Colors.grey.shade800, height: 1.5)),
-        ),
-
-        AiResultCard(
-          title: 'Discussion Topics',
-          icon: Icons.chat_bubble_outline,
-          iconColor: Colors.orange,
-          content: _buildList(_result!.discussionTopics),
-        ),
-
-        AiResultCard(
-          title: 'Discovery Questions',
-          icon: Icons.search,
-          iconColor: Colors.purple,
-          content: _buildList(_result!.discoveryQuestions),
-        ),
-
-        AiResultCard(
-          title: 'Recommended Solutions',
-          icon: Icons.lightbulb_outline,
-          iconColor: Colors.green,
-          content: _buildList(_result!.recommendedProducts),
-        ),
-
-        AiResultCard(
-          title: 'Likely Objections',
-          icon: Icons.warning_amber_rounded,
-          iconColor: Colors.red,
-          content: _buildList(_result!.likelyObjections),
-        ),
-
-        AiResultCard(
-          title: 'Suggested Responses',
-          icon: Icons.reply,
-          iconColor: Colors.teal,
-          content: _buildList(_result!.suggestedResponses),
-        ),
-
-        AiResultCard(
-          title: 'Next Best Action',
-          icon: Icons.stars,
-          iconColor: AppConstants.primaryColor,
-          content: Text(_result!.nextBestAction, style: TextStyle(color: Colors.grey.shade800, height: 1.5, fontWeight: FontWeight.w600)),
+        SelectionArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AiResultCard(
+                title: 'Executive Brief',
+                icon: Icons.article_outlined,
+                iconColor: Colors.blue,
+                content: Text(_result!.executiveBrief, style: TextStyle(color: Colors.grey.shade800, height: 1.5)),
+              ),
+              AiResultCard(
+                title: 'Discussion Topics',
+                icon: Icons.chat_bubble_outline,
+                iconColor: Colors.orange,
+                content: _buildList(_result!.discussionTopics),
+              ),
+              AiResultCard(
+                title: 'Discovery Questions',
+                icon: Icons.search,
+                iconColor: Colors.purple,
+                content: _buildList(_result!.discoveryQuestions),
+              ),
+              AiResultCard(
+                title: 'Recommended Solutions',
+                icon: Icons.lightbulb_outline,
+                iconColor: Colors.green,
+                content: _buildList(_result!.recommendedProducts),
+              ),
+              AiResultCard(
+                title: 'Likely Objections',
+                icon: Icons.warning_amber_rounded,
+                iconColor: Colors.red,
+                content: _buildList(_result!.likelyObjections),
+              ),
+              AiResultCard(
+                title: 'Suggested Responses',
+                icon: Icons.reply,
+                iconColor: Colors.teal,
+                content: _buildList(_result!.suggestedResponses),
+              ),
+              AiResultCard(
+                title: 'Next Best Action',
+                icon: Icons.stars,
+                iconColor: AppConstants.primaryColor,
+                content: Text(_result!.nextBestAction, style: TextStyle(color: Colors.grey.shade800, height: 1.5, fontWeight: FontWeight.w600)),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -400,4 +450,3 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     );
   }
 }
-
