@@ -147,8 +147,8 @@ const List<_SemanticConcept> _semanticConcepts = [
     name: 'Security & Compliance',
     phrases: [
       'audit', 'compliance', 'regulation', 'governance', 'security breach',
-      'privacy', 'data protection', 'data residency', 'sovereignty', 'risk management',
-      'ransomware', 'cyber attack', 'hacked', 'data leak', 'unauthorized access',
+      'privacy', 'data protection', 'risk management', 'ransomware',
+      'cyber attack', 'hacked', 'data leak', 'unauthorized access',
       'regulatory fine', 'security posture',
     ],
     products: ['Airtel Secure Internet', 'Airtel VPN/MPLS', 'Airtel Public Cloud', 'Airtel Colocation'],
@@ -179,10 +179,19 @@ const List<_SemanticConcept> _semanticConcepts = [
     phrases: [
       'migration', 'cloud', 'workload', 'hosting', 'disaster recovery',
       'backup', 'colocation', 'compute', 'server end of life', 'hardware refresh',
-      'data center move', 'dr drill', 'on-prem', 'on premise',
+      'data center move', 'dr drill', 'on-prem', 'on premise', 'cloud migration risk',
     ],
     products: ['Airtel Public Cloud', 'Airtel Colocation'],
     nba: 'Discuss workload migration timeline and disaster recovery requirements.',
+  ),
+  _SemanticConcept(
+    name: 'Data Sovereignty & Hosting',
+    phrases: [
+      'data residency', 'sovereignty', 'data localization', 'on-shore hosting',
+      'regulatory hosting', 'local data center', 'data compliance', 'data boundary'
+    ],
+    products: ['Airtel Colocation', 'Airtel Public Cloud'],
+    nba: 'Discuss local data residency compliance and schedule a data center tour or cloud architecture review.',
   ),
   _SemanticConcept(
     name: 'IoT & Asset Visibility',
@@ -754,9 +763,11 @@ class MeetingPrepIntelligenceEngine {
     // Phase 3 -- Confidence Layer Reason Formatting
     String confidencePrefix = '';
     if (score >= 100 && scoreGap >= 40) {
-      confidencePrefix = 'Highly confident recommendation: ';
-    } else if (score < 60) {
-      confidencePrefix = 'Airtel offers a wide range of solutions, but based on generic industry fit, ';
+      confidencePrefix = 'Strongly aligned with the customer\'s stated challenges. ';
+    } else if (score >= 60) {
+      confidencePrefix = 'Good fit based on industry and business context. ';
+    } else {
+      confidencePrefix = 'Recommended primarily based on industry patterns. ';
     }
 
     if (hasPainPoint) {
@@ -1232,8 +1243,10 @@ class MeetingPrepIntelligenceEngine {
   }
 
   bool _hasSignificantWordOverlap(String a, String b) {
-    final aWords = a.split(RegExp(r'\W+')).where((w) => w.length > 3);
-    return aWords.any((w) => b.contains(w));
+    const stopWords = {'data', 'management', 'system', 'network', 'business', 'risk', 'cost', 'time', 'high', 'low', 'poor', 'lack'};
+    final aWords = a.toLowerCase().split(RegExp(r'\W+')).where((w) => w.length > 3 && !stopWords.contains(w));
+    final bLower = b.toLowerCase();
+    return aWords.any((w) => bLower.contains(w));
   }
 
   List<String> _deduplicateAndTake(List<String> items, int n) {
