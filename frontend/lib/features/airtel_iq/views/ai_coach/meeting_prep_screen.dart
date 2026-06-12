@@ -29,6 +29,12 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
   String? _painPoint;
   String? _objective;
 
+  // Phase 2 — Scenario Mode extra context
+  // ignore: prefer_final_fields
+  List<String> _existingProducts = [];
+  final TextEditingController _notesController = TextEditingController();
+  bool _showExtraContext = false;
+
   // ── History mode inputs ───────────────────────────────────────────────────
   Customer? _selectedCustomer;
   Meeting? _selectedMeeting;
@@ -39,6 +45,11 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
   String? _enrichCompanySize;
   String? _enrichPainPoint;
 
+  // Phase 2 — History Mode extra context
+  // ignore: prefer_final_fields
+  List<String> _enrichExistingProducts = [];
+  final TextEditingController _enrichNotesController = TextEditingController();
+
   // ── State ─────────────────────────────────────────────────────────────────
   bool _isLoading = false;
   MeetingPrepV3Result? _result;
@@ -47,17 +58,21 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
 
   // ── Reference data ────────────────────────────────────────────────────────
   static const List<String> _industries = [
+    'Automotive',
     'Banking & Financial Services',
-    'Retail',
-    'Manufacturing',
-    'Logistics',
-    'Healthcare',
-    'IT & ITES',
     'E-Commerce',
     'Education',
-    'Hospitality',
-    'Government',
     'Energy & Utilities',
+    'Government',
+    'Healthcare',
+    'Hospitality',
+    'IT & ITES',
+    'Logistics',
+    'Manufacturing',
+    'Media & Entertainment',
+    'Retail',
+    'Telecom & Carriers',
+    'Travel & Tourism',
   ];
 
   static const List<String> _meetingTypes = [
@@ -106,6 +121,25 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     'Explore Upsell Opportunities',
   ];
 
+  // All 15 Airtel product names for the existing-products chip selector (Phase 2)
+  static const List<String> _allProductNames = [
+    'Airtel Corporate Postpaid',
+    'Airtel IQ Business Connect',
+    'Airtel SD-WAN',
+    'Airtel Secure Internet',
+    'Airtel Cloud',
+    'Airtel IoT',
+    'Airtel SIP Trunking',
+    'Airtel Contact Center as a Service',
+    'Airtel Managed Wi-Fi',
+    'Airtel VPN/MPLS',
+    'Airtel Work From Anywhere Solutions',
+    'Airtel Data Center Services (Nxtra)',
+    'Airtel 5G for Enterprise',
+    'Airtel CPaaS',
+    'Airtel Leased Line (ILL)',
+  ];
+
   // ── Logic ─────────────────────────────────────────────────────────────────
 
   /// Derives a dynamic, industry-specific pain point list from repository data.
@@ -146,9 +180,11 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
   bool get _canGenerate {
     if (_isLoading) return false;
     if (_prepMode == _PrepMode.scenario) {
-      return _industry != null && _meetingType != null;
+      // Phase 4: Industry is the ONLY mandatory field.
+      // Meeting Type and all other fields are optional enrichment.
+      return _industry != null;
     }
-    // History: only customer + meeting required; industry is optional
+    // History: customer + meeting required; industry/context are optional
     return _selectedCustomer != null && _selectedMeeting != null;
   }
 
@@ -178,10 +214,14 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
       if (_prepMode == _PrepMode.scenario) {
         input = MeetingPrepV3Input(
           industry: _industry,
-          meetingType: _meetingType!,
+          meetingType: _meetingType,
           companySize: _companySize,
           painPoint: _painPoint,
           objective: _objective,
+          existingAirtelProducts: _existingProducts,
+          situationNotes: _notesController.text.trim().isEmpty
+              ? null
+              : _notesController.text.trim(),
         );
       } else {
         // History mode: prefer enriched values, fall back to inferred
@@ -192,12 +232,16 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             allMeetings.where((m) => m.customerId == _selectedCustomer!.id).length;
 
         input = MeetingPrepV3Input(
-          industry: _enrichIndustry, // null → methodology-only fallback
+          industry: _enrichIndustry,
           meetingType: effectiveMeetingType,
           companySize: _enrichCompanySize,
           painPoint: _enrichPainPoint,
           customerName: _selectedCustomer!.name,
           previousMeetingCount: previousCount,
+          existingAirtelProducts: _enrichExistingProducts,
+          situationNotes: _enrichNotesController.text.trim().isEmpty
+              ? null
+              : _enrichNotesController.text.trim(),
         );
       }
 
@@ -360,9 +404,10 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
         ),
         const SizedBox(height: 16),
         _buildDropdown(
-          label: 'Meeting Type *',
+          label: 'Meeting Type (optional — improves specificity)',
           value: _meetingType,
           items: _meetingTypes,
+          isOptional: true,
           onChanged: (v) => setState(() {
             _meetingType = v;
             _result = null;
@@ -375,6 +420,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
               : 'Pain Point (select industry first for targeted options)',
           value: _painPoint,
           items: _derivePainPoints(_industry),
+          isOptional: true,
           onChanged: (v) => setState(() {
             _painPoint = v;
             _result = null;
@@ -385,6 +431,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
           label: 'Company Size (optional)',
           value: _companySize,
           items: _companySizes,
+          isOptional: true,
           onChanged: (v) => setState(() {
             _companySize = v;
             _result = null;
@@ -395,12 +442,174 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
           label: 'Meeting Objective (optional)',
           value: _objective,
           items: _objectives,
+          isOptional: true,
           onChanged: (v) => setState(() {
             _objective = v;
             _result = null;
           }),
         ),
+        const SizedBox(height: 16),
+
+        // Phase 2 -- expandable extra context
+        _buildExtraContextSection(
+          existingProducts: _existingProducts,
+          notesController: _notesController,
+          expanded: _showExtraContext,
+          onToggle: () => setState(() => _showExtraContext = !_showExtraContext),
+          onProductToggle: (name) => setState(() {
+            _existingProducts.contains(name)
+                ? _existingProducts.remove(name)
+                : _existingProducts.add(name);
+            _result = null;
+          }),
+          onNoteChanged: (_) => setState(() => _result = null),
+        ),
       ],
+    );
+  }
+
+  // Phase 2 -- collapsible "Add more context" section (shared by Scenario + Enrich)
+  Widget _buildExtraContextSection({
+    required List<String> existingProducts,
+    required TextEditingController notesController,
+    required bool expanded,
+    required VoidCallback onToggle,
+    required void Function(String) onProductToggle,
+    required void Function(String) onNoteChanged,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Toggle header
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: onToggle,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                children: [
+                  Icon(
+                    expanded ? Icons.expand_less : Icons.add,
+                    size: 18,
+                    color: AppConstants.primaryColor,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    expanded ? 'Hide extra context' : 'Add more context (optional)',
+                    style: TextStyle(
+                      color: AppConstants.primaryColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const Spacer(),
+                  if (!expanded && (existingProducts.isNotEmpty || notesController.text.isNotEmpty))
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppConstants.primaryColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'context added',
+                        style: TextStyle(
+                            fontSize: 11, color: AppConstants.primaryColor),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+
+          if (expanded) ...[
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Existing products label
+                  const Text(
+                    'Existing Airtel Products',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Select what the customer already has — boosts cross-sell recommendations.',
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Product chip grid
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _allProductNames.map((name) {
+                      final selected = existingProducts.contains(name);
+                      // Shorten display name for chips
+                      final label = name.replaceAll('Airtel ', '');
+                      return FilterChip(
+                        label: Text(label,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: selected ? Colors.white : Colors.grey.shade700,
+                            )),
+                        selected: selected,
+                        onSelected: (_) => onProductToggle(name),
+                        selectedColor: AppConstants.primaryColor,
+                        checkmarkColor: Colors.white,
+                        backgroundColor: Colors.grey.shade100,
+                        side: BorderSide(
+                          color: selected
+                              ? AppConstants.primaryColor
+                              : Colors.grey.shade300,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Situation notes
+                  const Text(
+                    'Situation Notes',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Optional free-text — e.g. "branch outages last quarter, evaluating SD-WAN".',
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: notesController,
+                    maxLines: 3,
+                    onChanged: onNoteChanged,
+                    decoration: InputDecoration(
+                      hintText:
+                          'e.g. branch outages, evaluating SD-WAN alternatives, MPLS renewal coming up',
+                      hintStyle: TextStyle(
+                          fontSize: 12, color: Colors.grey.shade400),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
@@ -409,7 +618,15 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     required String? value,
     required List<String> items,
     required ValueChanged<String?> onChanged,
+    bool isOptional = false,
   }) {
+    // When isOptional, "Not Known" is the first item and maps to null.
+    // This allows users to always return to an unspecified state after
+    // opening a dropdown, keeping optional fields truly optional.
+    const notKnown = 'Not Known';
+    final displayItems = isOptional ? [notKnown, ...items] : items;
+    final displayValue = isOptional ? (value ?? notKnown) : value;
+
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         labelText: label,
@@ -419,12 +636,14 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
-      initialValue: value,
+      initialValue: displayValue,
       isExpanded: true,
-      items: items
+      items: displayItems
           .map((e) => DropdownMenuItem(value: e, child: Text(e)))
           .toList(),
-      onChanged: onChanged,
+      onChanged: isOptional
+          ? (v) => onChanged(v == notKnown ? null : v)
+          : onChanged,
     );
   }
 
@@ -558,6 +777,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             label: 'Industry',
             value: _enrichIndustry,
             items: _industries,
+            isOptional: true,
             onChanged: (v) => setState(() {
               _enrichIndustry = v;
               // Clear pain point when industry changes
@@ -570,6 +790,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             label: 'Meeting Type',
             value: _enrichMeetingType,
             items: _meetingTypes,
+            isOptional: true,
             onChanged: (v) => setState(() {
               _enrichMeetingType = v;
               _result = null;
@@ -582,6 +803,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                 : 'Pain Point',
             value: _enrichPainPoint,
             items: _derivePainPoints(_enrichIndustry),
+            isOptional: true,
             onChanged: (v) => setState(() {
               _enrichPainPoint = v;
               _result = null;
@@ -592,10 +814,27 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             label: 'Company Size',
             value: _enrichCompanySize,
             items: _companySizes,
+            isOptional: true,
             onChanged: (v) => setState(() {
               _enrichCompanySize = v;
               _result = null;
             }),
+          ),
+          const SizedBox(height: 12),
+
+          // Phase 2 -- extra context in History Mode
+          _buildExtraContextSection(
+            existingProducts: _enrichExistingProducts,
+            notesController: _enrichNotesController,
+            expanded: _showExtraContext,
+            onToggle: () => setState(() => _showExtraContext = !_showExtraContext),
+            onProductToggle: (name) => setState(() {
+              _enrichExistingProducts.contains(name)
+                  ? _enrichExistingProducts.remove(name)
+                  : _enrichExistingProducts.add(name);
+              _result = null;
+            }),
+            onNoteChanged: (_) => setState(() => _result = null),
           ),
         ],
       ),
@@ -683,7 +922,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                 ),
               ),
 
-              // Top Challenges
+              // Top Challenges (always rendered first regardless of mode)
               _V3Card(
                 title: 'Top Likely Challenges',
                 icon: Icons.radar,
@@ -698,20 +937,39 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                 ),
               ),
 
-              // Discovery Questions
-              _V3Card(
-                title: 'Discovery Questions',
-                icon: Icons.search,
-                iconColor: Colors.purple,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: r.discoveryQuestions
-                      .asMap()
-                      .entries
-                      .map((e) => _numberedRow(e.key + 1, e.value))
-                      .toList(),
+              // Phase 1: objectionsDominant — Objections rendered BEFORE questions
+              // when meeting type is negotiation/objection-heavy (e.g. Renewal Negotiation)
+              if (r.objectionsDominant && r.topObjections.isNotEmpty)
+                _V3Card(
+                  title: 'Handle These Objections First',
+                  icon: Icons.shield_outlined,
+                  iconColor: Colors.red,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: r.topObjections
+                        .asMap()
+                        .entries
+                        .map((e) => _ObjectionRow(
+                            index: e.key + 1, item: e.value))
+                        .toList(),
+                  ),
                 ),
-              ),
+
+              // Discovery Questions
+              if (r.discoveryQuestions.isNotEmpty)
+                _V3Card(
+                  title: 'Discovery Questions',
+                  icon: Icons.search,
+                  iconColor: Colors.purple,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: r.discoveryQuestions
+                        .asMap()
+                        .entries
+                        .map((e) => _numberedRow(e.key + 1, e.value))
+                        .toList(),
+                  ),
+                ),
 
               // Primary Recommendation
               _PrimaryProductCard(product: r.primaryRecommendation),
@@ -730,8 +988,25 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                   ),
                 ),
 
-              // Objections
-              if (r.topObjections.isNotEmpty)
+              // Phase 1: Expansion Opportunities — Renewal, Upsell, QBR only
+              if (r.expansionOpportunities != null &&
+                  r.expansionOpportunities!.isNotEmpty)
+                _V3Card(
+                  title: 'Expansion Opportunities',
+                  icon: Icons.trending_up,
+                  iconColor: Colors.green.shade700,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: r.expansionOpportunities!
+                        .asMap()
+                        .entries
+                        .map((e) => _numberedRow(e.key + 1, e.value))
+                        .toList(),
+                  ),
+                ),
+
+              // Objections (standard position — not dominant mode)
+              if (!r.objectionsDominant && r.topObjections.isNotEmpty)
                 _V3Card(
                   title: 'Likely Objections',
                   icon: Icons.shield_outlined,

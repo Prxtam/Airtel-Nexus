@@ -35,22 +35,26 @@ class ProductIntelligence {
 class IndustryIntelligence {
   final String id;
   final String industryName;
+  final String? overview;
   final List<String> businessChallenges;
   final List<String> technologyChallenges;
   final List<String> recommendedProducts;
   final List<String> discoveryQuestions;
   final List<String> objections;
   final List<String> salesOpportunities;
+  final List<String> keyRegulations;
 
   const IndustryIntelligence({
     required this.id,
     required this.industryName,
+    this.overview,
     required this.businessChallenges,
     required this.technologyChallenges,
     required this.recommendedProducts,
     required this.discoveryQuestions,
     required this.objections,
     required this.salesOpportunities,
+    this.keyRegulations = const [],
   });
 }
 
