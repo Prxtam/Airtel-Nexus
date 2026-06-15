@@ -506,6 +506,16 @@ class MeetingPrepIntelligenceEngine {
     // 1. Rank all products -- Signals 1 through 6 + Semantic Concepts + Signal 1.5
     final rankedScoredProducts = _rankProducts(input, industry, methodology, painPoints, matchedConcepts);
 
+    if (painPoints.isNotEmpty) {
+      const genericProducts = ['Airtel Corporate Postpaid', 'Airtel IQ Business Connect', 'Airtel Office Internet'];
+      rankedScoredProducts.sort((a, b) {
+        final aGen = genericProducts.contains(a.item.name) ? 1 : 0;
+        final bGen = genericProducts.contains(b.item.name) ? 1 : 0;
+        if (aGen != bGen) return aGen.compareTo(bGen);
+        return b.score.compareTo(a.score);
+      });
+    }
+
     final primaryScored = rankedScoredProducts.isNotEmpty ? rankedScoredProducts[0] : null;
     final primaryProduct = primaryScored?.item;
     final primaryScore = primaryScored?.score ?? 0;
@@ -687,14 +697,22 @@ class MeetingPrepIntelligenceEngine {
 
       // Signal 2 -- Pain point match (dominant when present: +60 or -20)
       if (hasPainPoint) {
-        final ppLower = painPoints.first.toLowerCase();
-        final solves = product.painPointsSolved.any((p) {
-          final pLower = p.toLowerCase();
-          return pLower.contains(ppLower) ||
-              ppLower.contains(pLower) ||
-              _hasSignificantWordOverlap(ppLower, pLower);
-        });
-        score += solves ? 60 : -20;
+        bool solvesAny = false;
+        int matchCount = 0;
+        for (final pp in painPoints) {
+          final ppLower = pp.toLowerCase();
+          final solves = product.painPointsSolved.any((p) {
+            final pLower = p.toLowerCase();
+            return pLower.contains(ppLower) ||
+                ppLower.contains(pLower) ||
+                _hasSignificantWordOverlap(ppLower, pLower);
+          });
+          if (solves) {
+            solvesAny = true;
+            matchCount++;
+          }
+        }
+        score += solvesAny ? (matchCount * 40).clamp(0, 100).toDouble() : -20.0;
       }
 
       // Signal 3 -- Industry challenge keyword matching (capped at +20)
@@ -891,17 +909,24 @@ class MeetingPrepIntelligenceEngine {
     ];
 
     final hasPainPoint = painPoints.isNotEmpty;
-    List<_Scored<String>> adjusted;
 
     if (hasPainPoint) {
-      final ppLower = painPoints.first.toLowerCase();
-      final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
-      adjusted = allChallenges.map((s) {
-        final challengeLower = s.item.toLowerCase();
-        final matches = ppWords.any((w) => challengeLower.contains(w));
-        return _Scored(s.item, s.score + (matches ? 40 : -10));
-      }).toList();
-    } else if (noteKeywords.isNotEmpty) {
+      final results = List<String>.from(painPoints);
+      if (results.length < 3) {
+        final seen = Set<String>.from(results.map((r) => r.toLowerCase()));
+        allChallenges.sort((a, b) => b.score.compareTo(a.score));
+        for (final s in allChallenges) {
+          if (results.length >= 3) break;
+          if (seen.add(s.item.toLowerCase())) {
+            results.add(s.item);
+          }
+        }
+      }
+      return results.take(3).toList();
+    }
+
+    List<_Scored<String>> adjusted;
+    if (noteKeywords.isNotEmpty) {
       // Phase 2 Signal 7 -- situation notes boost (+20) when no explicit pain point
       adjusted = allChallenges.map((s) {
         final challengeLower = s.item.toLowerCase();
@@ -1046,7 +1071,7 @@ class MeetingPrepIntelligenceEngine {
       for (var i = 0; i < primary.objections.length; i++) {
         final response = i < primary.objectionResponses.length
             ? primary.objectionResponses[i]
-            : 'Engage with the Airtel enterprise team for a tailored response.';
+            : 'Acknowledge the specific concern. Pivot to Airtel\'s capabilities. Ask a probing question about their current constraints. Position the product with relevant case studies.';
         pool.add(_Scored(
           ScoredObjection(objection: primary.objections[i], response: response),
           30 + boost,
@@ -1059,7 +1084,7 @@ class MeetingPrepIntelligenceEngine {
       for (var i = 0; i < supporting.objections.length; i++) {
         final response = i < supporting.objectionResponses.length
             ? supporting.objectionResponses[i]
-            : 'Engage with the Airtel enterprise team for a tailored response.';
+            : 'Acknowledge the specific concern. Pivot to Airtel\'s capabilities. Ask a probing question about their current constraints. Position the product with relevant case studies.';
         pool.add(_Scored(
           ScoredObjection(objection: supporting.objections[i], response: response),
           20 + boost,
@@ -1073,8 +1098,8 @@ class MeetingPrepIntelligenceEngine {
         ScoredObjection(
           objection: obj,
           response:
-              'Demonstrate Airtel\'s specific solution fit for ${industry.industryName} organisations '
-              'and reference relevant case studies from the sector.',
+              'Acknowledge the specific concern. Pivot to Airtel\'s industry expertise in ${industry.industryName}. '
+              'Ask a probing question about their current constraints. Position the solution with relevant case studies.',
         ),
         15 + boost,
       ));
@@ -1196,7 +1221,19 @@ class MeetingPrepIntelligenceEngine {
         challenges.isNotEmpty ? challenges.first : 'key operational challenges';
         
     // Phase 3: Regulation Injection
-    String validate = 'Confirm with the customer: is "$topChallenge" currently affecting their operations?';
+    String validate;
+    if (hasPainPoint) {
+      if (painPoints.length == 1) {
+        validate = 'Confirm with the customer: is "${painPoints[0]}" currently affecting their operations?';
+      } else {
+        final last = painPoints.last;
+        final others = painPoints.take(painPoints.length - 1).join(', ');
+        validate = 'Confirm with the customer that $others and $last are currently priority areas for their business.';
+      }
+    } else {
+      validate = 'Confirm with the customer: is "$topChallenge" currently affecting their operations?';
+    }
+    
     if (industry.keyRegulations.isNotEmpty) {
       final regs = industry.keyRegulations.take(2).join(' and ');
       validate += ' Additionally, map out their current stance on $regs compliance.';

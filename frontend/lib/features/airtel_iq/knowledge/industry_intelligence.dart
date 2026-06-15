@@ -16,7 +16,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     technologyChallenges: [
       'Secure communication across distributed networks',
       'Branch connectivity reliability and uptime (SD-WAN needs)',
-      'Workforce mobility without compromising security',
+      'Workforce Mobility',
       'Centralized management of distributed IT infrastructure',
       'Cloud migration risks regarding data residency',
       'Integrating legacy core banking systems with modern APIs',
@@ -115,13 +115,13 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     businessChallenges: [
       'Plant coordination across global or national sites',
       'Field workforce management and safety',
-      'Operational efficiency and minimizing downtime',
+      'Operational Efficiency',
       'Supply chain bottlenecks',
-      'Predictive maintenance implementation',
+      'Predictive Maintenance',
     ],
     technologyChallenges: [
       'Site communication in remote or harsh environments',
-      'Workforce mobility on the factory floor',
+      'Workforce Mobility',
       'Connecting legacy industrial equipment to the cloud (Industry 4.0)',
       'Ensuring low latency for automated machinery',
       'Protecting intellectual property from cyber threats',
@@ -532,10 +532,10 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     businessChallenges: [
       'Connected vehicle and EV ecosystem management at scale',
       'AIS-140 compliance for commercial vehicle fleets',
-      'Supply chain visibility across multi-tier vendor networks',
+      'Supply Chain Visibility',
       'Dealership network communication and inventory synchronization',
       'Rising demand for ADAS and autonomous driving capabilities',
-      'Workforce mobility across manufacturing plants and field teams',
+      'Workforce Mobility',
     ],
     technologyChallenges: [
       'Dual-profile M2M eSIM connectivity for connected vehicles',
