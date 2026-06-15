@@ -24,11 +24,9 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Energy & Utilities',
     ],
     painPointsSolved: [
-      'Rising Telecom Costs',
       'Distributed Workforce',
       'Roaming Management',
       'Mobility Management',
-      'Operational Efficiency',
     ],
     businessOutcomes: [
       'Centralized telecom management',
@@ -81,10 +79,11 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Education',
     ],
     painPointsSolved: [
-      'Workforce Communication',
-      'Distributed Workforce',
       'Customer Engagement',
-      'Real-Time Communication',
+      'Workforce Communication',
+      'Remote Work',
+      'Call Routing Complexity',
+      'Agent Productivity',
     ],
     businessOutcomes: [
       'Better communication consistency',
@@ -156,9 +155,9 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Vendor consolidation: "We prefer to buy SD-WAN hardware directly from OEM vendors like Cisco/Fortinet."',
     ],
     objectionResponses: [
-      'Airtel SD-WAN can be deployed in a hybrid model, running alongside existing MPLS during a phased migration.',
+      'Acknowledge their stability, then pivot to bandwidth constraints and cloud-readiness. Ask: "As you migrate more workloads to AWS/Azure, are you finding the MPLS bandwidth costs scaling too quickly?" Position SD-WAN as a hybrid overlay rather than a rip-and-replace.',
       'Highlight built-in Next-Generation Firewall (NGFW) and IPsec encryption capabilities securing broadband links.',
-      'Explain the benefits of Airtel’s fully managed service (underlay + overlay + management portal) with a single SLA.',
+      'Acknowledge their preference for OEMs, then pivot to the management burden. Ask: "How much time does your team spend troubleshooting underlay vs overlay issues across different vendors?" Position Airtel as a single-SLA managed service provider.',
     ],
     crossSellOpportunities: [
       'Airtel Secure Internet',
@@ -972,10 +971,9 @@ final List<ProductIntelligence> productIntelligenceRepo = [
     painPointsSolved: [
       'Cyber Threats',
       'Security & Compliance',
-      'Multi-Vendor Complexity',
       'DDoS Attacks',
       'Data Breach Risk',
-      'IT Staff Bandwidth',
+      'Security Vulnerabilities',
     ],
     businessOutcomes: [
       'Eliminate the "two-vendor trap" by combining internet and security from Airtel',
