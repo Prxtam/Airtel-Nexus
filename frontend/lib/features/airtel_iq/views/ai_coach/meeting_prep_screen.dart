@@ -26,7 +26,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
   String? _industry;
   String? _meetingType;
   String? _companySize;
-  String? _painPoint;
+  List<String> _painPoints = [];
   String? _objective;
 
   // Phase 2 — Scenario Mode extra context
@@ -43,7 +43,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
   String? _enrichIndustry;
   String? _enrichMeetingType;
   String? _enrichCompanySize;
-  String? _enrichPainPoint;
+  List<String> _enrichPainPoints = [];
 
   // Phase 2 — History Mode extra context
   // ignore: prefer_final_fields
@@ -216,7 +216,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
           industry: _industry,
           meetingType: _meetingType,
           companySize: _companySize,
-          painPoint: _painPoint,
+          painPoints: _painPoints,
           objective: _objective,
           existingAirtelProducts: _existingProducts,
           situationNotes: _notesController.text.trim().isEmpty
@@ -235,7 +235,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
           industry: _enrichIndustry,
           meetingType: effectiveMeetingType,
           companySize: _enrichCompanySize,
-          painPoint: _enrichPainPoint,
+          painPoints: _enrichPainPoints,
           customerName: _selectedCustomer!.name,
           previousMeetingCount: previousCount,
           existingAirtelProducts: _enrichExistingProducts,
@@ -398,7 +398,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
           onChanged: (v) => setState(() {
             _industry = v;
             // Clear pain point when industry changes — previous selection may not be in new list
-            _painPoint = null;
+            _painPoints.clear();
             _result = null;
           }),
         ),
@@ -414,15 +414,15 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
           }),
         ),
         const SizedBox(height: 16),
-        _buildDropdown(
-          label: _industry != null
-              ? 'Pain Point — specific to ${_industry!.split(' ').first} sector (optional)'
-              : 'Pain Point (select industry first for targeted options)',
-          value: _painPoint,
-          items: _derivePainPoints(_industry),
-          isOptional: true,
-          onChanged: (v) => setState(() {
-            _painPoint = v;
+        _buildPainPointsSection(
+          industry: _industry,
+          selected: _painPoints,
+          onToggle: (v) => setState(() {
+            if (_painPoints.contains(v)) {
+              _painPoints.remove(v);
+            } else if (_painPoints.length < 3) {
+              _painPoints.add(v);
+            }
             _result = null;
           }),
         ),
@@ -613,6 +613,57 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     );
   }
 
+  Widget _buildPainPointsSection({
+    required String? industry,
+    required List<String> selected,
+    required void Function(String) onToggle,
+  }) {
+    final items = _derivePainPoints(industry);
+    final label = industry != null
+        ? 'Pain Points — specific to ${industry.split(' ').first} sector (optional, max 3)'
+        : 'Pain Points (select industry first for targeted options)';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: items.map((name) {
+            final isSelected = selected.contains(name);
+            final isDisabled = !isSelected && selected.length >= 3;
+            return FilterChip(
+              label: Text(name,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isSelected 
+                      ? Colors.white 
+                      : (isDisabled ? Colors.grey.shade400 : Colors.grey.shade700),
+                  )),
+              selected: isSelected,
+              onSelected: isDisabled ? null : (_) => onToggle(name),
+              selectedColor: AppConstants.primaryColor,
+              checkmarkColor: Colors.white,
+              backgroundColor: Colors.white,
+              disabledColor: Colors.grey.shade100,
+              side: BorderSide(
+                color: isSelected
+                    ? AppConstants.primaryColor
+                    : (isDisabled ? Colors.grey.shade200 : Colors.grey.shade300),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
   Widget _buildDropdown({
     required String label,
     required String? value,
@@ -781,7 +832,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             onChanged: (v) => setState(() {
               _enrichIndustry = v;
               // Clear pain point when industry changes
-              _enrichPainPoint = null;
+              _enrichPainPoints.clear();
               _result = null;
             }),
           ),
@@ -797,15 +848,15 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             }),
           ),
           const SizedBox(height: 12),
-          _buildDropdown(
-            label: _enrichIndustry != null
-                ? 'Pain Point — specific to ${_enrichIndustry!.split(' ').first} sector'
-                : 'Pain Point',
-            value: _enrichPainPoint,
-            items: _derivePainPoints(_enrichIndustry),
-            isOptional: true,
-            onChanged: (v) => setState(() {
-              _enrichPainPoint = v;
+          _buildPainPointsSection(
+            industry: _enrichIndustry,
+            selected: _enrichPainPoints,
+            onToggle: (v) => setState(() {
+              if (_enrichPainPoints.contains(v)) {
+                _enrichPainPoints.remove(v);
+              } else if (_enrichPainPoints.length < 3) {
+                _enrichPainPoints.add(v);
+              }
               _result = null;
             }),
           ),

@@ -320,7 +320,7 @@ class MeetingPrepV3Input {
   final String? companySize;
 
   /// Optional. When provided, becomes the dominant ranking and filtering signal.
-  final String? painPoint;
+  final List<String> painPoints;
 
   /// Optional. Secondary signal for question and NBA tuning.
   final String? objective;
@@ -349,7 +349,7 @@ class MeetingPrepV3Input {
     this.industry,
     this.meetingType,
     this.companySize,
-    this.painPoint,
+    this.painPoints = const [],
     this.objective,
     this.customerName,
     this.previousMeetingCount,
@@ -495,16 +495,16 @@ class MeetingPrepIntelligenceEngine {
     MeetingMethodology? methodology,
   ) {
     final shape = _resolveShape(input.meetingType);
-    final painPoint = _normalisePainPoint(input.painPoint);
+    final painPoints = input.painPoints;
 
     // Phase 2: extract situation note keywords once (active only when no painPoint)
-    final noteKeywords = _extractNoteKeywords(input.situationNotes, painPoint);
+    final noteKeywords = _extractNoteKeywords(input.situationNotes, painPoints);
 
     // Phase 2.5: Semantic Concept Engine mapping
     final matchedConcepts = _extractSemanticConcepts(input.situationNotes);
 
     // 1. Rank all products -- Signals 1 through 6 + Semantic Concepts + Signal 1.5
-    final rankedScoredProducts = _rankProducts(input, industry, methodology, painPoint, matchedConcepts);
+    final rankedScoredProducts = _rankProducts(input, industry, methodology, painPoints, matchedConcepts);
 
     final primaryScored = rankedScoredProducts.isNotEmpty ? rankedScoredProducts[0] : null;
     final primaryProduct = primaryScored?.item;
@@ -531,11 +531,11 @@ class MeetingPrepIntelligenceEngine {
     final scoreGap = primaryScore - secondaryScore;
 
     // 2. Rank challenges (Signal 7: notes boost when no pain point)
-    final challenges = _rankChallenges(industry, methodology, painPoint, noteKeywords);
+    final challenges = _rankChallenges(industry, methodology, painPoints, noteKeywords);
 
     // 3. Select questions (count + tier weights from shape; Signal 7 when active)
     final questions = _selectQuestions(
-        industry, methodology, primaryProduct, painPoint, input.objective,
+        industry, methodology, primaryProduct, painPoints, input.objective,
         shape, noteKeywords);
 
     // 4. Select objections (count + pool boost from shape; Signal 7 when active)
@@ -544,30 +544,30 @@ class MeetingPrepIntelligenceEngine {
       supportingSlice.isNotEmpty ? supportingSlice[0].item : null,
       industry,
       input.meetingType,
-      painPoint,
+      painPoints,
       shape,
       noteKeywords,
     );
 
     // 5. Build ranked products with repo-derived reasons + concept explanation + Confidence Layer
     final primary = primaryProduct != null
-        ? _buildRankedProduct(primaryProduct, input.industry!, painPoint, matchedConcepts, input.meetingType, primaryScore, scoreGap)
+        ? _buildRankedProduct(primaryProduct, input.industry!, painPoints, matchedConcepts, input.meetingType, primaryScore, scoreGap)
         : _fallbackRankedProduct();
 
     final supportingRanked = supportingSlice
-        .map((s) => _buildRankedProduct(s.item, input.industry!, painPoint, matchedConcepts, input.meetingType, s.score, 0))
+        .map((s) => _buildRankedProduct(s.item, input.industry!, painPoints, matchedConcepts, input.meetingType, s.score, 0))
         .toList();
 
     // 6. Meeting strategy
     final strategy =
-        _buildMeetingStrategy(methodology, challenges, painPoint, industry);
+        _buildMeetingStrategy(methodology, challenges, painPoints, industry, input.meetingType);
 
     // 7. Next best action
     final nba = _buildNextBestAction(input.meetingType, input.industry!, primary.productName, matchedConcepts);
 
     // 8. Context summary
     final contextSummary =
-        _buildContextSummary(input, industry, challenges, methodology, painPoint);
+        _buildContextSummary(input, industry, challenges, methodology, painPoints);
 
     // 9. Expansion opportunities (Renewal, Upsell, QBR only)
     List<String>? expansionOpps;
@@ -614,11 +614,11 @@ class MeetingPrepIntelligenceEngine {
     MeetingPrepV3Input input,
     IndustryIntelligence industry,
     MeetingMethodology? methodology,
-    String? painPoint,
+    List<String> painPoints,
     List<_SemanticConcept> matchedConcepts,
   ) {
     final allProducts = _knowledge.getAllProducts();
-    final hasPainPoint = painPoint != null && painPoint.isNotEmpty;
+    final hasPainPoint = painPoints.isNotEmpty;
     final industryChallenges = [
       ...industry.businessChallenges,
       ...industry.technologyChallenges,
@@ -644,7 +644,7 @@ class MeetingPrepIntelligenceEngine {
 
       // Signal 2 -- Pain point match (dominant when present: +60 or -20)
       if (hasPainPoint) {
-        final ppLower = painPoint.toLowerCase();
+        final ppLower = painPoints.first.toLowerCase();
         final solves = product.painPointsSolved.any((p) {
           final pLower = p.toLowerCase();
           return pLower.contains(ppLower) ||
@@ -742,14 +742,14 @@ class MeetingPrepIntelligenceEngine {
   RankedProduct _buildRankedProduct(
     ProductIntelligence product,
     String industry,
-    String? painPoint,
+    List<String> painPoints,
     List<_SemanticConcept> matchedConcepts,
     String? meetingType,
     double score,
     double scoreGap,
   ) {
     String reason;
-    final hasPainPoint = painPoint != null && painPoint.isNotEmpty;
+    final hasPainPoint = painPoints.isNotEmpty;
     final pitch = meetingType == 'Executive Alignment Meeting' ? product.executivePitch : product.elevatorPitch;
 
     // Phase 2.5 -- Build concept prefix if product was boosted
@@ -771,7 +771,7 @@ class MeetingPrepIntelligenceEngine {
     }
 
     if (hasPainPoint) {
-      final ppLower = painPoint.toLowerCase();
+      final ppLower = painPoints.first.toLowerCase();
       final directSolve = product.painPointsSolved.any((p) {
         final pLower = p.toLowerCase();
         return pLower.contains(ppLower) ||
@@ -781,7 +781,7 @@ class MeetingPrepIntelligenceEngine {
 
       if (directSolve) {
         reason =
-            '$confidencePrefix$conceptPrefix${product.name} addresses $painPoint -- $pitch';
+            '$confidencePrefix$conceptPrefix${product.name} addresses ${painPoints.join(', ')} -- $pitch';
       } else {
         final outcome = product.businessOutcomes.isNotEmpty
             ? product.businessOutcomes.first
@@ -820,7 +820,7 @@ class MeetingPrepIntelligenceEngine {
   List<String> _rankChallenges(
     IndustryIntelligence industry,
     MeetingMethodology? methodology,
-    String? painPoint,
+    List<String> painPoints,
     List<String> noteKeywords,
   ) {
     final meetingType = methodology?.meetingType ?? '';
@@ -841,11 +841,11 @@ class MeetingPrepIntelligenceEngine {
       }),
     ];
 
-    final hasPainPoint = painPoint != null && painPoint.isNotEmpty;
+    final hasPainPoint = painPoints.isNotEmpty;
     List<_Scored<String>> adjusted;
 
     if (hasPainPoint) {
-      final ppLower = painPoint.toLowerCase();
+      final ppLower = painPoints.first.toLowerCase();
       final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
       adjusted = allChallenges.map((s) {
         final challengeLower = s.item.toLowerCase();
@@ -875,7 +875,7 @@ class MeetingPrepIntelligenceEngine {
     IndustryIntelligence industry,
     MeetingMethodology? methodology,
     ProductIntelligence? primaryProduct,
-    String? painPoint,
+    List<String> painPoints,
     String? objective,
     _MeetingOutputShape shape,
     List<String> noteKeywords,
@@ -888,7 +888,7 @@ class MeetingPrepIntelligenceEngine {
     // All other types: methodology questions dominate (35 vs 20).
     final tier1Base = isDiscovery ? 30.0 : 20.0;
     final tier2Base = isDiscovery ? 20.0 : 35.0;
-    final tier3Base = (painPoint != null && painPoint.isNotEmpty) ? 100.0 : 10.0; // Phase 3: Pain Point Lock
+    final tier3Base = painPoints.isNotEmpty ? 100.0 : 10.0; // Phase 3: Pain Point Lock
 
     final pool = <_Scored<String>>[];
 
@@ -902,10 +902,10 @@ class MeetingPrepIntelligenceEngine {
       pool.add(_Scored(q, tier3Base));
     }
 
-    final hasPainPoint = painPoint != null && painPoint.isNotEmpty;
+    final hasPainPoint = painPoints.isNotEmpty;
 
     if (hasPainPoint) {
-      final ppLower = painPoint.toLowerCase();
+      final ppLower = painPoints.first.toLowerCase();
       final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
 
       // Phase 3: Pain Point Lock -> massive boost to force them to the top
@@ -953,7 +953,7 @@ class MeetingPrepIntelligenceEngine {
     ProductIntelligence? supporting,
     IndustryIntelligence industry,
     String? meetingType,
-    String? painPoint,
+    List<String> painPoints,
     _MeetingOutputShape shape,
     List<String> noteKeywords,
   ) {
@@ -1004,11 +1004,11 @@ class MeetingPrepIntelligenceEngine {
         mtLower.contains('negotiation') ||
         mtLower.contains('proposal');
 
-    final hasPainPoint = painPoint != null && painPoint.isNotEmpty;
+    final hasPainPoint = painPoints.isNotEmpty;
     List<_Scored<ScoredObjection>> scored;
 
     if (hasPainPoint) {
-      final ppLower = painPoint.toLowerCase();
+      final ppLower = painPoints.first.toLowerCase();
       final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
 
       final filtered = pool
@@ -1066,21 +1066,28 @@ class MeetingPrepIntelligenceEngine {
   MeetingStrategy _buildMeetingStrategy(
     MeetingMethodology? methodology,
     List<String> challenges,
-    String? painPoint,
+    List<String> painPoints,
     IndustryIntelligence industry,
+    String? meetingType,
   ) {
-    final leadBase = methodology?.focusAreas.isNotEmpty == true
-        ? methodology!.focusAreas.first
-        : 'Understanding the customer\'s current priorities and business context';
+    final isGeneric = meetingType == null;
 
-    final hasPainPoint = painPoint != null && painPoint.isNotEmpty;
-    final leadWith = hasPainPoint
-        ? '$leadBase -- specifically exploring $painPoint challenges in their ${industry.industryName} operations'
+    final leadBase = isGeneric
+        ? 'Explore current business priorities and operational challenges before discussing solutions.'
+        : (methodology?.focusAreas.isNotEmpty == true
+            ? methodology!.focusAreas.first
+            : 'Understanding the customer\'s current priorities and business context');
+
+    final hasPainPoint = painPoints.isNotEmpty;
+    final leadWith = (hasPainPoint && !isGeneric)
+        ? '$leadBase -- specifically exploring ${painPoints.join(', ')} challenges in their ${industry.industryName} operations'
         : leadBase;
 
-    final avoid = methodology?.risks.isNotEmpty == true
-        ? methodology!.risks.first
-        : 'Presenting solutions before understanding the customer\'s specific challenges';
+    final avoid = isGeneric
+        ? 'Jumping into product discussions before validating customer priorities.'
+        : (methodology?.risks.isNotEmpty == true
+            ? methodology!.risks.first
+            : 'Presenting solutions before understanding the customer\'s specific challenges');
 
     final topChallenge =
         challenges.isNotEmpty ? challenges.first : 'key operational challenges';
@@ -1092,12 +1099,14 @@ class MeetingPrepIntelligenceEngine {
       validate += ' Additionally, map out their current stance on $regs compliance.';
     }
 
-    final rawClose = methodology?.nextBestActions.isNotEmpty == true
-        ? methodology!.nextBestActions.first
-        : 'Agree on clear next steps before ending the meeting';
+    final rawClose = isGeneric
+        ? 'Agree on next steps and identify areas where Airtel can provide additional value.'
+        : (methodology?.nextBestActions.isNotEmpty == true
+            ? methodology!.nextBestActions.first
+            : 'Agree on clear next steps before ending the meeting');
 
     final closeWith =
-        _enrichNextBestAction(rawClose, methodology?.meetingType, industry.industryName, '');
+        _enrichNextBestAction(rawClose, meetingType, industry.industryName, '');
 
     return MeetingStrategy(
       leadWith: leadWith,
@@ -1165,6 +1174,9 @@ class MeetingPrepIntelligenceEngine {
       return '${conceptNbaPrefix}Send adoption metrics summary and renewal contract for review '
           'within 48 hours -- resolve any flagged service issues first';
     }
+    if (productName.isEmpty) {
+      return '$conceptNbaPrefix$base';
+    }
     return '$conceptNbaPrefix$base -- focused on $industry context with $productName as the primary solution';
   }
 
@@ -1177,7 +1189,7 @@ class MeetingPrepIntelligenceEngine {
     IndustryIntelligence industry,
     List<String> challenges,
     MeetingMethodology? methodology,
-    String? painPoint,
+    List<String> painPoints,
   ) {
     final prefix =
         input.customerName != null ? 'Meeting with ${input.customerName}. ' : '';
@@ -1209,31 +1221,30 @@ class MeetingPrepIntelligenceEngine {
       }
     }
 
-    if (painPoint != null && painPoint.isNotEmpty) {
-      return '$prefix$historyNote$overviewSentence${industry.industryName} organisations '
-          'dealing with $painPoint typically face $c1 and $c2.$existingNote '
-          'This $meetingLabel is best used to $purpose.';
-    }
+    final isGeneric = input.meetingType == null;
+    final intent = isGeneric 
+        ? 'This meeting is intended to understand customer priorities and identify relevant Airtel opportunities.'
+        : 'This $meetingLabel is best used to $purpose.';
 
-    return '$prefix$historyNote$overviewSentence${industry.industryName} organisations '
-        'typically face $c1 and $c2.$existingNote '
-        'This $meetingLabel is best used to $purpose.';
+    final ppText = painPoints.isNotEmpty ? ' dealing with ${painPoints.join(', ')}' : '';
+    
+    // Formatting polish: strip double spaces and double punctuation
+    String text = '$prefix$historyNote$overviewSentence${industry.industryName} organisations$ppText '
+          'typically face $c1 and $c2.$existingNote $intent';
+    
+    text = text.replaceAll('  ', ' ').replaceAll('..', '.').replaceAll(' .', '.').trim();
+    return text;
   }
 
   // ---------------------------------------------------------------------------
   // Utilities
   // ---------------------------------------------------------------------------
 
-  String? _normalisePainPoint(String? painPoint) {
-    if (painPoint == null || painPoint.trim().isEmpty) return null;
-    return painPoint.trim();
-  }
-
   /// Phase 2: Extracts significant keywords from situationNotes.
   /// Returns empty when painPoint is present -- painPoint always wins.
-  List<String> _extractNoteKeywords(String? notes, String? painPoint) {
+  List<String> _extractNoteKeywords(String? notes, List<String> painPoints) {
     if (notes == null || notes.trim().isEmpty) return const [];
-    if (painPoint != null && painPoint.isNotEmpty) return const [];
+    if (painPoints.isNotEmpty) return const [];
     return notes
         .toLowerCase()
         .split(RegExp(r'[\s,;.!?]+'))
