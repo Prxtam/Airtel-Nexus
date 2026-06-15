@@ -121,24 +121,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     'Explore Upsell Opportunities',
   ];
 
-  // All 15 Airtel product names for the existing-products chip selector (Phase 2)
-  static const List<String> _allProductNames = [
-    'Airtel Corporate Postpaid',
-    'Airtel IQ Business Connect',
-    'Airtel SD-WAN',
-    'Airtel Secure Internet',
-    'Airtel Cloud',
-    'Airtel IoT',
-    'Airtel SIP Trunking',
-    'Airtel Contact Center as a Service',
-    'Airtel Managed Wi-Fi',
-    'Airtel VPN/MPLS',
-    'Airtel Work From Anywhere Solutions',
-    'Airtel Data Center Services (Nxtra)',
-    'Airtel 5G for Enterprise',
-    'Airtel CPaaS',
-    'Airtel Leased Line (ILL)',
-  ];
+  // Products are loaded dynamically from AirtelIqKnowledgeService
 
   // ── Logic ─────────────────────────────────────────────────────────────────
 
@@ -547,32 +530,39 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                   const SizedBox(height: 10),
 
                   // Product chip grid
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: _allProductNames.map((name) {
-                      final selected = existingProducts.contains(name);
-                      // Shorten display name for chips
-                      final label = name.replaceAll('Airtel ', '');
-                      return FilterChip(
-                        label: Text(label,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: selected ? Colors.white : Colors.grey.shade700,
-                            )),
-                        selected: selected,
-                        onSelected: (_) => onProductToggle(name),
-                        selectedColor: AppConstants.primaryColor,
-                        checkmarkColor: Colors.white,
-                        backgroundColor: Colors.grey.shade100,
-                        side: BorderSide(
-                          color: selected
-                              ? AppConstants.primaryColor
-                              : Colors.grey.shade300,
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                  Builder(
+                    builder: (context) {
+                      final allProductNames = AirtelIqKnowledgeService().getAllProducts().map((p) => p.name).toList();
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: allProductNames.map((name) {
+                          final selected = existingProducts.contains(name);
+                          // Shorten display name for chips
+                          final label = name.replaceAll('Airtel ', '');
+                          return FilterChip(
+                            label: Text(label,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: selected ? Colors.white : Colors.grey.shade700,
+                                fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                              ),
+                            ),
+                            selected: selected,
+                            onSelected: (_) => onProductToggle(name),
+                            selectedColor: AppConstants.primaryColor,
+                            checkmarkColor: Colors.white,
+                            backgroundColor: Colors.grey.shade100,
+                            side: BorderSide(
+                              color: selected
+                                  ? AppConstants.primaryColor
+                                  : Colors.grey.shade300,
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
+                          );
+                        }).toList(),
                       );
-                    }).toList(),
+                    }
                   ),
                   const SizedBox(height: 16),
 

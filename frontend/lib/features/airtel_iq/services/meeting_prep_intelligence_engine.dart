@@ -517,11 +517,54 @@ class MeetingPrepIntelligenceEngine {
     }
 
     final supportingSlice = <_Scored<ProductIntelligence>>[];
+    final candidateSlice = <_Scored<ProductIntelligence>>[];
+    
     for (int i = 1; i < rankedScoredProducts.length; i++) {
-      if (supportingSlice.length >= shape.maxSupportingProducts) break;
-      
       final sp = rankedScoredProducts[i];
       if (!uniqueProducts.contains(sp.item.name) && sp.score >= 40) {
+        candidateSlice.add(sp);
+      }
+    }
+
+    if (painPoints.isNotEmpty) {
+      // Priority 1: Solves any selected pain point
+      for (final sp in candidateSlice) {
+        if (supportingSlice.length >= shape.maxSupportingProducts) break;
+        bool solvesAny = false;
+        for (final pp in painPoints) {
+          final ppLower = pp.toLowerCase();
+          solvesAny = solvesAny || sp.item.painPointsSolved.any((p) {
+            final pLower = p.toLowerCase();
+            return pLower.contains(ppLower) || ppLower.contains(pLower) || _hasSignificantWordOverlap(ppLower, pLower);
+          });
+        }
+        if (solvesAny && !uniqueProducts.contains(sp.item.name)) {
+          supportingSlice.add(sp);
+          uniqueProducts.add(sp.item.name);
+        }
+      }
+
+      // Priority 2: Industry Recommended Products
+      for (final sp in candidateSlice) {
+        if (supportingSlice.length >= shape.maxSupportingProducts) break;
+        if (industry.recommendedProducts.contains(sp.item.name) && !uniqueProducts.contains(sp.item.name)) {
+          supportingSlice.add(sp);
+          uniqueProducts.add(sp.item.name);
+        }
+      }
+
+      // Priority 3: Fallback (score >= 40)
+      for (final sp in candidateSlice) {
+        if (supportingSlice.length >= shape.maxSupportingProducts) break;
+        if (!uniqueProducts.contains(sp.item.name)) {
+          supportingSlice.add(sp);
+          uniqueProducts.add(sp.item.name);
+        }
+      }
+    } else {
+      // No pain points: Just take the top scored
+      for (final sp in candidateSlice) {
+        if (supportingSlice.length >= shape.maxSupportingProducts) break;
         supportingSlice.add(sp);
         uniqueProducts.add(sp.item.name);
       }
@@ -771,17 +814,23 @@ class MeetingPrepIntelligenceEngine {
     }
 
     if (hasPainPoint) {
-      final ppLower = painPoints.first.toLowerCase();
-      final directSolve = product.painPointsSolved.any((p) {
-        final pLower = p.toLowerCase();
-        return pLower.contains(ppLower) ||
-            ppLower.contains(pLower) ||
-            _hasSignificantWordOverlap(ppLower, pLower);
-      });
+      final solvedPps = <String>[];
+      for (final pp in painPoints) {
+        final ppLower = pp.toLowerCase();
+        final solves = product.painPointsSolved.any((p) {
+          final pLower = p.toLowerCase();
+          return pLower.contains(ppLower) ||
+              ppLower.contains(pLower) ||
+              _hasSignificantWordOverlap(ppLower, pLower);
+        });
+        if (solves) {
+          solvedPps.add(pp);
+        }
+      }
 
-      if (directSolve) {
+      if (solvedPps.isNotEmpty) {
         reason =
-            '$confidencePrefix$conceptPrefix${product.name} addresses ${painPoints.join(', ')} -- $pitch';
+            '$confidencePrefix$conceptPrefix${product.name} addresses ${solvedPps.join(', ')} -- $pitch';
       } else {
         final outcome = product.businessOutcomes.isNotEmpty
             ? product.businessOutcomes.first
@@ -905,17 +954,49 @@ class MeetingPrepIntelligenceEngine {
     final hasPainPoint = painPoints.isNotEmpty;
 
     if (hasPainPoint) {
-      final ppLower = painPoints.first.toLowerCase();
-      final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
-
-      // Phase 3: Pain Point Lock -> massive boost to force them to the top
-      final boosted = pool.map((s) {
-        final matches = ppWords.any((w) => s.item.toLowerCase().contains(w));
-        return _Scored(s.item, s.score + (matches ? 100 : 0));
-      }).toList()
-        ..sort((a, b) => b.score.compareTo(a.score));
-
-      return _deduplicateAndTake(boosted.map((s) => s.item).toList(), shape.questionCount);
+      // Phase 4.2 -- Quota-based question allocation across multiple pain points
+      final selectedQs = <String>{};
+      final remainingPool = List.of(pool);
+      
+      int quotaPerPp = (shape.questionCount / painPoints.length).floor();
+      int remainder = shape.questionCount % painPoints.length;
+      
+      for (int i = 0; i < painPoints.length; i++) {
+        final pp = painPoints[i];
+        final ppLower = pp.toLowerCase();
+        final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
+        
+        final boosted = remainingPool.map((s) {
+          final matches = ppWords.any((w) => s.item.toLowerCase().contains(w));
+          return _Scored(s.item, s.score + (matches ? 100 : 0));
+        }).toList()
+          ..sort((a, b) => b.score.compareTo(a.score));
+          
+        int targetQuota = quotaPerPp + (i < remainder ? 1 : 0);
+        int taken = 0;
+        
+        for (final s in boosted) {
+          if (taken >= targetQuota) break;
+          // Must match to fill quota, or fallback to highest score if it's the only one left
+          // Wait, if it matches, it has a score > 100
+          if (s.score > 100 || pool.length < shape.questionCount * 2) {
+            if (selectedQs.add(s.item)) {
+              taken++;
+              remainingPool.removeWhere((r) => r.item == s.item);
+            }
+          }
+        }
+      }
+      
+      // Fill remaining slots if any
+      if (selectedQs.length < shape.questionCount) {
+        remainingPool.sort((a, b) => b.score.compareTo(a.score));
+        for (final s in remainingPool) {
+          if (selectedQs.length >= shape.questionCount) break;
+          selectedQs.add(s.item);
+        }
+      }
+      return selectedQs.toList();
     }
 
     // Objective as secondary signal
@@ -1008,34 +1089,56 @@ class MeetingPrepIntelligenceEngine {
     List<_Scored<ScoredObjection>> scored;
 
     if (hasPainPoint) {
-      final ppLower = painPoints.first.toLowerCase();
-      final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
-
-      final filtered = pool
-          .where((s) => ppWords.any((w) => s.item.objection.toLowerCase().contains(w)))
-          .toList()
-        ..sort((a, b) => b.score.compareTo(a.score));
-
-      if (filtered.length >= shape.objectionCount) {
-        return filtered.take(shape.objectionCount).map((s) => s.item).toList();
-      }
-
-      scored = pool.map((s) {
-        final objLower = s.item.objection.toLowerCase();
-        final ppMatch = ppWords.any((w) => objLower.contains(w));
-        double sc = s.score + (ppMatch ? 50 : 0);
-        if (isCommercial && _isCommercialObjection(objLower)) sc += 20;
-        return _Scored(s.item, sc);
-      }).toList();
-    } else {
-      scored = pool.map((s) {
-        double sc = s.score;
-        if (isCommercial && _isCommercialObjection(s.item.objection.toLowerCase())) {
-          sc += 20;
+      final selectedObjs = <ScoredObjection>{};
+      final remainingPool = List.of(pool);
+      
+      int quotaPerPp = (shape.objectionCount / painPoints.length).floor();
+      int remainder = shape.objectionCount % painPoints.length;
+      
+      for (int i = 0; i < painPoints.length; i++) {
+        final pp = painPoints[i];
+        final ppLower = pp.toLowerCase();
+        final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
+        
+        final boosted = remainingPool.map((s) {
+          final objLower = s.item.objection.toLowerCase();
+          final ppMatch = ppWords.any((w) => objLower.contains(w));
+          double sc = s.score + (ppMatch ? 50 : 0);
+          if (isCommercial && _isCommercialObjection(objLower)) sc += 20;
+          return _Scored(s.item, sc);
+        }).toList()
+          ..sort((a, b) => b.score.compareTo(a.score));
+          
+        int targetQuota = quotaPerPp + (i < remainder ? 1 : 0);
+        int taken = 0;
+        
+        for (final s in boosted) {
+          if (taken >= targetQuota) break;
+          if (selectedObjs.add(s.item)) {
+            taken++;
+            remainingPool.removeWhere((r) => r.item == s.item);
+          }
         }
-        return _Scored(s.item, sc);
-      }).toList();
+      }
+      
+      if (selectedObjs.length < shape.objectionCount) {
+        remainingPool.sort((a, b) => b.score.compareTo(a.score));
+        for (final s in remainingPool) {
+          if (selectedObjs.length >= shape.objectionCount) break;
+          selectedObjs.add(s.item);
+        }
+      }
+      return selectedObjs.toList();
     }
+    
+    // Non-pain point flow
+    scored = pool.map((s) {
+      double sc = s.score;
+      if (isCommercial && _isCommercialObjection(s.item.objection.toLowerCase())) {
+        sc += 20;
+      }
+      return _Scored(s.item, sc);
+    }).toList();
 
     scored.sort((a, b) => b.score.compareTo(a.score));
 

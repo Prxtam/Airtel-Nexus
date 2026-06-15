@@ -1,0 +1,28 @@
+Meeting Prep Engine v1.0
+
+Inputs:
+- Industry
+- Meeting Type (optional)
+- Pain Points (0-3)
+- Existing Products
+- Situation Notes
+
+Scoring Signals:
+1. Industry fit
+2. Industry curation
+3. Pain point match
+4. Situation note semantic concepts
+5. Existing Airtel products
+6. Meeting type context
+
+Deterministic Hierarchy:
+1. Pain point products
+2. Industry curated products
+3. Generic fallback products
+
+Confidence:
+- Strongly aligned
+- Good fit
+- Recommended based on industry patterns
+
+STOP HERE.
