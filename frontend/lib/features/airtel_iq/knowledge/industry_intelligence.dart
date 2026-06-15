@@ -22,7 +22,6 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Integrating legacy core banking systems with modern APIs',
     ],
     recommendedProducts: [
-      'Airtel Corporate Postpaid',
       'Airtel IQ Business Connect',
       'Airtel SD-WAN',
       'Airtel Secure Internet',
@@ -78,7 +77,6 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Integrating e-commerce platforms with physical store inventory',
     ],
     recommendedProducts: [
-      'Airtel Corporate Postpaid',
       'Airtel IQ Business Connect',
       'Airtel SD-WAN',
       'Airtel Managed Wi-Fi',
@@ -127,7 +125,6 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Protecting intellectual property from cyber threats',
     ],
     recommendedProducts: [
-      'Airtel Corporate Postpaid',
       'Airtel SD-WAN',
       'Airtel IoT',
       'Airtel 5G for Enterprise',
@@ -178,7 +175,6 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Integrating disjointed supply chain management systems',
     ],
     recommendedProducts: [
-      'Airtel Corporate Postpaid',
       'Airtel IQ Business Connect',
       'Airtel IoT',
       'Airtel Managed Wi-Fi',
@@ -363,12 +359,9 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Integrating logistics APIs with customer-facing apps',
     ],
     recommendedProducts: [
-      'Airtel Cloud',
-      'Airtel IQ Business Connect',
-      'Airtel Secure Internet',
-      'Airtel IoT',
-      'Airtel Data Center Services',
-    ],
+      'Airtel Public Cloud',
+      'Airtel WhatsApp Business',
+      'Airtel Dedicated Internet (ILL)',],
     discoveryQuestions: [
       'How does your infrastructure handle traffic surges during major festival sales?',
       'What is the impact on revenue if your platform experiences 15 minutes of downtime?',
@@ -408,7 +401,6 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     ],
     recommendedProducts: [
       'Airtel Managed Wi-Fi',
-      'Airtel Corporate Postpaid',
       'Airtel IQ Business Connect',
       'Airtel SIP Trunking',
       'Airtel Leased Line',
@@ -499,7 +491,6 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Airtel Secure Internet',
       'Airtel 5G for Enterprise',
       'Airtel SD-WAN',
-      'Airtel Corporate Postpaid',
     ],
     discoveryQuestions: [
       'How are you currently managing connectivity for your smart metering rollout?',
@@ -549,7 +540,6 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Airtel IoT Connectivity',
       'Airtel Precise Positioning',
       'Airtel 5G for Enterprise',
-      'Airtel Corporate Postpaid',
       'Airtel SD-WAN',
       'Airtel Secure Internet',
     ],
@@ -661,7 +651,6 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Airtel IoT Connectivity',
       'Airtel WhatsApp Business',
       'Airtel Contact Center as a Service',
-      'Airtel Corporate Postpaid',
       'Airtel VPN/MPLS',
     ],
     discoveryQuestions: [

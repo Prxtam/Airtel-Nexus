@@ -365,7 +365,8 @@ class MeetingPrepV3Input {
 class _Scored<T> {
   final T item;
   final double score;
-  const _Scored(this.item, this.score);
+  final int matchCount;
+  const _Scored(this.item, this.score, {this.matchCount = 0});
 }
 
 // =============================================================================
@@ -679,6 +680,7 @@ class MeetingPrepIntelligenceEngine {
 
     final scored = allProducts.map((product) {
       double score = 0;
+      int matchCount = 0;
 
       // Phase 2.5 -- Semantic Concept Boost (+40 per matched concept, max +80)
       double conceptBoost = 0;
@@ -698,7 +700,6 @@ class MeetingPrepIntelligenceEngine {
       // Signal 2 -- Pain point match (dominant when present: +60 or -20)
       if (hasPainPoint) {
         bool solvesAny = false;
-        int matchCount = 0;
         for (final pp in painPoints) {
           final ppLower = pp.toLowerCase();
           final solves = product.painPointsSolved.any((p) {
@@ -765,10 +766,21 @@ class MeetingPrepIntelligenceEngine {
         }
       }
 
-      return _Scored(product, score);
+      return _Scored(product, score, matchCount: matchCount);
     }).toList();
 
-    scored.sort((a, b) => b.score.compareTo(a.score));
+    scored.sort((a, b) {
+      if (b.score != a.score) {
+        return b.score.compareTo(a.score);
+      }
+      if (b.matchCount != a.matchCount) {
+        return b.matchCount.compareTo(a.matchCount);
+      }
+      if (a.item is ProductIntelligence && b.item is ProductIntelligence) {
+        return (a.item as ProductIntelligence).name.compareTo((b.item as ProductIntelligence).name);
+      }
+      return 0;
+    });
     return scored;
   }
 

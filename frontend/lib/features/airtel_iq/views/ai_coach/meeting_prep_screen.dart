@@ -9,6 +9,8 @@ import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/airtel_iq/services/meeting_prep_intelligence_engine.dart';
 import 'package:frontend/features/airtel_iq/knowledge/airtel_iq_knowledge_service.dart';
 import 'package:frontend/features/airtel_iq/widgets/ai_loading_indicator.dart';
+import 'package:frontend/features/airtel_iq/models/product_enablement_model.dart';
+import 'package:frontend/features/airtel_iq/services/meeting_prep_enablement_service.dart';
 
 enum _PrepMode { scenario, history }
 
@@ -1013,7 +1015,10 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                 ),
 
               // Primary Recommendation
-              _PrimaryProductCard(product: r.primaryRecommendation),
+              _PrimaryProductCard(
+                product: r.primaryRecommendation,
+                enablement: MeetingPrepEnablementService().getEnablementForProduct(r.primaryRecommendation.productName),
+              ),
 
               // Supporting Recommendations
               if (r.supportingRecs.isNotEmpty)
@@ -1024,7 +1029,12 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: r.supportingRecs
-                        .map((p) => _SupportingProductRow(product: p))
+                        .asMap()
+                        .entries
+                        .map((e) => _SupportingProductRow(
+                              product: e.value,
+                              enablement: e.key == 0 ? MeetingPrepEnablementService().getEnablementForProduct(e.value.productName) : null,
+                            ))
                         .toList(),
                   ),
                 ),
@@ -1174,7 +1184,8 @@ class _V3Card extends StatelessWidget {
 
 class _PrimaryProductCard extends StatelessWidget {
   final RankedProduct product;
-  const _PrimaryProductCard({required this.product});
+  final ProductEnablement? enablement;
+  const _PrimaryProductCard({required this.product, this.enablement});
 
   @override
   Widget build(BuildContext context) {
@@ -1226,6 +1237,7 @@ class _PrimaryProductCard extends StatelessWidget {
                   color: Colors.white, fontSize: 13, height: 1.5),
             ),
           ),
+          if (enablement != null) _AmCopilotCard(enablement: enablement!, isDark: true),
         ],
       ),
     );
@@ -1234,7 +1246,8 @@ class _PrimaryProductCard extends StatelessWidget {
 
 class _SupportingProductRow extends StatelessWidget {
   final RankedProduct product;
-  const _SupportingProductRow({required this.product});
+  final ProductEnablement? enablement;
+  const _SupportingProductRow({required this.product, this.enablement});
 
   @override
   Widget build(BuildContext context) {
@@ -1258,6 +1271,7 @@ class _SupportingProductRow extends StatelessWidget {
                 fontSize: 13,
                 height: 1.4),
           ),
+          if (enablement != null) _AmCopilotCard(enablement: enablement!, isDark: false),
         ],
       ),
     );
@@ -1513,3 +1527,101 @@ class _NextBestActionCard extends StatelessWidget {
     );
   }
 }
+
+class _AmCopilotCard extends StatefulWidget {
+  final ProductEnablement enablement;
+  final bool isDark;
+  const _AmCopilotCard({required this.enablement, required this.isDark});
+  @override
+  State<_AmCopilotCard> createState() => _AmCopilotCardState();
+}
+
+class _AmCopilotCardState extends State<_AmCopilotCard> {
+  @override
+  Widget build(BuildContext context) {
+    final bgColor = widget.isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.shade50;
+    final textColor = widget.isDark ? Colors.white : Colors.grey.shade900;
+    final titleColor = widget.isDark ? Colors.white : AppConstants.primaryColor;
+    final dividerColor = widget.isDark ? Colors.white.withValues(alpha: 0.2) : Colors.grey.shade300;
+
+    return Container(
+      margin: const EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8),
+        border: widget.isDark ? null : Border.all(color: Colors.grey.shade200),
+      ),
+      child: ExpansionTile(
+        title: Text('▶ How to Pitch This', style: TextStyle(fontWeight: FontWeight.bold, color: titleColor, fontSize: 13)),
+        iconColor: titleColor,
+        collapsedIconColor: titleColor,
+        childrenPadding: const EdgeInsets.all(16),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sectionTitle('How to Position This Product', titleColor),
+          _textContent(widget.enablement.positionItAs, textColor),
+          Divider(height: 24, color: dividerColor),
+
+          _sectionTitle('Questions to Ask the Customer', titleColor),
+          ...widget.enablement.questionsToAsk.map((q) => _bulletPoint(q, textColor)),
+          Divider(height: 24, color: dividerColor),
+
+          _sectionTitle('Business Value to Emphasize', titleColor),
+          ...widget.enablement.businessValue.map((b) => _bulletPoint(b, textColor)),
+          Divider(height: 24, color: dividerColor),
+
+          _sectionTitle('Cross-Sell Opportunities', titleColor),
+          ...widget.enablement.crossSellOpportunities.map((c) => _bulletPoint(c, textColor)),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String title, Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget _textContent(String content, Color color) {
+    return Text(
+      content,
+      style: TextStyle(
+        fontSize: 13,
+        height: 1.4,
+        color: color,
+      ),
+    );
+  }
+
+  Widget _bulletPoint(String content, Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('• ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
+          Expanded(
+            child: Text(
+              content,
+              style: TextStyle(
+                fontSize: 13,
+                height: 1.4,
+                color: color,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
