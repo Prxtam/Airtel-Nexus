@@ -785,7 +785,11 @@ class MeetingPrepIntelligenceEngine {
       }
       return 0;
     });
+
+
     return scored;
+
+
   }
 
   double _companySizeAdjustment(ProductIntelligence product, String companySize) {

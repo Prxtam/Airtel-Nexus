@@ -10,13 +10,7 @@ void main() async {
     print('=======================================');
     print('TEST: ' + testName);
     print('=======================================');
-    print('Validate Statement:');
-    print(' ' + output.meetingStrategy.validate);
-    print('\\nTop Challenges:');
-    for (var c in output.topChallenges) {
-      print(' - ' + c);
-    }
-    print('\\nPrimary Recommendation:');
+    print('Primary Recommendation:');
     print(' ' + output.primaryRecommendation.productName);
     print('\\nSupporting Recommendations:');
     for (var r in output.supportingRecs) {
@@ -25,38 +19,43 @@ void main() async {
     print('\\n');
   }
 
-  // Scenario A
+  // A) Banking (No pain points)
   final inputA = MeetingPrepV3Input(
     industry: 'Banking & Financial Services',
-    painPoints: ['Data Sovereignty'],
+    painPoints: [],
+    existingAirtelProducts: [],
   );
-  printResult('Scenario A: Banking + Data Sovereignty', await engine.generate(inputA));
+  printResult('Scenario A: Banking (No pain points)', await engine.generate(inputA));
 
-  // Scenario B
+  // B) Banking + Data Sovereignty
   final inputB = MeetingPrepV3Input(
     industry: 'Banking & Financial Services',
-    painPoints: ['Cloud Migration Risk'],
+    painPoints: ['Data Sovereignty'],
+    existingAirtelProducts: [],
   );
-  printResult('Scenario B: Banking + Cloud Migration Risk', await engine.generate(inputB));
+  printResult('Scenario B: Banking + Data Sovereignty', await engine.generate(inputB));
 
-  // Scenario C
+  // C) Banking + Cloud Migration Risk
   final inputC = MeetingPrepV3Input(
     industry: 'Banking & Financial Services',
-    painPoints: ['Security & Compliance'],
+    painPoints: ['Cloud Migration Risk'],
+    existingAirtelProducts: [],
   );
-  printResult('Scenario C: Banking + Security & Compliance', await engine.generate(inputC));
+  printResult('Scenario C: Banking + Cloud Migration Risk', await engine.generate(inputC));
 
-  // Scenario D
+  // D) Banking + Security & Compliance
   final inputD = MeetingPrepV3Input(
     industry: 'Banking & Financial Services',
-    painPoints: ['Data Sovereignty', 'Cloud Migration Risk'],
+    painPoints: ['Security & Compliance'],
+    existingAirtelProducts: [],
   );
-  printResult('Scenario D: Banking + Data Sovereignty + Cloud Migration Risk', await engine.generate(inputD));
+  printResult('Scenario D: Banking + Security & Compliance', await engine.generate(inputD));
 
-  // Scenario E
+  // E) Banking + Data Sovereignty + Cloud Migration Risk + Security & Compliance
   final inputE = MeetingPrepV3Input(
     industry: 'Banking & Financial Services',
     painPoints: ['Data Sovereignty', 'Cloud Migration Risk', 'Security & Compliance'],
+    existingAirtelProducts: [],
   );
-  printResult('Scenario E: Banking + 3 Pain Points', await engine.generate(inputE));
+  printResult('Scenario E: Banking + Data Sovereignty + Cloud Migration Risk + Security & Compliance', await engine.generate(inputE));
 }
