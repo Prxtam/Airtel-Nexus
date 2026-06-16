@@ -1,4 +1,4 @@
-﻿import 'knowledge_models.dart';
+import 'knowledge_models.dart';
 
 final List<ProductIntelligence> productIntelligenceRepo = [
   const ProductIntelligence(
@@ -883,7 +883,7 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Corporate Postpaid',
     ],
     elevatorPitch: 'Airtel Precise Positioning delivers high-precision GPS assistance across India using network-assisted GNSS corrections for autonomous, precision, and safety-critical applications.',
-    executivePitch: 'Support fleet, logistics, and autonomous operations with materially better positioning than standard GPS, delivered over Airtel's network.',
+    executivePitch: 'Support fleet, logistics, and autonomous operations with materially better positioning than standard GPS, delivered over Airtel\'s network.',
     meetingTalkingPoints: [],
   ),
 
@@ -1057,9 +1057,9 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Integration complexity: "We don\'t have the technical resources to integrate APIs."',
     ],
     objectionResponses: [
-      'Per-conversation pricing can be efficient when teams need rich media, two-way communication, and better engagement than one-way channels.',
+        'Per-conversation pricing can be efficient when teams need rich media, two-way communication, and better engagement than one-way channels.',
       'WhatsApp requires customer opt-in for business communication â€” you can only message customers who have consented, which actually improves trust and engagement quality.',
-      'Airtel IQ can support integration with common CRM and helpdesk tools through Airtel's technical team.',
+      'Airtel IQ can support integration with common CRM and helpdesk tools through Airtel\'s technical team.',
     ],
     crossSellOpportunities: [
       'Airtel CPaaS',
