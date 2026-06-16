@@ -1,5 +1,6 @@
 import 'package:frontend/features/airtel_iq/knowledge/airtel_iq_knowledge_service.dart';
 import 'package:frontend/features/airtel_iq/knowledge/knowledge_models.dart';
+import 'package:frontend/features/airtel_iq/knowledge/product_aliases.dart';
 
 // =============================================================================
 // Phase 1 -- Meeting-Type Output Shape
@@ -677,15 +678,17 @@ class MeetingPrepIntelligenceEngine {
       ...industry.businessChallenges,
       ...industry.technologyChallenges,
     ];
+    final canonicalIndustryRecommended = canonicalizeProductNames(industry.recommendedProducts);
 
     final scored = allProducts.map((product) {
       double score = 0;
       int matchCount = 0;
+      final canonicalProductName = canonicalizeProductName(product.name);
 
       // Phase 2.5 -- Semantic Concept Boost (+40 per matched concept, max +80)
       double conceptBoost = 0;
       for (final concept in matchedConcepts) {
-        if (concept.products.contains(product.name)) {
+        if (canonicalizeProductNames(concept.products).contains(canonicalProductName)) {
           conceptBoost += 40;
         }
       }
@@ -695,7 +698,7 @@ class MeetingPrepIntelligenceEngine {
       if (product.industries.contains(input.industry)) score += 40;
 
       // Phase 3: Signal 1.5 -- Industry Recommended Product Boost (+30)
-      if (industry.recommendedProducts.contains(product.name)) score += 30;
+      if (canonicalIndustryRecommended.contains(canonicalProductName)) score += 30;
 
       // Signal 2 -- Pain point match (dominant when present: +60 or -20)
       if (hasPainPoint) {
@@ -747,18 +750,19 @@ class MeetingPrepIntelligenceEngine {
 
       // Signal 6 (Phase 2) -- Cross-sell logic for existing products
       if (input.existingAirtelProducts.isNotEmpty) {
-        if (input.existingAirtelProducts.contains(product.name)) {
+        final ownedCanonical = canonicalizeProductNames(input.existingAirtelProducts);
+        if (ownedCanonical.contains(canonicalProductName)) {
           // Customer already owns this -- strong penalty so it won't be re-recommended
           score -= 40;
         } else {
           // Boost if this product is a cross-sell partner of an owned product
-          for (final ownedName in input.existingAirtelProducts) {
+          for (final ownedName in ownedCanonical) {
             final owned = allProducts.firstWhere(
               (p) => p.name == ownedName,
               orElse: () => product, // safe fallback; won't match cross-sell
             );
-            if (owned.name != product.name &&
-                owned.crossSellOpportunities.contains(product.name)) {
+            if (canonicalizeProductName(owned.name) != canonicalProductName &&
+                canonicalizeProductNames(owned.crossSellOpportunities).contains(canonicalProductName)) {
               score += 25;
               break;
             }
@@ -827,7 +831,8 @@ class MeetingPrepIntelligenceEngine {
 
     // Phase 2.5 -- Build concept prefix if product was boosted
     String conceptPrefix = '';
-    final matchingConcepts = matchedConcepts.where((c) => c.products.contains(product.name)).toList();
+    final canonicalProductName = canonicalizeProductName(product.name);
+    final matchingConcepts = matchedConcepts.where((c) => canonicalizeProductNames(c.products).contains(canonicalProductName)).toList();
     if (matchingConcepts.isNotEmpty) {
       final conceptNames = matchingConcepts.map((c) => c.name).join(' and ');
       conceptPrefix = 'Situation notes indicate $conceptNames concerns which ${product.name} directly addresses. ';

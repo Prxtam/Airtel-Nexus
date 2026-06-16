@@ -1030,12 +1030,12 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: r.supportingRecs
                         .asMap()
-                        .entries
-                        .map((e) => _SupportingProductRow(
-                              product: e.value,
-                              enablement: e.key == 0 ? MeetingPrepEnablementService().getEnablementForProduct(e.value.productName) : null,
-                            ))
-                        .toList(),
+                          .entries
+                          .map((e) => _SupportingProductRow(
+                                product: e.value,
+                                enablement: MeetingPrepEnablementService().getEnablementForProduct(e.value.productName),
+                              ))
+                          .toList(),
                   ),
                 ),
 
@@ -1624,4 +1624,3 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
     );
   }
 }
-

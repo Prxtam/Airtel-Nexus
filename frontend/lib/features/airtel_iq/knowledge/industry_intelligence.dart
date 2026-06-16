@@ -1,4 +1,4 @@
-import 'knowledge_models.dart';
+﻿import 'knowledge_models.dart';
 
 final List<IndustryIntelligence> industryIntelligenceRepo = [
   const IndustryIntelligence(
@@ -334,7 +334,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     objections: [
       'We are a tech company, we build and manage these networks ourselves',
       'Our clients dictate which cloud providers and networks we must use',
-      'We have heavily invested in our current MPLS backbone and won’t rip-and-replace',
+      'We have heavily invested in our current MPLS backbone and wonâ€™t rip-and-replace',
     ],
     salesOpportunities: [
       'Remote workforce connectivity (WFA solutions)',
@@ -373,7 +373,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'How do you handle customer support queries during peak volumes?',
     ],
     objections: [
-      'We are fully hosted on AWS/GCP and don’t need telecom cloud services',
+      'We are fully hosted on AWS/GCP and donâ€™t need telecom cloud services',
       'We use a global CPaaS provider for SMS and are locked into volume pricing',
       'Our logistics are entirely outsourced to third-party providers (3PL)',
     ],
@@ -416,7 +416,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'How quickly can you resolve a network outage at a remote resort property?',
     ],
     objections: [
-      'Guest Wi-Fi is a sunk cost and we don’t want to invest more into it',
+      'Guest Wi-Fi is a sunk cost and we donâ€™t want to invest more into it',
       'We use local internet service providers because they are cheaper for individual hotels',
       'Replacing our legacy PBX systems across all properties is too capital intensive',
     ],
@@ -461,7 +461,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     ],
     objections: [
       'We are mandated to use government-owned telecom networks (e.g., BSNL)',
-      'The procurement and RFP process takes 12-18 months',
+      'The procurement and RFP process can take a long time',
       'We cannot move this highly classified data to any external data center',
     ],
     salesOpportunities: [
@@ -504,7 +504,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     objections: [
       'Cellular networks are not reliable enough for critical grid infrastructure',
       'Smart meter RF mesh networks are cheaper than cellular IoT',
-      'We require highly specialized ruggedized equipment that telcos don’t understand',
+      'We require highly specialized ruggedized equipment that telcos donâ€™t understand',
     ],
     salesOpportunities: [
       'Smart metering connectivity (Airtel IoT - NB-IoT/4G)',
@@ -514,7 +514,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     ],
   ),
 
-  // ── NEW INDUSTRIES FROM AIRTEL B2B WEBSITE ───────────────────────────────
+  // â”€â”€ NEW INDUSTRIES FROM AIRTEL B2B WEBSITE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const IndustryIntelligence(
     id: 'ind_automotive',
@@ -564,8 +564,8 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Dealership network SD-WAN modernization',
     ],
     keyRegulations: [
-      'AIS-140 — Ministry of Road Transport mandate for GPS/emergency alert in commercial vehicles',
-      'AIS-156 — Battery Management System standards for electric vehicles',
+      'AIS-140 â€” Ministry of Road Transport mandate for GPS/emergency alert in commercial vehicles',
+      'AIS-156 â€” Battery Management System standards for electric vehicles',
       'ARAI homologation requirements for connected vehicle components',
     ],
   ),
@@ -573,7 +573,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
   const IndustryIntelligence(
     id: 'ind_media_entertainment',
     industryName: 'Media & Entertainment',
-    overview: 'Indian media and entertainment companies — from OTT platforms and production houses to broadcasters and gaming firms — require ultra-low latency content delivery, elastic cloud compute for rendering, and resilient global connectivity for live events. Airtel provides edge data centers, CDN infrastructure, and managed security for content protection.',
+    overview: 'Indian media and entertainment companies â€” from OTT platforms and production houses to broadcasters and gaming firms â€” require ultra-low latency content delivery, elastic cloud compute for rendering, and resilient global connectivity for live events. Airtel provides edge data centers, CDN infrastructure, and managed security for content protection.',
     businessChallenges: [
       'Massive traffic spikes during live streaming events (sports, awards)',
       'Content delivery latency affecting viewer experience and churn',
@@ -607,7 +607,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'What is your cloud strategy for handling unpredictable compute demand during major events?',
     ],
     objections: [
-      'We already use AWS CloudFront / Akamai for CDN — why switch?',
+      'We already use AWS CloudFront / Akamai for CDN â€” why switch?',
       'Our content delivery is already managed by our streaming platform vendor',
       'We are too small to justify enterprise data center colocation',
     ],
@@ -655,21 +655,21 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     ],
     discoveryQuestions: [
       'How do you currently manage network connectivity across your properties and what is your uptime SLA?',
-      'How are you communicating with guests at each stage of their journey — pre-arrival, during stay, post-checkout?',
+      'How are you communicating with guests at each stage of their journey â€” pre-arrival, during stay, post-checkout?',
       'What is your annual energy spend across properties and do you have any smart monitoring in place?',
       'How do your reservation and front-desk systems connect to your central IT infrastructure?',
-      'How do you manage guest Wi-Fi — is it a managed service or handled internally?',
+      'How do you manage guest Wi-Fi â€” is it a managed service or handled internally?',
       'What percentage of your customer service interactions happen on WhatsApp or messaging channels?',
     ],
     objections: [
-      'Budget constraints: "Hospitality margins are tight — we cannot invest in new technology right now."',
+      'Budget constraints: "Hospitality margins are tight â€” we cannot invest in new technology right now."',
       'Existing contracts: "We are locked into contracts with our current internet and PBX provider."',
       'Complexity concern: "Managing IoT across 50+ properties seems too complex for our IT team."',
     ],
     salesOpportunities: [
       'SD-WAN rollout across multi-property chains for centralized network management',
       'WhatsApp Business for personalized pre-arrival and in-stay guest engagement',
-      'IoT-based smart energy management reducing energy costs by up to 15%',
+      'IoT-based smart energy management that can help reduce energy costs',
       'Managed Wi-Fi as a service for branded guest connectivity',
       'Contact center modernization for handling high-volume reservation and support calls',
     ],
@@ -683,18 +683,18 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
   const IndustryIntelligence(
     id: 'ind_telecom_carriers',
     industryName: 'Telecom & Carriers',
-    overview: 'Airtel\'s wholesale division serves 1,200+ global carrier interconnects and is one of Asia\'s largest wholesale voice and data providers, built on 400,000+ route KM fiber and 34+ submarine cable systems. For Indian ISPs, MVNOs, international carriers entering India, and OTT platforms needing transport capacity, Airtel\'s carrier digital platform and infrastructure represent a compelling network partnership.',
+    overview: 'Airtel\'s wholesale division serves a large global carrier interconnect footprint and is one of Asia\'s largest wholesale voice and data providers, built on 400,000+ route KM fiber and 34+ submarine cable systems. For Indian ISPs, MVNOs, international carriers entering India, and OTT platforms needing transport capacity, Airtel\'s carrier digital platform and infrastructure represent a compelling network partnership.',
     businessChallenges: [
       'Declining international voice revenue from OTT bypass (WhatsApp, Teams)',
       'IUC regime uncertainty creating P&L volatility for carrier interconnect businesses',
       'High spectrum and network CAPEX making new service launches expensive',
       'Regulatory compliance burden under DoT, TRAI, and state-level licensing',
-      'Traffic monetization — converting massive data growth into ARPU growth',
+      'Traffic monetization â€” converting massive data growth into ARPU growth',
       'International roaming complexity for MVNOs entering India',
     ],
     technologyChallenges: [
       'Last-mile connectivity gaps in rural India for ISP carrier partners',
-      'International voice route fraud — CLI spoofing, bypass fraud reducing revenue',
+      'International voice route fraud â€” CLI spoofing, bypass fraud reducing revenue',
       'Real-time route analytics needed to optimize voice termination costs',
       'Latency on trans-oceanic routes impacting call quality (India-Middle East, India-US)',
       'DLT compliance system integration for A2P messaging on Indian networks',
@@ -710,29 +710,30 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     ],
     discoveryQuestions: [
       'What is your international voice traffic volume to India and are you seeing OTT erosion or bypass fraud on key routes?',
-      'How are you optimizing routing costs for termination traffic — do you have real-time analytics on route performance vs. cost?',
+      'How are you optimizing routing costs for termination traffic â€” do you have real-time analytics on route performance vs. cost?',
       'For your MVNO or ISP operations, how are you sourcing last-mile connectivity where you don\'t own infrastructure?',
       'What is your current revenue loss from international voice fraud as a percentage of total traffic?',
       'Are you planning any new market entry or service expansion in India in the next 12 months?',
       'How are you managing DLT compliance for A2P messaging traffic carried over Indian networks?',
     ],
     objections: [
-      'We work with Tata/BSNL for Indian termination — established incumbents',
+      'We work with Tata/BSNL for Indian termination â€” established incumbents',
       'Your rates are not competitive on our top Asia corridors',
       'DLT compliance is too complex for us to manage as a foreign carrier',
     ],
     salesOpportunities: [
       'Wholesale voice + data bundle with volume pricing for international carriers',
-      'MVNO partnership — full network services for carriers seeking Indian presence',
+      'MVNO partnership â€” full network services for carriers seeking Indian presence',
       'Carrier Digital Platform self-service portal for real-time route management',
       'Last-mile ILL for ISP partners expanding to Tier-2/3 cities',
     ],
     keyRegulations: [
-      'DoT ILD/NLD licenses — International and national long-distance requirements',
-      'TRAI Interconnect Regulations — IUC framework and interconnect quality standards',
-      'TRAI TCCCPR 2018 — DLT compliance for A2P commercial communications',
-      'Telecom Act 2023 — New licensing and compliance framework',
-      'TRAI Prohibition of Unsolicited Commercial Communications — Spam detection obligations',
+      'DoT ILD/NLD licenses â€” International and national long-distance requirements',
+      'TRAI Interconnect Regulations â€” IUC framework and interconnect quality standards',
+      'TRAI TCCCPR 2018 â€” DLT compliance for A2P commercial communications',
+      'Telecom Act 2023 â€” New licensing and compliance framework',
+      'TRAI Prohibition of Unsolicited Commercial Communications â€” Spam detection obligations',
     ],
   ),
 ];
+

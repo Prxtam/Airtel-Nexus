@@ -2,6 +2,7 @@ import 'knowledge_models.dart';
 import 'product_intelligence.dart';
 import 'industry_intelligence.dart';
 import 'sales_methodology.dart';
+import 'product_aliases.dart';
 
 class AirtelIqKnowledgeService {
   /// Returns all available products in the knowledge repository
@@ -65,7 +66,7 @@ class AirtelIqKnowledgeService {
   /// Returns recommended products mapped to a specific industry
   List<String> getRecommendedProductsForIndustry(String industryName) {
     final industry = getIndustryByName(industryName);
-    return industry?.recommendedProducts ?? [];
+    return canonicalizeProductNames(industry?.recommendedProducts ?? const []);
   }
 
   /// Returns likely objections and their responses for a specific product
