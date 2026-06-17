@@ -14,6 +14,12 @@ class EnrichedProduct {
   final String productName;
   final String whatItIs;
   final String whenToPitch;
+  
+  // NEW Phase 8.5 Fields
+  final String openingHook;
+  final String positioningStatement;
+  final List<String> whenNotToPitch;
+
   final List<String> customerSignals;
   final List<String> businessOutcomes;
   final List<String> discoveryHooks;
@@ -27,6 +33,9 @@ class EnrichedProduct {
     required this.productName,
     required this.whatItIs,
     required this.whenToPitch,
+    required this.openingHook,
+    required this.positioningStatement,
+    required this.whenNotToPitch,
     required this.customerSignals,
     required this.businessOutcomes,
     required this.discoveryHooks,
@@ -43,6 +52,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Corporate Postpaid',
     whatItIs: 'A managed enterprise mobility solution offering centralized billing, dynamic data pooling, TraceMate workforce tracking, and Business Name Display for corporate verification.',
     whenToPitch: 'Pitch when clients are expanding field teams, struggling with BYOD reimbursement overhead, or suffering low call answer rates from customers.',
+    openingHook: 'Many enterprises are currently struggling to maintain visibility and control over their expanding field workforce. How are you currently managing the financial overhead and data security of individual mobile reimbursements?',
+    positioningStatement: 'Position this as a centralized visibility and cost-optimization tool, not just a mobile plan. Emphasize the 18% GST input credit and the retention of corporate contacts when employees leave.',
+    whenNotToPitch: [
+      'Customer has a strict, well-functioning BYOD policy with no reimbursement issues.',
+      'Workforce is 100% desk-bound with no field movement.',
+      'Customer is extremely price-sensitive and ignores GST/OpEx benefits.'
+    ],
     customerSignals: [
       'Field agents using personal numbers for client communication',
       'Finance team struggling with individual mobile reimbursements',
@@ -94,6 +110,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel IQ Business Connect',
     whatItIs: 'An omnichannel customer engagement platform natively integrated with the Airtel network, providing verified caller identity (Business Name Display) without third-party app dependencies.',
     whenToPitch: 'Pitch when a business relies heavily on outbound calling (collections, sales, deliveries) and complains about low contact rates or calls being flagged as spam.',
+    openingHook: 'We are seeing a massive trend where legitimate enterprise calls are being flagged as spam, directly impacting sales and delivery SLAs. How is your outbound calling team navigating the drop in customer answer rates?',
+    positioningStatement: 'Position this as a revenue-recovery tool. Low answer rates mean lost sales and wasted agent time. Focus on network-native verified identity rather than comparing it to Truecaller.',
+    whenNotToPitch: [
+      'Customer does not rely on outbound voice calls for sales or operations.',
+      'Customer already has a deeply integrated omnichannel CCaaS platform that solves this natively.',
+      'Outbound volume is too low to justify enterprise verification overhead.'
+    ],
     customerSignals: [
       'Drop in outbound sales conversion rates',
       'Delivery or field agents unable to reach customers due to spam blocking',
@@ -144,6 +167,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel SD-WAN',
     whatItIs: 'A software-defined networking solution that intelligently routes application traffic across broadband, LTE, and MPLS links, centralized through a single management dashboard.',
     whenToPitch: 'Pitch when an enterprise is opening multiple new branches quickly, struggling with MPLS costs, or migrating heavy workloads to the cloud requiring direct internet access.',
+    openingHook: 'As organizations shift workloads to the cloud, routing all branch traffic back through a central data center creates severe latency bottlenecks. How are you modernizing your branch networks to support direct cloud access securely?',
+    positioningStatement: 'Position SD-WAN as an agility and cost-optimization play. Do not pitch it as an MPLS killer; rather, pitch it as a hybrid solution to offload non-critical traffic to cheaper broadband while accelerating branch rollouts.',
+    whenNotToPitch: [
+      'Customer operates from a single central office with no remote branches.',
+      'Customer has zero cloud applications and runs 100% legacy on-premise servers.',
+      'Customer just signed a 5-year MPLS renewal and refuses a hybrid overlay.'
+    ],
     customerSignals: [
       'Complaints about expensive MPLS bandwidth at remote sites',
       'Cloud applications (O365, Salesforce) running slowly at branch offices',
@@ -195,6 +225,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel SIP Trunking',
     whatItIs: 'A scalable voice connectivity solution that replaces traditional ISDN/PRI lines, transmitting voice calls over an IP network directly to an enterprise IP-PBX.',
     whenToPitch: 'Pitch when a customer is consolidating infrastructure, moving to a unified communications platform, or reaching capacity limits on physical PRI lines.',
+    openingHook: 'Many enterprises are retiring legacy physical telephony hardware in favor of unified IP communications to reduce maintenance overhead. What is your roadmap for migrating off expensive physical PRI lines?',
+    positioningStatement: 'Position SIP Trunking as a necessary modernization step for IP-PBX or Microsoft Teams integration. Focus on the scalability and the reduction of physical infrastructure costs.',
+    whenNotToPitch: [
+      'Customer has a brand new legacy PBX that does not support SIP and refuses media gateways.',
+      'Voice calling is an absolute zero-priority for the business.',
+      'Customer is entirely migrating to a cloud-native CCaaS where external SIP routing is unnecessary.'
+    ],
     customerSignals: [
       'Paying for unused voice channels on fixed PRI lines',
       'Migrating from legacy PBX to modern IP-PBX or Microsoft Teams',
@@ -238,13 +275,20 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     officialSourceUrls: [
       'Derived from standard Airtel IQ SIP capabilities'
     ],
-    verificationStatus: 'Partially Verified (Extrapolated from Airtel IQ general capabilities)',
+    verificationStatus: 'Partially Verified',
   ),
 
   'prod_ccaas': const EnrichedProduct(
     productName: 'Airtel Contact Center as a Service',
     whatItIs: 'A cloud-based omnichannel contact center platform natively integrated with Airtel\'s telecom network, allowing agents to handle voice, chat, and email without on-premise hardware.',
     whenToPitch: 'Pitch when a business wants to enable remote agents, is frustrated by the capital expense of legacy PBX infrastructure, or needs to deploy a customer service team rapidly.',
+    openingHook: 'Modern customer service requires agents to seamlessly pivot between voice, chat, and social media regardless of where they are working from. How are you currently equipping your support team to handle omnichannel interactions remotely?',
+    positioningStatement: 'Position CCaaS as an agility enabler. The primary value is shifting contact center costs from rigid CapEx to elastic OpEx, allowing rapid agent deployment during peak seasons.',
+    whenNotToPitch: [
+      'Customer does not have a dedicated customer service or outbound sales team.',
+      'Customer recently invested heavily in a brand new on-premise Cisco/Avaya contact center.',
+      'Business strictly prohibits cloud data storage for call recordings due to extreme compliance.'
+    ],
     customerSignals: [
       'Struggling to manage a hybrid or work-from-home customer support team',
       'Facing high maintenance costs for legacy on-premise contact center hardware',
@@ -288,13 +332,20 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     officialSourceUrls: [
       'Derived from standard Airtel IQ CCaaS capabilities'
     ],
-    verificationStatus: 'Partially Verified (Extrapolated from Airtel IQ general capabilities)',
+    verificationStatus: 'Partially Verified',
   ),
 
   'prod_managed_wifi': const EnrichedProduct(
     productName: 'Airtel Managed Wi-Fi',
     whatItIs: 'An end-to-end managed enterprise Wi-Fi solution covering access point provisioning, centralized monitoring, proactive maintenance, and secure guest access portals.',
     whenToPitch: 'Pitch to organizations with large physical footprints (campuses, warehouses, retail chains) struggling with Wi-Fi dead zones, IT maintenance overhead, or poor guest connectivity.',
+    openingHook: 'As footfall increases in large retail and campus environments, poor Wi-Fi connectivity often translates directly to a poor guest experience and IT headaches. How is your IT team managing wireless density and dead zones across your physical locations?',
+    positioningStatement: 'Position this as an IT offloading service. Enterprise Wi-Fi is complex to tune and maintain; Airtel takes on the SLAs, hardware lifecycle, and security, freeing the internal IT team.',
+    whenNotToPitch: [
+      'Customer operates a small 10-person office that runs fine on a standard router.',
+      'Customer\'s business model has absolutely no physical footfall or warehouse operations.',
+      'Internal IT team insists on owning and managing all access point hardware directly.'
+    ],
     customerSignals: [
       'High volume of IT helpdesk tickets related to wireless connectivity issues',
       'Inability to segregate corporate network traffic from guest or IoT traffic securely',
@@ -345,6 +396,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel VPN/MPLS',
     whatItIs: 'A highly secure, private Multiprotocol Label Switching (MPLS) network providing dedicated, point-to-point connectivity between enterprise locations with guaranteed Quality of Service (QoS).',
     whenToPitch: 'Pitch to highly regulated enterprises requiring absolute data privacy, deterministic latency for core applications (like SAP/ERP), and immunity from public internet congestion.',
+    openingHook: 'Regulated industries face immense pressure to keep sensitive data completely off the public internet while ensuring zero latency for core ERP applications. How are you currently guaranteeing the deterministic routing of your most critical internal workloads?',
+    positioningStatement: 'Position MPLS for mission-critical, latency-sensitive core workloads. Do not pitch it for generic branch internet access. Frame it as the ultra-secure, SLA-backed backbone of the enterprise.',
+    whenNotToPitch: [
+      'Customer is entirely cloud-native with zero on-premise data centers.',
+      'Customer is highly cost-conscious and primarily uses SaaS applications over broadband.',
+      'Customer is trying to reduce WAN spend and specifically asked to move away from MPLS.'
+    ],
     customerSignals: [
       'Strict compliance mandates prohibiting the transmission of sensitive data over the public internet',
       'Complaints about application timeouts or jitter in core banking or ERP systems',
@@ -395,6 +453,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Work From Anywhere Solutions',
     whatItIs: 'A suite of secure mobility and connectivity services enabling employees to access enterprise applications securely from home or remote locations.',
     whenToPitch: 'Pitch when an enterprise operates a hybrid workforce, struggles to secure remote access, or needs to rapidly provision connectivity for remote employees.',
+    openingHook: 'As hybrid work becomes permanent, enterprises are struggling to extend corporate security policies to untrusted home networks. How are you ensuring your remote workforce can securely access internal applications without exposing the corporate network?',
+    positioningStatement: 'Position this as an enterprise security and productivity enabler. It replaces disjointed VPNs and unmanaged home broadband with a cohesive, secure remote access strategy.',
+    whenNotToPitch: [
+      'Customer mandates 100% return-to-office and has no remote workers.',
+      'Customer only needs basic mobile data plans, not secure access to corporate networks.',
+      'Customer already uses a fully deployed Zero Trust Network Access (ZTNA) provider globally.'
+    ],
     customerSignals: [
       'Security breaches originating from compromised remote employee endpoints',
       'Helpdesk overwhelmed by VPN connection issues from home broadband users',
@@ -445,6 +510,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel 5G for Enterprise',
     whatItIs: 'Ultra-low latency, high-bandwidth private and public 5G network solutions designed to power industrial automation, IoT deployments, and massive device density.',
     whenToPitch: 'Pitch to manufacturing plants, ports, or logistics hubs looking to automate operations using robotics, AGVs (Automated Guided Vehicles), or real-time high-definition video analytics.',
+    openingHook: 'Industrial automation is often bottlenecked by the latency and unreliability of standard Wi-Fi on the factory floor. How is your organization modernizing its wireless infrastructure to support real-time robotics and computer vision?',
+    positioningStatement: 'Position 5G as an Industry 4.0 enabler. This is a highly strategic, long-term play. Frame it around low latency, edge computing, and massive device density, not just "faster internet".',
+    whenNotToPitch: [
+      'Customer is a standard corporate office with no industrial or automation use cases.',
+      'Customer lacks the capital budget or operational maturity for Industry 4.0 initiatives.',
+      'Customer only needs standard building Wi-Fi for employee laptops.'
+    ],
     customerSignals: [
       'Current factory Wi-Fi dropping connections for mobile robots or AGVs',
       'Need for real-time AI computer vision for quality control on assembly lines',
@@ -495,6 +567,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel CPaaS',
     whatItIs: 'A Communications Platform as a Service that provides APIs to seamlessly embed SMS, Voice, and messaging capabilities directly into enterprise applications and workflows.',
     whenToPitch: 'Pitch when an enterprise needs to automate transactional notifications (OTPs, delivery updates), build custom IVRs, or mask phone numbers for customer privacy.',
+    openingHook: 'Customers today expect instant, secure notifications and seamless interactions within apps, but building native telecom infrastructure is costly. How are your developers currently integrating secure messaging and voice directly into your applications?',
+    positioningStatement: 'Position CPaaS to the CTO or Product Owner as a developer-friendly API platform. Emphasize speed-to-market and Airtel’s direct-to-telecom reliability over third-party aggregators.',
+    whenNotToPitch: [
+      'Customer relies entirely on off-the-shelf software and has no in-house developers.',
+      'Customer uses simple email marketing and has no need for transactional SMS or voice APIs.',
+      'Customer volume is too small to justify an API integration.'
+    ],
     customerSignals: [
       'E-commerce platforms needing automated delivery tracking updates',
       'Cab aggregators or delivery apps requiring driver-to-customer call masking',
@@ -545,6 +624,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Leased Line (ILL)',
     whatItIs: 'A dedicated, secure, and uncontended internet connection providing guaranteed symmetric bandwidth (equal upload/download speeds) and an SLA-backed 99.5% uptime.',
     whenToPitch: 'Pitch when a business cannot tolerate internet downtime, frequently uploads large files, or hosts critical web applications on-premise.',
+    openingHook: 'For digitally mature enterprises, any internet downtime translates directly to lost revenue and stalled productivity. How are you guaranteeing the uptime and symmetric upload speeds required for your critical cloud applications?',
+    positioningStatement: 'Position ILL as the foundational lifeline of the business. Do not sell it as "fast broadband." Sell it as an insurance policy against downtime, backed by a financially binding SLA and uncontended bandwidth.',
+    whenNotToPitch: [
+      'Customer operates a small cafe or 3-person office that just needs basic web browsing.',
+      'Customer is extremely price-sensitive and perfectly happy with shared consumer broadband.',
+      'Customer requires routing across multiple branches rather than direct internet (pitch MPLS/SD-WAN instead).'
+    ],
     customerSignals: [
       'Complaints about slow internet during peak office hours due to shared broadband',
       'Video conferences freezing or dropping due to poor upload speeds',
@@ -596,6 +682,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Colocation (Nxtra)',
     whatItIs: 'Enterprise-grade data center space providing secure power, cooling, and physical security for a company\'s proprietary server hardware, backed by high-density network connectivity.',
     whenToPitch: 'Pitch when an enterprise is running out of space in their on-premise server room, struggling with power cooling costs, or requires a disaster recovery site.',
+    openingHook: 'Maintaining on-premise server rooms is becoming increasingly unsustainable due to escalating power costs and compliance mandates. How is your infrastructure strategy shifting to balance proprietary hardware control with modern resilience?',
+    positioningStatement: 'Position Colocation as a strategic bridge. It relieves the customer of massive real estate and cooling CapEx while allowing them to retain physical control of their legacy hardware near hyperscaler cloud ramps.',
+    whenNotToPitch: [
+      'Customer is proudly 100% cloud-native with zero owned server hardware.',
+      'Customer is a small startup running everything on SaaS.',
+      'Customer insists on keeping data servers under their desk for "security".'
+    ],
     customerSignals: [
       'Upcoming server hardware refresh cycle but reluctant to move entirely to the public cloud',
       'Facing exorbitant cooling and power costs for an aging on-premise server room',
@@ -646,6 +739,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Global Voice',
     whatItIs: 'Wholesale Voice Termination services utilizing Tier-1 carrier partnerships and 1200+ global interconnects to provide high-quality international calling routes.',
     whenToPitch: 'Pitch to international BPOs, call centers, or multi-national corporations suffering from call drops, high latency, or excessive costs on international outbound calls.',
+    openingHook: 'For global contact centers, poor international voice quality directly impacts agent resolution times and customer satisfaction. How are you currently optimizing your international routing to minimize latency and call drops?',
+    positioningStatement: 'Position Global Voice around network quality and fraud protection. Do not compete purely on the lowest per-minute rate; sell the reliability of Tier-1 routing and the operational savings of high answer rates.',
+    whenNotToPitch: [
+      'Customer only makes domestic calls within India.',
+      'Customer uses basic consumer VoIP tools (like Skype/Zoom) for occasional international chats.',
+      'Customer strictly refuses to move away from illegal/grey-route telecom providers.'
+    ],
     customerSignals: [
       'BPO clients complaining about poor voice quality impacting customer satisfaction',
       'High rates of international call drops or jitter',
@@ -696,6 +796,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel IoT Connectivity',
     whatItIs: 'A scalable M2M (Machine-to-Machine) connectivity solution powered by 5G and NB-IoT, managed centrally through the Airtel IoTHub platform for real-time device control.',
     whenToPitch: 'Pitch when a business needs to track fleets, monitor smart meters, automate industrial assets, or manage thousands of remote point-of-sale machines securely.',
+    openingHook: 'Managing thousands of distributed IoT assets becomes incredibly expensive if technicians have to constantly visit the field for diagnostics. How are you centralizing visibility and control over your remote connected devices?',
+    positioningStatement: 'Position IoT Connectivity as an operational intelligence platform, not just "SIM cards". Focus heavily on the IoTHub dashboard which enables bulk management, diagnostics, and security at scale.',
+    whenNotToPitch: [
+      'Customer only needs internet for human employees (laptops/phones).',
+      'Customer operates entirely within a single small building using Wi-Fi.',
+      'Customer has no distributed physical assets or logistics operations.'
+    ],
     customerSignals: [
       'Logistics companies losing visibility of high-value shipments in transit',
       'Utilities struggling to collect data manually from remote utility meters',
@@ -746,6 +853,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Office Internet',
     whatItIs: 'A business-grade broadband solution delivering up to 1 Gbps speeds, bundled with a free static IP, Cisco DNS security, and parallel ringing for enterprise mobility.',
     whenToPitch: 'Pitch to SMEs, branch offices, or retail stores that need fast, secure internet but do not require the dedicated SLA and cost of an Internet Leased Line.',
+    openingHook: 'Many small offices and retail chains expose themselves to cyber threats by relying on standard consumer broadband. How are you ensuring your branch offices have enterprise-grade security layered directly into their internet connection?',
+    positioningStatement: 'Position this as a secure, all-in-one "Business in a Box" for SMEs. Lead with the bundled value of the free Static IP and built-in Cisco DNS security, separating it from cheap consumer broadband.',
+    whenNotToPitch: [
+      'Customer runs a massive data center requiring guaranteed symmetric SLAs.',
+      'Customer requires complex multi-site routing (pitch SD-WAN).',
+      'Customer is an enterprise headquarters with thousands of employees.'
+    ],
     customerSignals: [
       'Small offices struggling with consumer-grade broadband dropping out',
       'Retail stores needing a static IP for surveillance cameras or secure POS systems',
@@ -796,6 +910,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Precise Positioning',
     whatItIs: 'A high-accuracy location service utilizing RTK (Real-Time Kinematic) technology over the cellular network to provide centimeter-level GPS accuracy for autonomous operations.',
     whenToPitch: 'Pitch to logistics, agriculture, or drone operators where standard 5-meter GPS accuracy is insufficient for automation or precision tracking.',
+    openingHook: 'For autonomous operations and drone delivery, standard GPS variance of 5 meters is dangerous and unacceptable. How are you achieving the centimeter-level accuracy required to safely automate your high-value assets?',
+    positioningStatement: 'Position this as an infrastructure-free automation enabler. Customers no longer need to build and maintain expensive proprietary ground reference stations to achieve RTK accuracy.',
+    whenNotToPitch: [
+      'Customer only tracks standard delivery trucks where street-level GPS is fine.',
+      'Customer has no autonomous, drone, or precision agricultural use cases.',
+      'Customer assets operate entirely indoors with no GPS visibility.'
+    ],
     customerSignals: [
       'Drone delivery companies struggling with landing accuracy',
       'Mining or agriculture firms deploying autonomous vehicles that require exact routing',
@@ -846,6 +967,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Public Cloud',
     whatItIs: 'A telco-grade, sovereign public cloud infrastructure hosted entirely within India, offering compute, storage, and a unified Cloud Management Platform (CMP).',
     whenToPitch: 'Pitch when organizations are mandated to keep data within India, want to escape unpredictable egress fees from global hyperscalers, or need a single vendor for both connectivity and cloud.',
+    openingHook: 'Many enterprises find themselves trapped by unpredictable data egress fees and sovereignty concerns when dealing with global hyperscalers. How are you balancing cloud scale with strict local regulatory compliance?',
+    positioningStatement: 'Position Airtel Public Cloud as a compliance-first, sovereign cloud layer rather than a direct AWS/Azure replacement. Emphasize low egress fees and seamless hybrid orchestration.',
+    whenNotToPitch: [
+      'Customer requires highly specialized AI/ML PaaS services only AWS/Google can provide.',
+      'Customer operates a global application requiring data centers in US/EU.',
+      'Customer is entirely locked into a 5-year enterprise agreement with a hyperscaler.'
+    ],
     customerSignals: [
       'Organizations facing strict data residency and sovereignty regulations',
       'CIOs complaining about opaque billing and high data egress charges from AWS/Azure',
@@ -897,6 +1025,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel Secure Internet',
     whatItIs: 'An integrated connectivity and security solution combining Airtel\'s reliable internet leased lines with cloud-delivered security (Zscaler SSE) or on-premise Fortinet firewalls.',
     whenToPitch: 'Pitch when an enterprise is struggling to manage multiple security vendors, moving to a hybrid work model, or facing increased threats like ransomware and DDoS attacks.',
+    openingHook: 'As cyber threats become more sophisticated, managing disparate firewalls and network vendors creates dangerous security gaps. How are you unifying your network connectivity and threat protection to eliminate operational silos?',
+    positioningStatement: 'Position this as a consolidation and risk-reduction play. The value is a "single throat to choke" when an outage or attack occurs. Sell the 24x7 SOC monitoring so the customer\'s IT team can sleep at night.',
+    whenNotToPitch: [
+      'Customer just heavily invested in a massive fleet of Palo Alto firewalls.',
+      'Customer IT team strictly mandates managing all security policies natively with no MSP involvement.',
+      'Customer operates a small cafe with no sensitive corporate data.'
+    ],
     customerSignals: [
       'IT team overwhelmed by managing disjointed firewalls and security policies across locations',
       'Concerns about remote employees accessing corporate applications via untrusted home networks',
@@ -947,6 +1082,13 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     productName: 'Airtel WhatsApp Business',
     whatItIs: 'An enterprise-grade WhatsApp API solution that converts WhatsApp into a secure, automated, two-way customer engagement channel capable of handling rich media and transactions.',
     whenToPitch: 'Pitch when marketing campaigns face low SMS open rates, or when customer support teams are overwhelmed by routine queries that could be handled via chatbots.',
+    openingHook: 'Traditional SMS marketing is suffering from extreme fatigue and low engagement rates, while support queues are bursting with routine queries. How are you shifting your customer interactions to the channels they actually prefer to use daily?',
+    positioningStatement: 'Position WhatsApp API as a conversion and deflection engine. It converts marketing into interactive sales, and deflects expensive human support calls into automated bot resolutions.',
+    whenNotToPitch: [
+      'Customer only needs to send a few hundred messages a month (use a standard WhatsApp Business App).',
+      'Customer audience is not active on WhatsApp (e.g., highly specific B2B sectors).',
+      'Customer refuses to invest in any CRM or chatbot orchestration logic.'
+    ],
     customerSignals: [
       'Marketing teams complaining about poor engagement and ROI from traditional SMS blasts',
       'Customer service queues overflowing with repetitive questions like "Where is my order?"',

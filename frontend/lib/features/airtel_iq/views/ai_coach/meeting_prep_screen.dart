@@ -9,7 +9,7 @@ import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/airtel_iq/services/meeting_prep_intelligence_engine.dart';
 import 'package:frontend/features/airtel_iq/knowledge/airtel_iq_knowledge_service.dart';
 import 'package:frontend/features/airtel_iq/widgets/ai_loading_indicator.dart';
-import 'package:frontend/features/airtel_iq/models/product_enablement_model.dart';
+import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 import 'package:frontend/features/airtel_iq/services/meeting_prep_enablement_service.dart';
 
 enum _PrepMode { scenario, history }
@@ -1184,7 +1184,7 @@ class _V3Card extends StatelessWidget {
 
 class _PrimaryProductCard extends StatelessWidget {
   final RankedProduct product;
-  final ProductEnablement? enablement;
+  final EnrichedProduct? enablement;
   const _PrimaryProductCard({required this.product, this.enablement});
 
   @override
@@ -1246,7 +1246,7 @@ class _PrimaryProductCard extends StatelessWidget {
 
 class _SupportingProductRow extends StatelessWidget {
   final RankedProduct product;
-  final ProductEnablement? enablement;
+  final EnrichedProduct? enablement;
   const _SupportingProductRow({required this.product, this.enablement});
 
   @override
@@ -1529,7 +1529,7 @@ class _NextBestActionCard extends StatelessWidget {
 }
 
 class _AmCopilotCard extends StatefulWidget {
-  final ProductEnablement enablement;
+  final EnrichedProduct enablement;
   final bool isDark;
   const _AmCopilotCard({required this.enablement, required this.isDark});
   @override
@@ -1558,20 +1558,37 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
         childrenPadding: const EdgeInsets.all(16),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle('How to Position This Product', titleColor),
-          _textContent(widget.enablement.positionItAs, textColor),
+          _sectionTitle('Consultative Opening Hook', titleColor),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: widget.isDark ? Colors.blue.withValues(alpha: 0.1) : Colors.blue.shade50,
+              border: Border(left: BorderSide(color: Colors.blue.shade400, width: 4)),
+            ),
+            child: _textContent('"${widget.enablement.openingHook}"', textColor, isItalic: true),
+          ),
           Divider(height: 24, color: dividerColor),
 
-          _sectionTitle('Questions to Ask the Customer', titleColor),
-          ...widget.enablement.questionsToAsk.map((q) => _bulletPoint(q, textColor)),
+          _sectionTitle('Internal Positioning Statement', titleColor),
+          _textContent(widget.enablement.positioningStatement, textColor),
+          Divider(height: 24, color: dividerColor),
+
+          if (widget.enablement.whenNotToPitch.isNotEmpty) ...[
+            _sectionTitle('When NOT To Pitch This', Colors.red.shade400),
+            ...widget.enablement.whenNotToPitch.map((q) => _bulletPoint(q, textColor, iconColor: Colors.red.shade400, icon: Icons.close)),
+            Divider(height: 24, color: dividerColor),
+          ],
+
+          _sectionTitle('Discovery Questions', titleColor),
+          ...widget.enablement.discoveryHooks.map((q) => _bulletPoint(q, textColor)),
           Divider(height: 24, color: dividerColor),
 
           _sectionTitle('Business Value to Emphasize', titleColor),
-          ...widget.enablement.businessValue.map((b) => _bulletPoint(b, textColor)),
+          ...widget.enablement.businessOutcomes.map((b) => _bulletPoint(b, textColor)),
           Divider(height: 24, color: dividerColor),
 
           _sectionTitle('Cross-Sell Opportunities', titleColor),
-          ...widget.enablement.crossSellOpportunities.map((c) => _bulletPoint(c, textColor)),
+          ...widget.enablement.crossSellProducts.map((c) => _bulletPoint(c, textColor)),
         ],
       ),
     );
@@ -1591,24 +1608,31 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
     );
   }
 
-  Widget _textContent(String content, Color color) {
+  Widget _textContent(String content, Color color, {bool isItalic = false}) {
     return Text(
       content,
       style: TextStyle(
         fontSize: 13,
         height: 1.4,
         color: color,
+        fontStyle: isItalic ? FontStyle.italic : FontStyle.normal,
       ),
     );
   }
 
-  Widget _bulletPoint(String content, Color color) {
+  Widget _bulletPoint(String content, Color color, {Color? iconColor, IconData? icon}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('• ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
+          if (icon != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 6, top: 2),
+              child: Icon(icon, size: 14, color: iconColor ?? color),
+            )
+          else
+            Text('• ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: iconColor ?? color)),
           Expanded(
             child: Text(
               content,
