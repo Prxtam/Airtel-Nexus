@@ -1190,14 +1190,18 @@ class _PrimaryProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppConstants.primaryColor, AppConstants.primaryColor.withValues(alpha: 0.75)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -1205,39 +1209,40 @@ class _PrimaryProductCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.stars_rounded, color: Colors.white, size: 20),
+              Icon(Icons.stars_rounded, color: AppConstants.primaryColor, size: 20),
               const SizedBox(width: 8),
-              const Text(
+              Text(
                 'Primary Recommendation',
                 style: TextStyle(
-                    color: Colors.white70,
+                    color: AppConstants.primaryColor,
                     fontSize: 13,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
             product.productName,
             style: const TextStyle(
-                color: Colors.white,
+                color: Colors.black87,
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: Colors.grey.shade50,
               borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey.shade200),
             ),
             child: Text(
               product.selectionReason,
-              style: const TextStyle(
-                  color: Colors.white, fontSize: 13, height: 1.5),
+              style: TextStyle(
+                  color: Colors.grey.shade800, fontSize: 14, height: 1.5),
             ),
           ),
-          if (enablement != null) _AmCopilotCard(enablement: enablement!, isDark: true),
+          if (enablement != null) _AmCopilotCard(enablement: enablement!, isDark: false),
         ],
       ),
     );
@@ -1558,7 +1563,7 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
         childrenPadding: const EdgeInsets.all(16),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle('Consultative Opening Hook', titleColor),
+          _sectionTitle('💬 Conversation Starter', titleColor),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -1569,26 +1574,26 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
           ),
           Divider(height: 24, color: dividerColor),
 
-          _sectionTitle('Internal Positioning Statement', titleColor),
-          _textContent(widget.enablement.positioningStatement, textColor),
-          Divider(height: 24, color: dividerColor),
-
-          if (widget.enablement.whenNotToPitch.isNotEmpty) ...[
-            _sectionTitle('When NOT To Pitch This', Colors.red.shade400),
-            ...widget.enablement.whenNotToPitch.map((q) => _bulletPoint(q, textColor, iconColor: Colors.red.shade400, icon: Icons.close)),
-            Divider(height: 24, color: dividerColor),
-          ],
-
-          _sectionTitle('Discovery Questions', titleColor),
-          ...widget.enablement.discoveryHooks.map((q) => _bulletPoint(q, textColor)),
-          Divider(height: 24, color: dividerColor),
-
-          _sectionTitle('Business Value to Emphasize', titleColor),
+          _sectionTitle('🎯 Business Value', titleColor),
           ...widget.enablement.businessOutcomes.map((b) => _bulletPoint(b, textColor)),
           Divider(height: 24, color: dividerColor),
 
-          _sectionTitle('Cross-Sell Opportunities', titleColor),
+          _sectionTitle('🧠 Position It As', titleColor),
+          _textContent(widget.enablement.positioningStatement, textColor),
+          Divider(height: 24, color: dividerColor),
+
+          _sectionTitle('❓ Discovery Questions', titleColor),
+          ...widget.enablement.discoveryHooks.map((q) => _bulletPoint(q, textColor)),
+          Divider(height: 24, color: dividerColor),
+
+          _sectionTitle('🤝 Cross-Sell Opportunities', titleColor),
           ...widget.enablement.crossSellProducts.map((c) => _bulletPoint(c, textColor)),
+          
+          if (widget.enablement.whenNotToPitch.isNotEmpty) ...[
+            Divider(height: 24, color: dividerColor),
+            _sectionTitle('⚠️ When NOT To Pitch This', Colors.red.shade400),
+            ...widget.enablement.whenNotToPitch.map((q) => _bulletPoint(q, textColor, iconColor: Colors.red.shade400, icon: Icons.close)),
+          ],
         ],
       ),
     );
