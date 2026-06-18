@@ -1,9 +1,20 @@
-
 class ObjectionHandling {
   final String objection;
   final String response;
 
   const ObjectionHandling({required this.objection, required this.response});
+}
+
+class ObjectionGuidance {
+  final String reframe;
+  final String recommendedResponse;
+  final List<String> avoidSaying;
+
+  const ObjectionGuidance({
+    required this.reframe,
+    required this.recommendedResponse,
+    required this.avoidSaying,
+  });
 }
 
 class EnrichedProduct {
@@ -39,6 +50,7 @@ class EnrichedProduct {
   final List<String> idealIndustries;
   final List<String> officialSourceUrls;
   final String verificationStatus;
+  final Map<String, ObjectionGuidance>? objectionGuidance;
 
   const EnrichedProduct({
     required this.productName,
@@ -66,6 +78,7 @@ class EnrichedProduct {
     required this.idealIndustries,
     required this.officialSourceUrls,
     required this.verificationStatus,
+    this.objectionGuidance,
   });
 }
 

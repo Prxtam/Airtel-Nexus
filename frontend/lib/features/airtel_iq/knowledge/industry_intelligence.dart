@@ -1,4 +1,4 @@
-﻿import 'knowledge_models.dart';
+import 'knowledge_models.dart';
 
 final List<IndustryIntelligence> industryIntelligenceRepo = [
   const IndustryIntelligence(
@@ -95,10 +95,10 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'How are you currently tracking your supply chain and delivery fleets?',
     ],
     objections: [
-      'We have thin margins and cannot justify premium connectivity',
-      'Store managers are not technical enough to handle new equipment',
-      'We use local broadband providers for our stores because it is cheaper',
-      'Changing our POS network architecture is too risky right now',
+      'Our retail margins are too thin to justify a massive IT overhaul.',
+      'Store managers are not technical enough to handle complex equipment.',
+      'Local broadband is cheaper and good enough for our stores.',
+      'Integrating this with our existing POS systems across 500+ stores is too risky.',
     ],
     salesOpportunities: [
       'Store connectivity standardization (SD-WAN/Managed Wi-Fi)',
@@ -143,10 +143,11 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'How do you track the location and status of high-value assets during transit?',
     ],
     objections: [
-      'Our factories are in remote areas where connectivity is fundamentally poor',
-      'We cannot risk moving OT data to the public cloud',
-      'IoT deployment seems too complex and fragmented',
-      'We do not have the internal skills to manage a Private 5G network',
+      'We cannot risk production downtime during a network transition.',
+      'Can this seamlessly integrate with our existing legacy factory systems?',
+      'Deployments across multiple plants simultaneously will be difficult.',
+      'Factory floor connectivity is notoriously unreliable.',
+      'We do not have the internal expertise to manage this.',
     ],
     salesOpportunities: [
       'Factory floor automation (Private 5G / IoT)',
@@ -207,7 +208,7 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     id: 'ind_healthcare',
     industryName: 'Healthcare',
     businessChallenges: [
-      'Patient data privacy and HIPAA compliance',
+      'Patient data privacy and DPDP/NDHM compliance',
       'Telemedicine adoption and reliability',
       'Hospital operational efficiency',
       'Coordination between doctors, staff, and patients',
@@ -239,10 +240,10 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'How are you tracking expensive mobile medical equipment (e.g., portable ultrasounds) within the facility?',
     ],
     objections: [
-      'Our strict compliance rules prevent us from using public cloud solutions',
-      'We cannot risk migrating our critical network; downtime could cost lives',
-      'Doctors refuse to use new communication apps; they prefer WhatsApp',
-      'Our budget is strictly allocated to medical equipment, not IT infrastructure',
+      'Our strict DPDP compliance rules prevent us from using public cloud solutions.',
+      'We cannot risk migrating our critical network; downtime could impact patient care.',
+      'Doctors refuse to use new communication apps; they prefer WhatsApp.',
+      'Our budget is strictly allocated to medical equipment, not IT infrastructure.',
     ],
     salesOpportunities: [
       'Patient engagement and telehealth (Airtel IQ)',
