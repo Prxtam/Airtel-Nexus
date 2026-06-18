@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
-import 'package:frontend/features/airtel_iq/mock_data/airtel_iq_mock_data.dart';
-import 'package:frontend/features/airtel_iq/models/airtel_iq_models.dart';
+import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
 
 class ProductsListScreen extends StatefulWidget {
@@ -13,23 +12,27 @@ class ProductsListScreen extends StatefulWidget {
 }
 
 class _ProductsListScreenState extends State<ProductsListScreen> {
-  late List<AirtelProduct> _products;
+  late Map<String, EnrichedProduct> _filteredProducts;
 
   @override
   void initState() {
     super.initState();
-    _products = AirtelIqMockData.products;
+    _filteredProducts = Map.from(productEnrichmentData);
   }
 
   void _onSearchChanged(String query) {
     setState(() {
       if (query.isEmpty) {
-        _products = AirtelIqMockData.products;
+        _filteredProducts = Map.from(productEnrichmentData);
       } else {
-        _products = AirtelIqMockData.products.where((product) {
-          return product.name.toLowerCase().contains(query.toLowerCase()) ||
-                 product.category.toLowerCase().contains(query.toLowerCase());
-        }).toList();
+        _filteredProducts = Map.fromEntries(
+          productEnrichmentData.entries.where((entry) {
+            final product = entry.value;
+            return product.productName.toLowerCase().contains(query.toLowerCase()) ||
+                   product.primaryUseCase.toLowerCase().contains(query.toLowerCase()) ||
+                   product.category.toLowerCase().contains(query.toLowerCase());
+          }),
+        );
       }
     });
   }
@@ -48,12 +51,12 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: AirtelIqSearchBar(
-              hintText: 'Search products...',
+              hintText: 'Search products by name or category...',
               onChanged: _onSearchChanged,
             ),
           ),
           Expanded(
-            child: _products.isEmpty
+            child: _filteredProducts.isEmpty
                 ? const Center(
                     child: Text(
                       'No products match your search.',
@@ -62,10 +65,12 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                   )
                 : ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    itemCount: _products.length,
+                    itemCount: _filteredProducts.length,
                     separatorBuilder: (context, index) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
-                      final product = _products[index];
+                      final productId = _filteredProducts.keys.elementAt(index);
+                      final product = _filteredProducts.values.elementAt(index);
+                      
                       return Card(
                         elevation: 0,
                         color: Colors.white,
@@ -74,7 +79,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                           side: BorderSide(color: Colors.grey.shade200),
                         ),
                         child: InkWell(
-                          onTap: () => context.push('/airtel-iq/products/${product.id}'),
+                          onTap: () => context.push('/airtel-iq/products/$productId'),
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -98,13 +103,34 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
-                                  product.name,
+                                  product.productName,
                                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  product.shortDescription,
+                                  product.whatItIs,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(color: Colors.grey.shade600, height: 1.4),
+                                ),
+                                const SizedBox(height: 16),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: product.idealIndustries.take(3).map((industry) {
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade100,
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(color: Colors.grey.shade300),
+                                      ),
+                                      child: Text(
+                                        industry,
+                                        style: TextStyle(color: Colors.grey.shade700, fontSize: 11),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
                                 const SizedBox(height: 16),
                                 Row(
