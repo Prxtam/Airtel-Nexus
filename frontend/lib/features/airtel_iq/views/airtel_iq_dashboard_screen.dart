@@ -17,7 +17,10 @@ class AirtelIqDashboardScreen extends StatelessWidget {
           _buildHeroSection(context),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -48,7 +51,7 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 8),
                   const AirtelIqSectionHeader(title: 'Core Knowledge'),
                   GridView.count(
@@ -68,7 +71,8 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const KnowledgeExplorerScreen(),
+                              builder: (context) =>
+                                  const KnowledgeExplorerScreen(),
                             ),
                           );
                         },
@@ -101,8 +105,8 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                         onTap: () => context.push('/airtel-iq/knowledge'),
                       ),
                       AirtelIqFeatureCard(
-                        title: 'Sales Playbooks',
-                        subtitle: 'Industry specific strategies',
+                        title: 'Industry Playbooks',
+                        subtitle: 'Quick-reference for every industry',
                         icon: Icons.assignment_outlined,
                         iconColor: Colors.green,
                         onTap: () => context.push('/airtel-iq/playbooks'),
@@ -122,7 +126,12 @@ class AirtelIqDashboardScreen extends StatelessWidget {
   Widget _buildHeroSection(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 20, 20, 32),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        MediaQuery.of(context).padding.top + 20,
+        20,
+        32,
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [AppConstants.primaryColor, Color(0xFFC00000)],
@@ -154,14 +163,22 @@ class AirtelIqDashboardScreen extends StatelessWidget {
               const SizedBox(width: 16),
               const Text(
                 'Airtel IQ',
-                style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 8),
           const Text(
             'Sales Enablement Hub',
-            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: 12),
           const Text(

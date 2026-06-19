@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
-import 'package:frontend/features/airtel_iq/mock_data/airtel_iq_mock_data.dart';
-import 'package:frontend/features/airtel_iq/models/airtel_iq_models.dart';
-import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
+import 'package:frontend/features/airtel_iq/knowledge/industry_intelligence.dart';
+import 'package:frontend/features/airtel_iq/services/industry_playbook_adapter.dart';
 
 class PlaybooksListScreen extends StatefulWidget {
   const PlaybooksListScreen({super.key});
@@ -13,22 +12,79 @@ class PlaybooksListScreen extends StatefulWidget {
 }
 
 class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
-  late List<SalesPlaybook> _playbooks;
+  late List<IndustryPlaybook> _allPlaybooks;
+  late List<IndustryPlaybook> _filtered;
+  final TextEditingController _search = TextEditingController();
+
+  static const List<(String, Color)> _industryColors = [
+    ('Banking', Color(0xFF1E3A5F)),
+    ('Manufacturing', Color(0xFF374151)),
+    ('Retail', Color(0xFF7C3AED)),
+    ('Healthcare', Color(0xFF0F766E)),
+    ('IT', Color(0xFF1D4ED8)),
+    ('Logistics', Color(0xFFB45309)),
+    ('Government', Color(0xFF1A5276)),
+    ('E-Commerce', Color(0xFFC2185B)),
+    ('Education', Color(0xFF0D6E3F)),
+    ('Hospitality', Color(0xFF92400E)),
+    ('Energy', Color(0xFF6D4C41)),
+    ('Automotive', Color(0xFF37474F)),
+    ('Media', Color(0xFF4527A0)),
+    ('Travel', Color(0xFF006064)),
+    ('Telecom', Color(0xFF880E4F)),
+  ];
+
+  Color _colorForIndustry(String name) {
+    for (final (keyword, color) in _industryColors) {
+      if (name.contains(keyword)) return color;
+    }
+    return AppConstants.primaryColor;
+  }
+
+  String _iconLabelForIndustry(String name) {
+    if (name.contains('Banking')) return '🏦';
+    if (name.contains('Manufacturing')) return '🏭';
+    if (name.contains('Retail')) return '🛍️';
+    if (name.contains('Healthcare')) return '🏥';
+    if (name.contains('IT')) return '💻';
+    if (name.contains('Logistics')) return '🚚';
+    if (name.contains('Government')) return '🏛️';
+    if (name.contains('E-Commerce')) return '📦';
+    if (name.contains('Education')) return '🎓';
+    if (name.contains('Hospitality')) return '🏨';
+    if (name.contains('Energy')) return '⚡';
+    if (name.contains('Automotive')) return '🚗';
+    if (name.contains('Media')) return '🎬';
+    if (name.contains('Travel')) return '✈️';
+    if (name.contains('Telecom')) return '📡';
+    return '🏢';
+  }
 
   @override
   void initState() {
     super.initState();
-    _playbooks = AirtelIqMockData.playbooks;
+    _allPlaybooks = industryIntelligenceRepo
+        .map(IndustryPlaybook.fromIndustry)
+        .toList();
+    _filtered = _allPlaybooks;
   }
 
-  void _onSearchChanged(String query) {
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  void _onSearch(String query) {
     setState(() {
-      if (query.isEmpty) {
-        _playbooks = AirtelIqMockData.playbooks;
+      if (query.trim().isEmpty) {
+        _filtered = _allPlaybooks;
       } else {
-        _playbooks = AirtelIqMockData.playbooks.where((pb) {
-          return pb.industry.toLowerCase().contains(query.toLowerCase()) ||
-                 pb.overview.toLowerCase().contains(query.toLowerCase());
+        final q = query.toLowerCase();
+        _filtered = _allPlaybooks.where((pb) {
+          return pb.industryName.toLowerCase().contains(q) ||
+              pb.businessPriorities.any((c) => c.toLowerCase().contains(q)) ||
+              pb.relevantSolutions.any((s) => s.toLowerCase().contains(q));
         }).toList();
       }
     });
@@ -39,86 +95,205 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Sales Playbooks'),
+        title: const Text('Industry Playbooks'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: AirtelIqSearchBar(
-              hintText: 'Search industries or strategies...',
-              onChanged: _onSearchChanged,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(64),
+          child: Container(
+            color: AppConstants.primaryColor,
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: TextField(
+              controller: _search,
+              onChanged: _onSearch,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'Search industry or solution...',
+                hintStyle: const TextStyle(color: Colors.white54),
+                prefixIcon: const Icon(Icons.search, color: Colors.white54),
+                filled: true,
+                fillColor: Colors.white.withValues(alpha: 0.15),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
           ),
-          Expanded(
-            child: _playbooks.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No playbooks match your search.',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    itemCount: _playbooks.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final pb = _playbooks[index];
-                      return Card(
-                        elevation: 0,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(color: Colors.grey.shade200),
+        ),
+      ),
+      body: _filtered.isEmpty
+          ? const Center(
+              child: Text(
+                'No industries match your search.',
+                style: TextStyle(color: Colors.grey),
+              ),
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: _filtered.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final pb = _filtered[index];
+                final color = _colorForIndustry(pb.industryName);
+                final emoji = _iconLabelForIndustry(pb.industryName);
+                return _IndustryCard(
+                  playbook: pb,
+                  color: color,
+                  emoji: emoji,
+                  onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
+                );
+              },
+            ),
+    );
+  }
+}
+
+class _IndustryCard extends StatelessWidget {
+  final IndustryPlaybook playbook;
+  final Color color;
+  final String emoji;
+  final VoidCallback onTap;
+
+  const _IndustryCard({
+    required this.playbook,
+    required this.color,
+    required this.emoji,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final topPriorities = playbook.businessPriorities.take(3).toList();
+
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: Column(
+            children: [
+              // Header stripe
+              Container(
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(14),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                child: Row(
+                  children: [
+                    Text(emoji, style: const TextStyle(fontSize: 24)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        playbook.industryName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
                         ),
-                        child: InkWell(
-                          onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
-                          borderRadius: BorderRadius.circular(12),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.assignment_outlined, color: Colors.green.shade700, size: 20),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        pb.industry,
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  pb.overview,
-                                  style: TextStyle(color: Colors.grey.shade600, height: 1.4),
-                                ),
-                                const SizedBox(height: 16),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Open Playbook',
-                                      style: TextStyle(color: AppConstants.primaryColor, fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Icon(Icons.arrow_forward, size: 16, color: AppConstants.primaryColor),
-                                  ],
-                                ),
-                              ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        '${playbook.relevantSolutions.length} solutions',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Body
+              Padding(
+                padding: const EdgeInsets.all(14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Top Business Priorities',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: color,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ...topPriorities.map(
+                      (p) => Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 6),
+                              width: 4,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                color: color,
+                                shape: BoxShape.circle,
+                              ),
                             ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                p,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey.shade700,
+                                  height: 1.35,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Open Playbook',
+                          style: TextStyle(
+                            color: color,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                        const SizedBox(width: 4),
+                        Icon(Icons.arrow_forward, size: 14, color: color),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
