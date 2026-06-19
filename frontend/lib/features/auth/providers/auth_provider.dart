@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:frontend/core/storage/secure_storage.dart';
 import 'package:frontend/features/auth/models/user.dart';
 import 'package:frontend/features/auth/repositories/auth_repository.dart';
 
@@ -22,43 +20,44 @@ class AuthState {
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repository;
-  final FlutterSecureStorage _storage;
 
-  AuthNotifier(this._repository, this._storage) : super(AuthState(status: AuthStatus.initial)) {
+  AuthNotifier(this._repository) : super(AuthState(status: AuthStatus.initial)) {
     _init();
   }
 
   Future<void> _init() async {
-    final token = await _storage.read(key: 'jwt_token');
-    if (token != null) {
-      try {
-        final user = await _repository.getMe();
-        state = state.copyWith(status: AuthStatus.authenticated, user: user);
-      } catch (e) {
-        await _storage.delete(key: 'jwt_token');
-        state = state.copyWith(status: AuthStatus.unauthenticated);
-      }
+    final user = await _repository.getMe();
+    if (user != null) {
+      state = state.copyWith(status: AuthStatus.authenticated, user: user);
     } else {
       state = state.copyWith(status: AuthStatus.unauthenticated);
     }
   }
 
-  Future<void> login(String email, String password) async {
-    final token = await _repository.login(email, password);
-    await _storage.write(key: 'jwt_token', value: token);
+  Future<void> loginLocally({
+    required String fullName,
+    required String role,
+    String? employeeId,
+    String? circle,
+  }) async {
+    await _repository.loginLocally(
+      fullName: fullName,
+      role: role,
+      employeeId: employeeId,
+      circle: circle,
+    );
     
     final user = await _repository.getMe();
     state = state.copyWith(status: AuthStatus.authenticated, user: user);
   }
 
   Future<void> logout() async {
-    await _storage.delete(key: 'jwt_token');
+    await _repository.logout();
     state = state.copyWith(status: AuthStatus.unauthenticated, user: null);
   }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final repository = ref.watch(authRepositoryProvider);
-  final storage = ref.watch(secureStorageProvider);
-  return AuthNotifier(repository, storage);
+  return AuthNotifier(repository);
 });

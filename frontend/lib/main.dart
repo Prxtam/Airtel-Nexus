@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/router/app_router.dart';
 import 'package:frontend/core/services/meeting_notification_service.dart';
+import 'package:frontend/core/storage/hive_service.dart';
 import 'package:frontend/features/meetings/services/notification_sync_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,6 +13,9 @@ void main() async {
   // Initialize notification service
   final notificationService = MeetingNotificationService();
   await notificationService.initialize();
+  
+  // Initialize Hive storage
+  await HiveService.init();
   
   runApp(const ProviderScope(child: MyApp()));
 }

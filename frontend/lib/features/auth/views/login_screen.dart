@@ -12,28 +12,48 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _employeeIdController = TextEditingController();
+  final _circleController = TextEditingController();
+  
+  String? _selectedRole;
   bool _isLoading = false;
   String? _errorMessage;
 
+  final List<String> _roles = [
+    'Account Manager',
+    'Zonal Sales Manager',
+    'Circle Business Head',
+  ];
+
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    _nameController.dispose();
+    _employeeIdController.dispose();
+    _circleController.dispose();
     super.dispose();
   }
 
   Future<void> _login() async {
+    final name = _nameController.text.trim();
+    if (name.isEmpty || _selectedRole == null) {
+      setState(() {
+        _errorMessage = 'Employee Name and Role are required.';
+      });
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
     try {
-      await ref.read(authProvider.notifier).login(
-        _emailController.text.trim(),
-        _passwordController.text,
+      await ref.read(authProvider.notifier).loginLocally(
+        fullName: name,
+        role: _selectedRole!,
+        employeeId: _employeeIdController.text.trim().isNotEmpty ? _employeeIdController.text.trim() : null,
+        circle: _circleController.text.trim().isNotEmpty ? _circleController.text.trim() : null,
       );
       // GoRouter will automatically redirect via redirect logic based on auth state
     } catch (e) {
@@ -84,26 +104,64 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               const Gap(48),
+              
+              // Employee Name (Required)
               TextField(
-                controller: _emailController,
+                controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'Employee Name *',
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: Icon(Icons.person),
                 ),
-                keyboardType: TextInputType.emailAddress,
+                textCapitalization: TextCapitalization.words,
               ),
               const Gap(16),
-              TextField(
-                controller: _passwordController,
+              
+              // Role Dropdown (Required)
+              DropdownButtonFormField<String>(
+                initialValue: _selectedRole,
                 decoration: const InputDecoration(
-                  labelText: 'Password',
+                  labelText: 'Role *',
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: Icon(Icons.badge),
                 ),
-                obscureText: true,
+                items: _roles.map((role) {
+                  return DropdownMenuItem(
+                    value: role,
+                    child: Text(role),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _selectedRole = val;
+                  });
+                },
+              ),
+              const Gap(16),
+
+              // Employee ID (Optional)
+              TextField(
+                controller: _employeeIdController,
+                decoration: const InputDecoration(
+                  labelText: 'Employee ID (Optional)',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.numbers),
+                ),
+              ),
+              const Gap(16),
+
+              // Circle (Optional)
+              TextField(
+                controller: _circleController,
+                decoration: const InputDecoration(
+                  labelText: 'Circle (Optional)',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.location_on),
+                ),
+                textCapitalization: TextCapitalization.words,
               ),
               const Gap(24),
+
               if (_errorMessage != null) ...[
                 Text(
                   _errorMessage!,
@@ -112,6 +170,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const Gap(16),
               ],
+              
               ElevatedButton(
                 onPressed: _isLoading ? null : _login,
                 style: ElevatedButton.styleFrom(

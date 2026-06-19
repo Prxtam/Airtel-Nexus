@@ -1,57 +1,70 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/core/api/dio_client.dart';
+import 'package:frontend/core/storage/hive_service.dart';
 import 'package:frontend/features/customers/models/customer.dart';
+import 'package:uuid/uuid.dart';
 
 final customerRepositoryProvider = Provider<CustomerRepository>((ref) {
-  final dio = ref.watch(dioProvider);
-  return CustomerRepository(dio);
+  return CustomerRepository();
 });
 
 class CustomerRepository {
-  final Dio _dio;
-  CustomerRepository(this._dio);
-
   Future<List<Customer>> listCustomers() async {
-    final response = await _dio.get('/customers');
-    if (response.statusCode == 200) {
-      final data = response.data as Map<String, dynamic>;
-      final list = data['customers'] as List<dynamic>;
-      return list
-          .map((e) => Customer.fromJson(e as Map<String, dynamic>))
-          .toList();
-    }
-    throw Exception(response.data['detail'] ?? 'Failed to load customers');
+    final box = HiveService.customersBox;
+    // Return sorted by latest created first
+    final customers = box.values.toList();
+    customers.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return customers;
   }
 
   Future<Customer> getCustomer(String id) async {
-    final response = await _dio.get('/customers/$id');
-    if (response.statusCode == 200) {
-      return Customer.fromJson(response.data as Map<String, dynamic>);
+    final box = HiveService.customersBox;
+    final customer = box.get(id);
+    if (customer == null) {
+      throw Exception('Customer not found');
     }
-    throw Exception(response.data['detail'] ?? 'Customer not found');
+    return customer;
   }
 
   Future<Customer> createCustomer(String name) async {
-    final response = await _dio.post('/customers', data: {'name': name});
-    if (response.statusCode == 201) {
-      return Customer.fromJson(response.data as Map<String, dynamic>);
-    }
-    throw Exception(response.data['detail'] ?? 'Failed to create customer');
+    final box = HiveService.customersBox;
+    final userBox = HiveService.userBox;
+    final currentUser = userBox.get('current_user');
+
+    final now = DateTime.now();
+    final newCustomer = Customer(
+      id: const Uuid().v4(),
+      ownerId: currentUser?.id,
+      name: name,
+      createdAt: now,
+      updatedAt: now,
+    );
+
+    await box.put(newCustomer.id, newCustomer);
+    return newCustomer;
   }
 
   Future<Customer> updateCustomer(String id, String name) async {
-    final response = await _dio.patch('/customers/$id', data: {'name': name});
-    if (response.statusCode == 200) {
-      return Customer.fromJson(response.data as Map<String, dynamic>);
+    final box = HiveService.customersBox;
+    final existingCustomer = box.get(id);
+
+    if (existingCustomer == null) {
+      throw Exception('Customer not found');
     }
-    throw Exception(response.data['detail'] ?? 'Failed to update customer');
+
+    final updatedCustomer = Customer(
+      id: existingCustomer.id,
+      ownerId: existingCustomer.ownerId,
+      name: name,
+      createdAt: existingCustomer.createdAt,
+      updatedAt: DateTime.now(),
+    );
+
+    await box.put(updatedCustomer.id, updatedCustomer);
+    return updatedCustomer;
   }
 
   Future<void> deleteCustomer(String id) async {
-    final response = await _dio.delete('/customers/$id');
-    if (response.statusCode != 204) {
-      throw Exception(response.data['detail'] ?? 'Failed to delete customer');
-    }
+    final box = HiveService.customersBox;
+    await box.delete(id);
   }
 }

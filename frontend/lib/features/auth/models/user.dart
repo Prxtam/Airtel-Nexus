@@ -1,12 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:hive/hive.dart';
 
 part 'user.g.dart';
 
+@HiveType(typeId: 0)
 @JsonSerializable(fieldRename: FieldRename.snake)
 class User {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String email;
+  @HiveField(2)
   final String? fullName;
+  @HiveField(3)
   final List<String> roles;
 
   User({

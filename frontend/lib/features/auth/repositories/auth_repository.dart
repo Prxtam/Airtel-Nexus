@@ -1,36 +1,43 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/core/api/dio_client.dart';
+import 'package:frontend/core/storage/hive_service.dart';
 import 'package:frontend/features/auth/models/user.dart';
+import 'package:uuid/uuid.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final dio = ref.watch(dioProvider);
-  return AuthRepository(dio);
+  return AuthRepository();
 });
 
 class AuthRepository {
-  final Dio _dio;
-  AuthRepository(this._dio);
-
-  Future<String> login(String email, String password) async {
-    final response = await _dio.post('/auth/login', data: {
-      'email': email,
-      'password': password,
-    });
+  Future<void> loginLocally({
+    required String fullName,
+    required String role,
+    String? employeeId,
+    String? circle,
+  }) async {
+    final userBox = HiveService.userBox;
     
-    if (response.statusCode == 200) {
-      return response.data['access_token'] as String;
-    } else {
-      throw Exception(response.data['detail'] ?? 'Login failed');
-    }
+    // Map display role to internal role
+    String internalRole = 'account_manager';
+    if (role == 'Zonal Sales Manager') internalRole = 'zonal_sales_manager';
+    if (role == 'Circle Business Head') internalRole = 'circle_business_head';
+
+    final user = User(
+      id: const Uuid().v4(),
+      email: employeeId ?? '${fullName.replaceAll(' ', '.').toLowerCase()}@airtel.com',
+      fullName: fullName,
+      roles: [internalRole],
+    );
+    
+    await userBox.put('current_user', user);
   }
 
-  Future<User> getMe() async {
-    final response = await _dio.get('/auth/me');
-    if (response.statusCode == 200) {
-      return User.fromJson(response.data['user'] as Map<String, dynamic>);
-    } else {
-      throw Exception(response.data['detail'] ?? 'Failed to fetch profile');
-    }
+  Future<User?> getMe() async {
+    final userBox = HiveService.userBox;
+    return userBox.get('current_user');
+  }
+
+  Future<void> logout() async {
+    final userBox = HiveService.userBox;
+    await userBox.delete('current_user');
   }
 }

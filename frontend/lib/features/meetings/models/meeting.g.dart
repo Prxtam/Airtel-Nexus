@@ -3,25 +3,81 @@
 part of 'meeting.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class MeetingAdapter extends TypeAdapter<Meeting> {
+  @override
+  final int typeId = 2;
+
+  @override
+  Meeting read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Meeting(
+      id: fields[0] as String,
+      customerId: fields[1] as String,
+      createdByUserId: fields[2] as String,
+      title: fields[3] as String?,
+      meetingAt: fields[4] as DateTime,
+      createdAt: fields[5] as DateTime,
+      updatedAt: fields[6] as DateTime,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Meeting obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.customerId)
+      ..writeByte(2)
+      ..write(obj.createdByUserId)
+      ..writeByte(3)
+      ..write(obj.title)
+      ..writeByte(4)
+      ..write(obj.meetingAt)
+      ..writeByte(5)
+      ..write(obj.createdAt)
+      ..writeByte(6)
+      ..write(obj.updatedAt);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MeetingAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
 Meeting _$MeetingFromJson(Map<String, dynamic> json) => Meeting(
-  id: json['id'] as String,
-  customerId: json['customer_id'] as String,
-  createdByUserId: json['created_by_user_id'] as String,
-  title: json['title'] as String?,
-  meetingAt: DateTime.parse(json['meeting_at'] as String),
-  createdAt: DateTime.parse(json['created_at'] as String),
-  updatedAt: DateTime.parse(json['updated_at'] as String),
-);
+      id: json['id'] as String,
+      customerId: json['customer_id'] as String,
+      createdByUserId: json['created_by_user_id'] as String,
+      title: json['title'] as String?,
+      meetingAt: DateTime.parse(json['meeting_at'] as String),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+    );
 
 Map<String, dynamic> _$MeetingToJson(Meeting instance) => <String, dynamic>{
-  'id': instance.id,
-  'customer_id': instance.customerId,
-  'created_by_user_id': instance.createdByUserId,
-  'title': instance.title,
-  'meeting_at': instance.meetingAt.toIso8601String(),
-  'created_at': instance.createdAt.toIso8601String(),
-  'updated_at': instance.updatedAt.toIso8601String(),
-};
+      'id': instance.id,
+      'customer_id': instance.customerId,
+      'created_by_user_id': instance.createdByUserId,
+      'title': instance.title,
+      'meeting_at': instance.meetingAt.toIso8601String(),
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+    };

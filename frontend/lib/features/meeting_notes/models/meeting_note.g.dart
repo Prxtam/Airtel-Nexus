@@ -7,13 +7,13 @@ part of 'meeting_note.dart';
 // **************************************************************************
 
 MeetingNote _$MeetingNoteFromJson(Map<String, dynamic> json) => MeetingNote(
-  id: json['id'] as String,
-  meetingId: json['meeting_id'] as String,
-  authorUserId: json['author_user_id'] as String,
-  noteText: json['note_text'] as String,
-  createdAt: DateTime.parse(json['created_at'] as String),
-  updatedAt: DateTime.parse(json['updated_at'] as String),
-);
+      id: json['id'] as String,
+      meetingId: json['meeting_id'] as String,
+      authorUserId: json['author_user_id'] as String,
+      noteText: json['note_text'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+    );
 
 Map<String, dynamic> _$MeetingNoteToJson(MeetingNote instance) =>
     <String, dynamic>{
