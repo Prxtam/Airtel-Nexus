@@ -5,7 +5,6 @@ import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
-import 'package:frontend/features/customers/views/widgets/customer_copilot_sheet.dart';
 import 'package:gap/gap.dart';
 
 class CustomerDetailScreen extends ConsumerWidget {
@@ -23,13 +22,6 @@ class CustomerDetailScreen extends ConsumerWidget {
         title: const Text('Customer Details'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.auto_awesome),
-            tooltip: 'AI Insights',
-            onPressed: () => CustomerCopilotSheet.show(context, customerId),
-          ),
-        ],
       ),
       body: customerAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

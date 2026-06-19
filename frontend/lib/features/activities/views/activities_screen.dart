@@ -3,9 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/meetings/views/meeting_list_screen.dart';
 import 'package:frontend/features/tasks/views/task_list_screen.dart';
-import 'package:frontend/features/users/views/team_filter_dropdown.dart';
-import 'package:frontend/features/tasks/providers/task_filter_provider.dart';
-import 'package:frontend/features/meetings/providers/meeting_filter_provider.dart';
 
 class ActivitiesScreen extends ConsumerStatefulWidget {
   const ActivitiesScreen({super.key});
@@ -91,19 +88,7 @@ class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen> with Single
                 'Activities',
                 style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              // Dropdowns
-              Theme(
-                data: Theme.of(context).copyWith(canvasColor: Colors.white),
-                child: _tabController.index == 0
-                    ? TeamFilterDropdown(
-                        currentValue: ref.watch(meetingTeamFilterProvider),
-                        onChanged: (val) => ref.read(meetingTeamFilterProvider.notifier).state = val,
-                      )
-                    : TeamFilterDropdown(
-                        currentValue: ref.watch(taskTeamFilterProvider),
-                        onChanged: (val) => ref.read(taskTeamFilterProvider.notifier).state = val,
-                      ),
-              ),
+              const SizedBox(), // Removed legacy dropdown
             ],
           ),
           const SizedBox(height: 4),

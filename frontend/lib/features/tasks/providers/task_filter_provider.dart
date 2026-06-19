@@ -12,8 +12,7 @@ final taskPriorityFilterProvider =
     StateProvider.autoDispose<TaskPriorityFilter>(
         (ref) => TaskPriorityFilter.all);
 
-// Team filter state (null = show all)
-final taskTeamFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
+// Team filter removed as app is now offline-first for individual AM.
 
 // Derived filtered list
 final filteredTaskListProvider =
@@ -21,15 +20,8 @@ final filteredTaskListProvider =
   final rawAsync = ref.watch(taskListProvider);
   final search = ref.watch(taskSearchProvider);
   final priority = ref.watch(taskPriorityFilterProvider);
-  final teamFilterId = ref.watch(taskTeamFilterProvider);
-
   return rawAsync.whenData((list) {
     var result = list;
-    
-    // 0. Filter by team
-    if (teamFilterId != null) {
-      result = result.where((t) => t.userId == teamFilterId).toList();
-    }
 
     // 1. Filter by priority
     if (priority != TaskPriorityFilter.all) {

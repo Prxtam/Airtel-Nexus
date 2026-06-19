@@ -11,8 +11,7 @@ final customerSearchProvider = StateProvider.autoDispose<String>((ref) => '');
 final customerSortProvider =
     StateProvider.autoDispose<CustomerSort>((ref) => CustomerSort.nameAsc);
 
-// Team filter state (null = show all)
-final customerTeamFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
+// Team filter removed as app is now offline-first for individual AM.
 
 // Derived filtered & sorted list
 final filteredCustomerListProvider =
@@ -20,12 +19,9 @@ final filteredCustomerListProvider =
   final rawAsync = ref.watch(customerListProvider);
   final search = ref.watch(customerSearchProvider);
   final sort = ref.watch(customerSortProvider);
-  final teamFilterId = ref.watch(customerTeamFilterProvider);
-
   return rawAsync.whenData((list) {
-    // 1. Filter by search query and team
+    // 1. Filter by search query
     var result = list.where((c) {
-      if (teamFilterId != null && c.ownerId != teamFilterId) return false;
       if (search.isEmpty) return true;
       return c.name.toLowerCase().contains(search.toLowerCase());
     }).toList();

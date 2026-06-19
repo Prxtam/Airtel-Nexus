@@ -1,66 +1,75 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/core/api/dio_client.dart';
+import 'package:frontend/core/storage/hive_service.dart';
 import 'package:frontend/features/meeting_notes/models/meeting_note.dart';
+import 'package:uuid/uuid.dart';
 
 final meetingNoteRepositoryProvider =
     Provider<MeetingNoteRepository>((ref) {
-  final dio = ref.watch(dioProvider);
-  return MeetingNoteRepository(dio);
+  return MeetingNoteRepository();
 });
 
 class MeetingNoteRepository {
-  final Dio _dio;
-  MeetingNoteRepository(this._dio);
-
   Future<List<MeetingNote>> listNotes({required String meetingId}) async {
-    final response = await _dio
-        .get('/meeting-notes', queryParameters: {'meeting_id': meetingId});
-    if (response.statusCode == 200) {
-      final list = response.data['notes'] as List<dynamic>;
-      return list
-          .map((e) => MeetingNote.fromJson(e as Map<String, dynamic>))
-          .toList();
-    }
-    throw Exception(response.data['detail'] ?? 'Failed to load notes');
+    final box = HiveService.meetingNotesBox;
+    final notes = box.values.where((n) => n.meetingId == meetingId).toList();
+    // Sort ascending by creation time
+    notes.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    return notes;
   }
 
   Future<MeetingNote> getNote(String id) async {
-    final response = await _dio.get('/meeting-notes/$id');
-    if (response.statusCode == 200) {
-      return MeetingNote.fromJson(response.data as Map<String, dynamic>);
+    final box = HiveService.meetingNotesBox;
+    final note = box.get(id);
+    if (note == null) {
+      throw Exception('Note not found');
     }
-    throw Exception(response.data['detail'] ?? 'Note not found');
+    return note;
   }
 
   Future<MeetingNote> createNote({
     required String meetingId,
     required String noteText,
   }) async {
-    final response = await _dio.post('/meeting-notes', data: {
-      'meeting_id': meetingId,
-      'note_text': noteText,
-    });
-    if (response.statusCode == 201) {
-      return MeetingNote.fromJson(response.data as Map<String, dynamic>);
-    }
-    throw Exception(response.data['detail'] ?? 'Failed to create note');
+    final box = HiveService.meetingNotesBox;
+    final currentUser = HiveService.userBox.get('current_user');
+    final now = DateTime.now();
+
+    final newNote = MeetingNote(
+      id: const Uuid().v4(),
+      meetingId: meetingId,
+      authorUserId: currentUser?.id ?? 'unknown_user',
+      noteText: noteText,
+      createdAt: now,
+      updatedAt: now,
+    );
+
+    await box.put(newNote.id, newNote);
+    return newNote;
   }
 
   Future<MeetingNote> updateNote(String id, {required String noteText}) async {
-    final response = await _dio.patch('/meeting-notes/$id', data: {
-      'note_text': noteText,
-    });
-    if (response.statusCode == 200) {
-      return MeetingNote.fromJson(response.data as Map<String, dynamic>);
+    final box = HiveService.meetingNotesBox;
+    final existing = box.get(id);
+
+    if (existing == null) {
+      throw Exception('Note not found');
     }
-    throw Exception(response.data['detail'] ?? 'Failed to update note');
+
+    final updated = MeetingNote(
+      id: existing.id,
+      meetingId: existing.meetingId,
+      authorUserId: existing.authorUserId,
+      noteText: noteText,
+      createdAt: existing.createdAt,
+      updatedAt: DateTime.now(),
+    );
+
+    await box.put(updated.id, updated);
+    return updated;
   }
 
   Future<void> deleteNote(String id) async {
-    final response = await _dio.delete('/meeting-notes/$id');
-    if (response.statusCode != 204) {
-      throw Exception(response.data['detail'] ?? 'Failed to delete note');
-    }
+    final box = HiveService.meetingNotesBox;
+    await box.delete(id);
   }
 }

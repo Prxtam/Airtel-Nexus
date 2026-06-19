@@ -7,7 +7,6 @@ import 'package:frontend/features/meeting_notes/models/meeting_note.dart';
 import 'package:frontend/features/meeting_notes/providers/meeting_note_provider.dart';
 import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
-import 'package:frontend/features/meetings/views/widgets/meeting_copilot_sheet.dart';
 import 'package:gap/gap.dart';
 
 class MeetingDetailScreen extends ConsumerWidget {
@@ -23,13 +22,6 @@ class MeetingDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Meeting Details'),
         backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => MeetingCopilotSheet.show(context, meetingId),
-        icon: const Icon(Icons.auto_awesome),
-        label: const Text('AI Copilot'),
-        backgroundColor: Colors.purple.shade600,
         foregroundColor: Colors.white,
       ),
       body: meetingAsync.when(

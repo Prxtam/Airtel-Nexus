@@ -21,8 +21,6 @@ import 'package:frontend/features/airtel_iq/views/ai_coach/follow_up_generator_s
 import 'package:frontend/features/airtel_iq/views/ai_coach/ask_airtel_iq_screen.dart';
 import 'package:frontend/features/airtel_iq/views/ai_coach/meeting_intelligence_screen.dart';
 import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
-import 'package:frontend/features/dashboard/views/admin_dashboard_screen.dart';
-import 'package:frontend/features/dashboard/views/team_dashboard_screen.dart';
 import 'package:frontend/features/customers/views/customer_list_screen.dart';
 import 'package:frontend/features/customers/views/customer_create_screen.dart';
 import 'package:frontend/features/customers/views/customer_detail_screen.dart';
@@ -202,16 +200,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       // ── Full Screen Routes (Outside Shell) ───────────────
 
       // Dashboards
-      GoRoute(
-        parentNavigatorKey: _rootNavigatorKey,
-        path: '/admin',
-        builder: (context, state) => const AdminDashboardScreen(),
-      ),
-      GoRoute(
-        parentNavigatorKey: _rootNavigatorKey,
-        path: '/team',
-        builder: (context, state) => const TeamDashboardScreen(),
-      ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: '/profile',

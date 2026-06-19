@@ -8,7 +8,6 @@ import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_filter_provider.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
-import 'package:frontend/features/users/views/team_filter_dropdown.dart';
 import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:gap/gap.dart';
 
@@ -26,12 +25,7 @@ class MeetingListScreen extends ConsumerWidget {
         title: const Text('Meetings'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: [
-          TeamFilterDropdown(
-            currentValue: ref.watch(meetingTeamFilterProvider),
-            onChanged: (val) => ref.read(meetingTeamFilterProvider.notifier).state = val,
-          ),
-        ],
+        actions: const [],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/meetings/create'),

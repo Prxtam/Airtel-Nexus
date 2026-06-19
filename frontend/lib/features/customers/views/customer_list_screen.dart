@@ -7,7 +7,6 @@ import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/customers/providers/customer_filter_provider.dart';
-import 'package:frontend/features/users/views/team_filter_dropdown.dart';
 import 'package:frontend/features/users/views/owner_badge.dart';
 
 class CustomerListScreen extends ConsumerWidget {
@@ -111,15 +110,6 @@ class CustomerListScreen extends ConsumerWidget {
               ),
               Row(
                 children: [
-                  Theme(
-                    data: Theme.of(context).copyWith(
-                      canvasColor: Colors.white,
-                    ),
-                    child: TeamFilterDropdown(
-                      currentValue: ref.watch(customerTeamFilterProvider),
-                      onChanged: (val) => ref.read(customerTeamFilterProvider.notifier).state = val,
-                    ),
-                  ),
                   if (!hasNoCustomersAtAll)
                     PopupMenuButton<CustomerSort>(
                       icon: const Icon(Icons.sort, color: Colors.white),
