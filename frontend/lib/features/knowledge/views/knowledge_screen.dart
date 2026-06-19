@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
+import 'package:frontend/features/airtel_iq/views/about_airtel/about_airtel_screen.dart';
 
 class KnowledgeScreen extends StatelessWidget {
   const KnowledgeScreen({super.key});
@@ -173,6 +174,13 @@ class KnowledgeScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const KnowledgeExplorerScreen(),
+                ),
+              );
+            } else if (title == 'About Airtel') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutAirtelScreen(),
                 ),
               );
             } else {
