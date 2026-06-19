@@ -15,7 +15,10 @@ class KnowledgeScreen extends StatelessWidget {
           _buildHeader(context),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 24.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -40,8 +43,8 @@ class KnowledgeScreen extends StatelessWidget {
                   _buildKnowledgeCategory(
                     context: context,
                     icon: Icons.menu_book_outlined,
-                    title: 'Sales Playbooks',
-                    subtitle: 'Guides and strategies for closing deals',
+                    title: 'Industry Playbooks',
+                    subtitle: 'Quick-reference for every industry',
                     color: Colors.green,
                   ),
                   const SizedBox(height: 32),
@@ -65,9 +68,9 @@ class KnowledgeScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   _buildKnowledgeCategory(
                     context: context,
-                    icon: Icons.travel_explore,
-                    title: 'Knowledge Explorer',
-                    subtitle: 'Browse Airtel IQ Repository',
+                    icon: Icons.hub_outlined,
+                    title: 'Knowledge Hub',
+                    subtitle: 'Airtel reference encyclopedia',
                     color: Colors.teal,
                   ),
                   const SizedBox(height: 12),
@@ -91,7 +94,12 @@ class KnowledgeScreen extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 16, 20, 20),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        MediaQuery.of(context).padding.top + 16,
+        20,
+        20,
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [AppConstants.primaryColor, Color(0xFFC00000)],
@@ -108,12 +116,21 @@ class KnowledgeScreen extends StatelessWidget {
         children: const [
           Text(
             'Airtel IQ',
-            style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700, letterSpacing: -0.5),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.5,
+            ),
           ),
           SizedBox(height: 4),
           Text(
             'Sales intelligence for Account Managers',
-            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ],
       ),
@@ -147,11 +164,11 @@ class KnowledgeScreen extends StatelessWidget {
           onTap: () {
             if (title == 'Airtel Products') {
               context.push('/airtel-iq/products');
-            } else if (title == 'Sales Playbooks') {
+            } else if (title == 'Industry Playbooks') {
               context.push('/airtel-iq/playbooks');
             } else if (title == 'AI Sales Coach') {
               context.push('/airtel-iq/ai-coach');
-            } else if (title == 'Knowledge Explorer') {
+            } else if (title == 'Knowledge Hub') {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -183,12 +200,19 @@ class KnowledgeScreen extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: Colors.black87),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
-                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),

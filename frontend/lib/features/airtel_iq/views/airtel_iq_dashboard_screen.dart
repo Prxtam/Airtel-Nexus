@@ -63,9 +63,9 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                     childAspectRatio: 0.85,
                     children: [
                       AirtelIqFeatureCard(
-                        title: 'Knowledge Explorer',
-                        subtitle: 'Browse Airtel IQ Repository',
-                        icon: Icons.travel_explore,
+                        title: 'Knowledge Hub',
+                        subtitle: 'Airtel reference encyclopedia',
+                        icon: Icons.hub_outlined,
                         iconColor: Colors.teal,
                         onTap: () {
                           Navigator.push(
