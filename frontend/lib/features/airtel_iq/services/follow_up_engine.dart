@@ -8,6 +8,7 @@
 /// Repositories used (read-only):
 ///   - product_intelligence.dart  → painPointsSolved, discoveryQuestions
 ///   - industry_intelligence.dart → salesOpportunities, keyRegulations
+library;
 
 import 'package:frontend/features/airtel_iq/knowledge/airtel_iq_knowledge_service.dart';
 import 'package:frontend/features/airtel_iq/knowledge/knowledge_models.dart';

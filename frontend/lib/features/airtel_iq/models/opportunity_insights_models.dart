@@ -1,6 +1,7 @@
 /// Data models for the Opportunity Insights engine.
 /// Phase 8.7 – Strategic Account Growth Assistant.
 /// 100% deterministic, no LLM, no external calls.
+library;
 
 enum OpportunityConfidence {
   quickWin,

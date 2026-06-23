@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/app_theme.dart';
+
 
 class AiResultCard extends StatelessWidget {
   final String title;
@@ -25,7 +27,7 @@ class AiResultCard extends StatelessWidget {
       ),
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

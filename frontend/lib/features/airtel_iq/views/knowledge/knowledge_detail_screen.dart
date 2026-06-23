@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/mock_data/airtel_iq_mock_data.dart';
 
 class KnowledgeDetailScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class KnowledgeDetailScreen extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

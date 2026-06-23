@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -30,7 +31,7 @@ class ProductDetailScreen extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: SelectionArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

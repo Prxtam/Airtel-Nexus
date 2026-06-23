@@ -127,7 +127,9 @@ class _OpportunityInsightsScreenState extends State<OpportunityInsightsScreen> {
     sb.writeln('OPPORTUNITY INSIGHTS — ${_industry ?? ''}');
     sb.writeln();
     sb.writeln('OPPORTUNITY POTENTIAL: ${r.growthPotential.label}');
-    for (final d in r.growthPotential.drivers) sb.writeln('• $d');
+    for (final d in r.growthPotential.drivers) {
+      sb.writeln('• $d');
+    }
     sb.writeln();
     sb.writeln('SUGGESTED NEXT MOVE');
     sb.writeln(r.suggestedNextMove);
@@ -142,17 +144,25 @@ class _OpportunityInsightsScreenState extends State<OpportunityInsightsScreen> {
     if (r.currentStack.isEmpty) {
       sb.writeln('None recorded');
     } else {
-      for (final p in r.currentStack) sb.writeln('✅ $p');
+      for (final p in r.currentStack) {
+        sb.writeln('✅ $p');
+      }
     }
     sb.writeln();
     sb.writeln('EXPANSION OPPORTUNITIES');
-    for (final p in r.expansionOpportunities) sb.writeln('🚨 $p');
+    for (final p in r.expansionOpportunities) {
+      sb.writeln('🚨 $p');
+    }
     sb.writeln();
     sb.writeln('STRATEGIC RISKS');
-    for (final risk in r.strategicRisks) sb.writeln('• $risk');
+    for (final risk in r.strategicRisks) {
+      sb.writeln('• $risk');
+    }
     sb.writeln();
     sb.writeln('CONVERSATION AREAS');
-    for (final a in r.conversationAreas) sb.writeln('• $a');
+    for (final a in r.conversationAreas) {
+      sb.writeln('• $a');
+    }
 
     Clipboard.setData(ClipboardData(text: sb.toString().trimRight()));
     ScaffoldMessenger.of(context).showSnackBar(

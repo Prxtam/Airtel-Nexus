@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_feature_card.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_section_header.dart';
 import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
+import 'package:gap/gap.dart';
 
 class AirtelIqDashboardScreen extends StatelessWidget {
   const AirtelIqDashboardScreen({super.key});
@@ -18,8 +20,8 @@ class AirtelIqDashboardScreen extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.md,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -29,8 +31,8 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+                    crossAxisSpacing: AppSpacing.md,
+                    mainAxisSpacing: AppSpacing.md,
                     childAspectRatio: 0.85,
                     children: [
                       AirtelIqFeatureCard(
@@ -52,14 +54,14 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 8),
+                  const Gap(AppSpacing.xl),
                   const AirtelIqSectionHeader(title: 'Core Knowledge'),
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+                    crossAxisSpacing: AppSpacing.md,
+                    mainAxisSpacing: AppSpacing.md,
                     childAspectRatio: 0.85,
                     children: [
                       AirtelIqFeatureCard(
@@ -87,14 +89,14 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 8),
+                  const Gap(AppSpacing.xl),
                   const AirtelIqSectionHeader(title: 'Resources'),
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+                    crossAxisSpacing: AppSpacing.md,
+                    mainAxisSpacing: AppSpacing.md,
                     childAspectRatio: 0.85,
                     children: [
                       AirtelIqFeatureCard(
@@ -113,7 +115,7 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 32),
+                  const Gap(AppSpacing.xxl),
                 ],
               ),
             ),
@@ -127,10 +129,10 @@ class AirtelIqDashboardScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(
-        20,
-        MediaQuery.of(context).padding.top + 20,
-        20,
-        32,
+        AppSpacing.lg,
+        MediaQuery.of(context).padding.top + AppSpacing.lg,
+        AppSpacing.lg,
+        AppSpacing.xxl,
       ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -139,8 +141,8 @@ class AirtelIqDashboardScreen extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
+          bottomLeft: Radius.circular(AppRadius.lg),
+          bottomRight: Radius.circular(AppRadius.lg),
         ),
       ),
       child: Column(
@@ -160,30 +162,27 @@ class AirtelIqDashboardScreen extends StatelessWidget {
                   }
                 },
               ),
-              const SizedBox(width: 16),
-              const Text(
+              const Gap(AppSpacing.md),
+              Text(
                 'Airtel IQ',
-                style: TextStyle(
+                style: AppTypography.pageTitle.copyWith(
                   color: Colors.white,
                   fontSize: 28,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          const Text(
+          const Gap(AppSpacing.sm),
+          Text(
             'Sales Enablement Hub',
-            style: TextStyle(
+            style: AppTypography.sectionTitle.copyWith(
               color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 12),
-          const Text(
+          const Gap(AppSpacing.md),
+          Text(
             'Helping Airtel Account Managers sell smarter, prepare faster, and close enterprise opportunities more effectively.',
-            style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
+            style: AppTypography.bodyText.copyWith(color: Colors.white70, height: 1.4),
           ),
         ],
       ),

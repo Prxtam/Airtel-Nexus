@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
@@ -28,7 +29,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
   String? _industry;
   String? _meetingType;
   String? _companySize;
-  List<String> _painPoints = [];
+  final List<String> _painPoints = [];
   String? _objective;
 
   // Phase 2 — Scenario Mode extra context
@@ -45,7 +46,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
   String? _enrichIndustry;
   String? _enrichMeetingType;
   String? _enrichCompanySize;
-  List<String> _enrichPainPoints = [];
+  final List<String> _enrichPainPoints = [];
 
   // Phase 2 — History Mode extra context
   // ignore: prefer_final_fields
@@ -296,7 +297,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
 
     Clipboard.setData(ClipboardData(text: sb.toString().trimRight()));
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Meeting brief copied to clipboard')),
+      const SnackBar(content: Text('Copied to clipboard')),
     );
   }
 
@@ -312,7 +313,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

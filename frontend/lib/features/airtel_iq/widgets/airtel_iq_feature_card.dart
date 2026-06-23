@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 
 class AirtelIqFeatureCard extends StatelessWidget {
   final String title;
@@ -21,10 +22,10 @@ class AirtelIqFeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
+      elevation: AppElevation.raised,
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         side: BorderSide(
           color: isFeatured ? iconColor.withValues(alpha: 0.5) : Colors.grey.shade200,
           width: isFeatured ? 1.5 : 1.0,
@@ -32,31 +33,31 @@ class AirtelIqFeatureCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(AppSpacing.sm),
                 decoration: BoxDecoration(
                   color: iconColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
                 child: Icon(icon, color: iconColor, size: 28),
               ),
               const Spacer(),
               Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: AppTypography.cardTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: AppSpacing.sm),
               Text(
                 subtitle,
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

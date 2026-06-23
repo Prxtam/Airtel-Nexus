@@ -104,7 +104,9 @@ class _FollowUpGeneratorScreenState extends State<FollowUpGeneratorScreen> {
     final sb = StringBuffer();
     sb.writeln('FOLLOW-UP — ${_industry ?? ''}');
     sb.writeln('📝 CRM NOTES');
-    for (final n in r.crmNotes) sb.writeln('• $n');
+    for (final n in r.crmNotes) {
+      sb.writeln('• $n');
+    }
     sb.writeln();
     sb.writeln('✅ ACTION ITEMS');
     for (var i = 0; i < r.actionItems.length; i++) {
@@ -130,7 +132,7 @@ class _FollowUpGeneratorScreenState extends State<FollowUpGeneratorScreen> {
       sb.writeln();
     });
     Clipboard.setData(ClipboardData(text: sb.toString().trimRight()));
-    _showSnack('All output copied to clipboard');
+    _showSnack('Copied to clipboard');
   }
 
   void _copySection(String content) {
@@ -207,7 +209,7 @@ class _FollowUpGeneratorScreenState extends State<FollowUpGeneratorScreen> {
             _labelText('Industry *', 'Required'),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              value: _industry,
+              initialValue: _industry,
               decoration: InputDecoration(
                 hintText: 'Select customer industry',
                 filled: true,

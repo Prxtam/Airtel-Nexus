@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/mock_data/airtel_iq_mock_data.dart';
 import 'package:frontend/features/airtel_iq/models/airtel_iq_models.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
@@ -45,7 +46,7 @@ class _FaqScreenState extends State<FaqScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: AirtelIqSearchBar(
               hintText: 'Search FAQs...',
               onChanged: _onSearchChanged,

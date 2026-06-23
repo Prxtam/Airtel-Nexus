@@ -158,7 +158,7 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
                   ),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
-                    value: _selectedProduct,
+                    initialValue: _selectedProduct,
                     hint: const Text('Select a Product'),
                     isExpanded: true,
                     decoration: _inputDecoration(),
@@ -180,7 +180,7 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
                   ),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
-                    value: _industry,
+                    initialValue: _industry,
                     hint: const Text('Select Industry'),
                     isExpanded: true,
                     decoration: _inputDecoration(),

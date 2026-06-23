@@ -1,5 +1,4 @@
 import 'package:frontend/features/airtel_iq/services/meeting_prep_intelligence_engine.dart';
-import 'package:frontend/features/airtel_iq/knowledge/knowledge_models.dart';
 
 void main() async {
   final engine = MeetingPrepIntelligenceEngine();

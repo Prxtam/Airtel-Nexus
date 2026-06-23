@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/services/knowledge_search_service.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
 
@@ -39,7 +40,7 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
       body: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             color: AppConstants.primaryColor,
             child: AirtelIqSearchBar(
               hintText: 'Search products, FAQs, playbooks, objections...',
@@ -95,7 +96,7 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
 
     return SelectionArea(
       child: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         children: [
           if (_result!.products.isNotEmpty) ...[
             const Text('Products', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

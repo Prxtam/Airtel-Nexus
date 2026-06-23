@@ -5,6 +5,8 @@ import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:gap/gap.dart';
 
+import 'package:flutter_svg/flutter_svg.dart';
+
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
@@ -23,7 +25,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 1500),
     );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -57,39 +59,40 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppConstants.primaryColor, // Airtel Red
+      backgroundColor: Colors.white,
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
           child: ScaleTransition(
             scale: _scaleAnimation,
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.business, // Airtel Logo placeholder
-                  size: 80,
-                  color: Colors.white,
-                ),
-                Gap(24),
-                Text(
-                  'Airtel Nexus',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            child: Container(
+              width: 180,
+              height: 180,
+              decoration: const BoxDecoration(
+                color: AppConstants.primaryColor, // Airtel Red
+                shape: BoxShape.circle,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/airtel_logo.svg',
+                    width: 60,
+                    height: 60,
                   ),
-                ),
-                Gap(8),
-                Text(
-                  'Empowering Enterprise Relationships',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white70,
-                    letterSpacing: 1.2,
+                  const Gap(8),
+                  const Text(
+                    'airtel',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

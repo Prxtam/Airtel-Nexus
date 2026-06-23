@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/meeting_notes/providers/meeting_note_provider.dart';
@@ -128,7 +129,7 @@ class _MeetingIntelligenceScreenState extends ConsumerState<MeetingIntelligenceS
     }
 
     Clipboard.setData(ClipboardData(text: sb.toString()));
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Report copied to clipboard!')));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
   }
 
   @override
@@ -175,7 +176,7 @@ class _MeetingIntelligenceScreenState extends ConsumerState<MeetingIntelligenceS
         children: [
           _buildHeroSnapshot(),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -211,7 +212,7 @@ class _MeetingIntelligenceScreenState extends ConsumerState<MeetingIntelligenceS
     }
 
     return Container(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
@@ -445,7 +446,7 @@ class _MeetingIntelligenceScreenState extends ConsumerState<MeetingIntelligenceS
             elevation: 0,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.shade200)),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

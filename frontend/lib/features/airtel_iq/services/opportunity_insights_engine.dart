@@ -12,6 +12,7 @@
 /// Scoring Philosophy: Whitespace-first.
 /// More unowned products = higher growth potential.
 /// NOT: more existing products = higher potential.
+library;
 
 import 'package:frontend/features/airtel_iq/knowledge/airtel_iq_knowledge_service.dart';
 import 'package:frontend/features/airtel_iq/knowledge/knowledge_models.dart';
@@ -523,16 +524,22 @@ class OpportunityInsightsEngine {
   // Maps a product name to a broad category for driver generation
   String _inferProductCategory(String prodNameLower) {
     if (prodNameLower.contains('cloud') || prodNameLower.contains('colocation') ||
-        prodNameLower.contains('nxtra')) return 'Cloud & Infrastructure';
+        prodNameLower.contains('nxtra')) {
+      return 'Cloud & Infrastructure';
+    }
     if (prodNameLower.contains('secure') || prodNameLower.contains('security')) {
       return 'Security';
     }
     if (prodNameLower.contains('sd-wan') || prodNameLower.contains('mpls') ||
         prodNameLower.contains('vpn') || prodNameLower.contains('ill') ||
         prodNameLower.contains('leased') || prodNameLower.contains('dedicated') ||
-        prodNameLower.contains('office internet')) return 'Connectivity';
+        prodNameLower.contains('office internet')) {
+      return 'Connectivity';
+    }
     if (prodNameLower.contains('iot') || prodNameLower.contains('positioning') ||
-        prodNameLower.contains('5g')) return 'IoT & Advanced Connectivity';
+        prodNameLower.contains('5g')) {
+      return 'IoT & Advanced Connectivity';
+    }
     if (prodNameLower.contains('postpaid') || prodNameLower.contains('work from')) {
       return 'Mobility';
     }

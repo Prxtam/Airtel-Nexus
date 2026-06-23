@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:gap/gap.dart';
@@ -80,10 +81,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(
-                Icons.business_center,
-                size: 80,
-                color: AppConstants.primaryColor,
+              SvgPicture.asset(
+                'assets/images/airtel_logo.svg',
+                width: 60,
+                height: 60,
+                colorFilter: const ColorFilter.mode(AppConstants.primaryColor, BlendMode.srcIn),
               ),
               const Gap(16),
               const Text(
@@ -171,20 +173,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const Gap(16),
               ],
               
-              ElevatedButton(
-                onPressed: _isLoading ? null : _login,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+              Center(
+                child: SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _login,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppConstants.primaryColor,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                          )
+                        : const Text('Login', style: TextStyle(fontSize: 16)),
+                  ),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                      )
-                    : const Text('Login', style: TextStyle(fontSize: 16)),
               ),
             ],
           ),

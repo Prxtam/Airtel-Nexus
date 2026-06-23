@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
 
@@ -49,7 +50,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: AirtelIqSearchBar(
               hintText: 'Search products by name or category...',
               onChanged: _onSearchChanged,
@@ -82,7 +83,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                           onTap: () => context.push('/airtel-iq/products/$productId'),
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(AppSpacing.lg),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

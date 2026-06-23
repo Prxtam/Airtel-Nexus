@@ -780,10 +780,8 @@ class MeetingPrepIntelligenceEngine {
       if (b.matchCount != a.matchCount) {
         return b.matchCount.compareTo(a.matchCount);
       }
-      if (a.item is ProductIntelligence && b.item is ProductIntelligence) {
-        return (a.item as ProductIntelligence).name.compareTo((b.item as ProductIntelligence).name);
-      }
-      return 0;
+      return (a.item).name.compareTo((b.item).name);
+          return 0;
     });
 
 

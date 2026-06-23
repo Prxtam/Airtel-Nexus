@@ -178,6 +178,11 @@ class AppTheme {
         ),
         margin: EdgeInsets.zero,
       ),
+      expansionTileTheme: const ExpansionTileThemeData(
+        shape: Border(),
+        collapsedShape: Border(),
+        tilePadding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+      ),
     );
   }
 }

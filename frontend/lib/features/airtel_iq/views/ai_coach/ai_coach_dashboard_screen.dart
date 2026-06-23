@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
+import 'package:gap/gap.dart';
 
 
 class AiCoachDashboardScreen extends StatelessWidget {
@@ -16,19 +18,18 @@ class AiCoachDashboardScreen extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
+            Text(
               'Your AI-powered sales workspace',
-              style: TextStyle(
-                fontSize: 16,
+              style: AppTypography.sectionTitle.copyWith(
                 color: Colors.grey,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 24),
+            const Gap(AppSpacing.xl),
             _buildActionCard(
               context: context,
               title: 'Meeting Prep',
@@ -64,7 +65,7 @@ class AiCoachDashboardScreen extends StatelessWidget {
               icon: Icons.search,
               route: '/airtel-iq/ai-coach/ask',
             ),
-            const SizedBox(height: 32),
+            const Gap(AppSpacing.xxl),
           ],
         ),
       ),
@@ -79,52 +80,45 @@ class AiCoachDashboardScreen extends StatelessWidget {
     required String route,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: AppSpacing.md),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           onTap: () => context.push(route),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(AppSpacing.md),
                   decoration: BoxDecoration(
                     color: AppConstants.primaryColor.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
                   ),
                   child: Icon(icon, color: AppConstants.primaryColor, size: 28),
                 ),
-                const SizedBox(width: 16),
+                const Gap(AppSpacing.lg),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
+                        style: AppTypography.cardTitle.copyWith(
                           fontWeight: FontWeight.w700, 
-                          fontSize: 16, 
                           color: Colors.black87,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const Gap(AppSpacing.sm),
                       Text(
                         subtitle,
-                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                        style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
                       ),
                     ],
                   ),
