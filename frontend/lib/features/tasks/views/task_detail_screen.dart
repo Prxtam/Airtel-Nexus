@@ -111,76 +111,53 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
             surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Status + title row
+                  Text(
+                    task.title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppConstants.textColor,
+                    ),
+                  ),
+                  const Gap(6),
+                  // Metadata Row for Customer
+                  Consumer(
+                    builder: (context, ref, child) {
+                      if (task.customerId == null) {
+                        return const Text('Internal Task', style: TextStyle(color: Colors.black87, fontSize: 13));
+                      }
+                      final customerAsync = ref.watch(customerDetailProvider(task.customerId!));
+                      final customerName = customerAsync.valueOrNull?.name ?? 'Loading...';
+                      return Text('Customer: $customerName', style: const TextStyle(color: Colors.black87, fontSize: 13));
+                    },
+                  ),
+                  const Gap(12),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
-                        color: isCompleted ? Colors.green : Colors.grey,
-                        size: 28,
-                      ),
-                      const Gap(12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              task.title,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppConstants.textColor,
-                              ),
-                            ),
-                            const Gap(8),
-                            // Metadata Row for Customer
-                            Consumer(
-                              builder: (context, ref, child) {
-                                if (task.customerId == null) {
-                                  return const Text('Internal Task', style: TextStyle(color: Colors.black87, fontSize: 13));
-                                }
-                                final customerAsync = ref.watch(customerDetailProvider(task.customerId!));
-                                final customerName = customerAsync.valueOrNull?.name ?? 'Loading...';
-                                return Text('Customer: $customerName', style: const TextStyle(color: Colors.black87, fontSize: 13));
-                              },
-                            ),
-                            const Gap(12),
-                            Row(
-                              children: [
-                                _PriorityChip(priority: task.priority),
-                                const Gap(8),
-                                _StatusChip(status: task.status),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      _PriorityChip(priority: task.priority),
+                      const Gap(8),
+                      _StatusChip(status: task.status),
                     ],
                   ),
 
                   // Description
                   if (task.description != null && task.description!.isNotEmpty) ...[
                     const Gap(16),
-                    const Divider(),
-                    const Gap(8),
-                    const Text('Description',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.grey, fontSize: 12)),
-                    const Gap(4),
+                    const Divider(height: 1),
+                    const Gap(12),
                     Text(task.description!,
-                        style: const TextStyle(height: 1.5)),
+                        style: const TextStyle(height: 1.4, color: Colors.black87, fontSize: 14)),
                   ],
                 ],
               ),
             ),
           ),
 
-          const Gap(16),
+          const Gap(12),
 
           // Dates card
           Card(
@@ -193,22 +170,24 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Timeline',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const Gap(16),
-                  _InfoRow(label: 'Created', value: _formatDate(task.createdAt)),
                   if (task.dueAt != null) ...[
-                    const Gap(12),
-                    _InfoRow(
-                      label: 'Due',
-                      value: _formatDate(task.dueAt!),
-                      valueColor: _isDueSoon(task.dueAt!) && !isCompleted
-                          ? Colors.orange
-                          : null,
+                    const Text('DUE DATE', style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                    const Gap(4),
+                    Text(
+                      _formatDate(task.dueAt!),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: _isDueSoon(task.dueAt!) && !isCompleted ? Colors.orange : Colors.black87,
+                      ),
                     ),
+                    const Gap(16),
+                    const Divider(height: 1),
+                    const Gap(16),
                   ],
-                  if (task.completedAt != null) ...[
-                    const Gap(12),
+                  _InfoRow(label: 'Created', value: _formatDate(task.createdAt)),
+                  if (task.completedAt != null && isCompleted) ...[
+                    const Gap(8),
                     _InfoRow(
                       label: 'Completed',
                       value: _formatDate(task.completedAt!),
@@ -223,25 +202,23 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
           const Gap(24),
 
           // Complete/Incomplete Toggle Button
-          const Gap(32),
           Align(
-            alignment: Alignment.centerRight,
-            child: ElevatedButton.icon(
+            alignment: Alignment.center,
+            child: OutlinedButton.icon(
               onPressed: _isToggling ? null : () => _toggleStatus(isCompleted),
               icon: _isToggling
-                  ? SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(color: isCompleted ? Colors.orange : Colors.white, strokeWidth: 2),
+                  ? const SizedBox(
+                      height: 14,
+                      width: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Icon(isCompleted ? Icons.undo : Icons.check_circle_outline, size: 18),
+                  : Icon(isCompleted ? Icons.undo : Icons.check, size: 16),
               label: Text(_isToggling ? 'Updating...' : (isCompleted ? 'Mark as Incomplete' : 'Mark as Complete')),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isCompleted ? Colors.grey.shade200 : Colors.green,
-                foregroundColor: isCompleted ? Colors.black87 : Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: isCompleted ? Colors.grey.shade700 : AppConstants.primaryColor,
+                side: BorderSide(color: isCompleted ? Colors.grey.shade300 : AppConstants.primaryColor.withValues(alpha: 0.5)),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                elevation: isCompleted ? 0 : 2,
               ),
             ),
           ),

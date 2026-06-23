@@ -336,7 +336,7 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
 
 
 
-          const Gap(32),
+          const Gap(24),
 
           // Notes Section Header
           Consumer(builder: (context, ref, child) {
@@ -358,11 +358,11 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
             );
           }),
           
-          const Gap(16),
+          const Gap(12),
 
           _NotesSection(meetingId: widget.meetingId),
 
-          const Gap(48),
+          const Gap(32),
 
           // Delete Button (Standalone)
           Align(
@@ -418,28 +418,31 @@ class _NotesSection extends ConsumerWidget {
         if (notes.isEmpty) {
           return Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade200),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.note_outlined, color: Colors.grey, size: 32),
+                const Text('📝 No notes added yet',
+                    style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 14)),
+                const Gap(4),
+                const Text('Add notes after the meeting to keep track of discussions and action items.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey, fontSize: 12, height: 1.4)),
                 const Gap(12),
-                const Text('No meeting notes available.',
-                    style: TextStyle(color: Colors.grey, fontSize: 13)),
-                const Gap(16),
-                OutlinedButton.icon(
+                OutlinedButton(
                   onPressed: () => context.push('/meetings/$meetingId/notes/create'),
-                  icon: const Icon(Icons.add, size: 16),
-                  label: const Text('Add Note'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppConstants.primaryColor,
-                    side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
+                    side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.3)),
+                    minimumSize: const Size(0, 36),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
+                  child: const Text('Add Note', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),
