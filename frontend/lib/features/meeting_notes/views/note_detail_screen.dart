@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/meeting_notes/models/meeting_note.dart';
 import 'package:frontend/features/meeting_notes/providers/meeting_note_provider.dart';
 import 'package:gap/gap.dart';
@@ -95,9 +96,10 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Note'),
-        content:
-            const Text('This note will be permanently deleted.'),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        title: const Text('Delete Note', style: TextStyle(color: Colors.black)),
+        content: const Text('This note will be permanently deleted.', style: TextStyle(color: Colors.grey)),
         actions: [
           TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -139,6 +141,8 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
         children: [
           Card(
             elevation: 2,
+            color: Colors.white,
+            surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)),
             child: Padding(
@@ -221,6 +225,8 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
           const Gap(16),
           Card(
             elevation: 1,
+            color: Colors.white,
+            surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)),
             child: Padding(
@@ -243,37 +249,40 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
               ),
             ),
           ),
-          const Gap(32),
-          OutlinedButton.icon(
-            onPressed: _isDeleting ? null : _confirmDelete,
-            icon: _isDeleting
-                ? const SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CircularProgressIndicator(
-                        color: Colors.red, strokeWidth: 2),
-                  )
-                : const Icon(Icons.delete_outline, color: Colors.red),
-            label: Text(
-              _isDeleting ? 'Deleting...' : 'Delete Note',
-              style: const TextStyle(color: Colors.red),
-            ),
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Colors.red),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+          const Gap(48),
+          
+          // Delete Button (Standalone)
+          Align(
+            alignment: Alignment.center,
+            child: OutlinedButton.icon(
+              onPressed: _isDeleting ? null : _confirmDelete,
+              icon: _isDeleting
+                  ? const SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: CircularProgressIndicator(
+                          color: Colors.red, strokeWidth: 2),
+                    )
+                  : const Icon(Icons.delete_outline, color: Colors.red, size: 18),
+              label: Text(
+                _isDeleting ? 'Deleting...' : 'Delete Note',
+                style: const TextStyle(color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.red, width: 0.5),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+              ),
             ),
           ),
+          const Gap(32),
         ],
       ),
     );
   }
 
-  String _formatDate(DateTime dt) {
-    final local = dt.toLocal();
-    return '${local.day}/${local.month}/${local.year}  ${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
-  }
+  String _formatDate(DateTime dt) => AppDateFormatter.format(dt);
 }
 
 class _InfoRow extends StatelessWidget {

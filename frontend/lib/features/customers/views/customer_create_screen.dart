@@ -69,22 +69,11 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(
-                Icons.person_add,
-                size: 64,
-                color: AppConstants.primaryColor,
+              Text(
+                'Company Information',
+                style: AppTypography.sectionTitle,
               ),
-              const Gap(24),
-              const Text(
-                'Customer Details',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const Gap(4),
-              const Text(
-                'Enter the customer name to create a new record.',
-                style: TextStyle(color: Colors.grey),
-              ),
-              const Gap(24),
+              const Gap(AppSpacing.lg),
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -130,25 +119,28 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
                 ),
               ],
               const Gap(32),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _submit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppConstants.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                    ),
                   ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2),
+                        )
+                      : const Text('Add Customer',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2),
-                      )
-                    : const Text('Create Customer',
-                        style: TextStyle(fontSize: 16)),
               ),
             ],
           ),

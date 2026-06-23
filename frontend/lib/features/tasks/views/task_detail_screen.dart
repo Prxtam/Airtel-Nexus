@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
+import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:gap/gap.dart';
@@ -45,14 +47,15 @@ class _TaskDetailBody extends ConsumerStatefulWidget {
 }
 
 class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
-  bool _isCompleting = false;
+  bool _isToggling = false;
 
-  Future<void> _markComplete() async {
+  Future<void> _toggleStatus(bool isCurrentlyCompleted) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Mark task as completed?'),
-        content: const Text('This action cannot be undone.'),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        title: Text(isCurrentlyCompleted ? 'Do you want to mark this task as incomplete?' : 'Do you want to mark this task as complete?', style: const TextStyle(color: Colors.black, fontSize: 16)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -61,10 +64,10 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
+              backgroundColor: isCurrentlyCompleted ? Colors.orange : Colors.green,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Complete'),
+            child: const Text('Confirm'),
           ),
         ],
       ),
@@ -72,9 +75,9 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
 
     if (confirmed != true || !mounted) return;
 
-    setState(() => _isCompleting = true);
+    setState(() => _isToggling = true);
     try {
-      await ref.read(taskDetailProvider(widget.taskId).notifier).complete();
+      await ref.read(taskDetailProvider(widget.taskId).notifier).toggleStatus();
       // Invalidate the list so it refreshes when the user navigates back
       ref.invalidate(taskListProvider);
     } catch (e) {
@@ -87,7 +90,7 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
         );
       }
     } finally {
-      if (mounted) setState(() => _isCompleting = false);
+      if (mounted) setState(() => _isToggling = false);
     }
   }
 
@@ -104,6 +107,8 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
           // Main card
           Card(
             elevation: 2,
+            color: Colors.white,
+            surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -126,18 +131,25 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
                           children: [
                             Text(
                               task.title,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                decoration: isCompleted
-                                    ? TextDecoration.lineThrough
-                                    : null,
-                                color: isCompleted
-                                    ? Colors.grey
-                                    : AppConstants.textColor,
+                                color: AppConstants.textColor,
                               ),
                             ),
                             const Gap(8),
+                            // Metadata Row for Customer
+                            Consumer(
+                              builder: (context, ref, child) {
+                                if (task.customerId == null) {
+                                  return const Text('Internal Task', style: TextStyle(color: Colors.black87, fontSize: 13));
+                                }
+                                final customerAsync = ref.watch(customerDetailProvider(task.customerId!));
+                                final customerName = customerAsync.valueOrNull?.name ?? 'Loading...';
+                                return Text('Customer: $customerName', style: const TextStyle(color: Colors.black87, fontSize: 13));
+                              },
+                            ),
+                            const Gap(12),
                             Row(
                               children: [
                                 _PriorityChip(priority: task.priority),
@@ -173,6 +185,8 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
           // Dates card
           Card(
             elevation: 1,
+            color: Colors.white,
+            surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -181,10 +195,10 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
                 children: [
                   const Text('Timeline',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const Gap(12),
+                  const Gap(16),
                   _InfoRow(label: 'Created', value: _formatDate(task.createdAt)),
                   if (task.dueAt != null) ...[
-                    const Divider(height: 24),
+                    const Gap(12),
                     _InfoRow(
                       label: 'Due',
                       value: _formatDate(task.dueAt!),
@@ -194,15 +208,13 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
                     ),
                   ],
                   if (task.completedAt != null) ...[
-                    const Divider(height: 24),
+                    const Gap(12),
                     _InfoRow(
                       label: 'Completed',
                       value: _formatDate(task.completedAt!),
                       valueColor: Colors.green,
                     ),
                   ],
-                  const Divider(height: 24),
-                  _InfoRow(label: 'Last Updated', value: _formatDate(task.updatedAt)),
                 ],
               ),
             ),
@@ -210,54 +222,35 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
 
           const Gap(24),
 
-          // Complete button — only shown for pending tasks
-          if (!isCompleted)
-            ElevatedButton.icon(
-              onPressed: _isCompleting ? null : _markComplete,
-              icon: _isCompleting
-                  ? const SizedBox(
-                      height: 18,
-                      width: 18,
-                      child: CircularProgressIndicator(
-                          color: Colors.white, strokeWidth: 2),
+          // Complete/Incomplete Toggle Button
+          const Gap(32),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton.icon(
+              onPressed: _isToggling ? null : () => _toggleStatus(isCompleted),
+              icon: _isToggling
+                  ? SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: CircularProgressIndicator(color: isCompleted ? Colors.orange : Colors.white, strokeWidth: 2),
                     )
-                  : const Icon(Icons.check_circle_outline),
-              label: Text(_isCompleting ? 'Marking complete...' : 'Mark as Complete'),
+                  : Icon(isCompleted ? Icons.undo : Icons.check_circle_outline, size: 18),
+              label: Text(_isToggling ? 'Updating...' : (isCompleted ? 'Mark as Incomplete' : 'Mark as Complete')),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                backgroundColor: isCompleted ? Colors.grey.shade200 : Colors.green,
+                foregroundColor: isCompleted ? Colors.black87 : Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                elevation: isCompleted ? 0 : 2,
               ),
             ),
-
-          if (isCompleted)
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              decoration: BoxDecoration(
-                color: Colors.green.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.green.shade200),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.check_circle, color: Colors.green),
-                  Gap(8),
-                  Text('Task Completed',
-                      style: TextStyle(
-                          color: Colors.green, fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
+          ),
         ],
       ),
     );
   }
 
-  String _formatDate(DateTime dt) =>
-      '${dt.day}/${dt.month}/${dt.year} at ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  String _formatDate(DateTime dt) => AppDateFormatter.format(dt);
 
   bool _isDueSoon(DateTime dueAt) =>
       dueAt.difference(DateTime.now()).inDays <= 2;

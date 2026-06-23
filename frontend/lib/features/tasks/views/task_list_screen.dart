@@ -5,6 +5,7 @@ import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:frontend/features/tasks/providers/task_filter_provider.dart';
@@ -242,7 +243,6 @@ class _TaskTile extends StatelessWidget {
           task.title,
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            decoration: isCompleted ? TextDecoration.lineThrough : null,
             color: isCompleted ? Colors.grey : AppConstants.textColor,
           ),
         ),
@@ -276,7 +276,7 @@ class _TaskTile extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime dt) => '${dt.day}/${dt.month}/${dt.year}';
+  String _formatDate(DateTime dt) => AppDateFormatter.format(dt);
 }
 
 class _PriorityBadge extends StatelessWidget {

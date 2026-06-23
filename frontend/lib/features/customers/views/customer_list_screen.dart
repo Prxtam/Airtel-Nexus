@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
@@ -178,6 +179,6 @@ class _CustomerTile extends StatelessWidget {
   }
 
   String _formatDate(DateTime dt) {
-    return '${dt.day}/${dt.month}/${dt.year}';
+    return AppDateFormatter.format(dt);
   }
 }

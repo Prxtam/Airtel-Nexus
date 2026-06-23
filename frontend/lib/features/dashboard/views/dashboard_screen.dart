@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
@@ -502,12 +504,7 @@ class _ModernMeetingTile extends StatelessWidget {
   }
 
   String _formatDateTime(DateTime dt) {
-    final local = dt.toLocal();
-    final today = DateTime.now();
-    final isToday = local.year == today.year && local.month == today.month && local.day == today.day;
-    final timeStr = '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
-    if (isToday) return 'Today, $timeStr';
-    return '${local.day}/${local.month}/${local.year} $timeStr';
+    return AppDateFormatter.format(dt);
   }
 }
 

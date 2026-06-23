@@ -125,6 +125,15 @@ class TaskDetailNotifier extends StateNotifier<AsyncValue<Task>> {
       state = AsyncValue.error(e, st);
     }
   }
+
+  Future<void> toggleStatus() async {
+    try {
+      final updated = await _repository.toggleTaskStatus(taskId);
+      state = AsyncValue.data(updated);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
 }
 
 final taskDetailProvider = StateNotifierProvider.family<

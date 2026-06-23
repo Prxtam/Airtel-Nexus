@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
@@ -113,14 +114,11 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.add_task, size: 64, color: AppConstants.primaryColor),
-              const Gap(24),
-              const Text('Task Details',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              const Gap(4),
-              const Text('Fill in the details for your new task.',
-                  style: TextStyle(color: Colors.grey)),
-              const Gap(24),
+              Text(
+                'Task Information',
+                style: AppTypography.sectionTitle,
+              ),
+              const Gap(AppSpacing.lg),
 
               // Title
               TextFormField(
@@ -202,17 +200,16 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
               const Text('Due Date (optional)',
                   style: TextStyle(fontWeight: FontWeight.w600)),
               const Gap(8),
-              OutlinedButton.icon(
+              OutlinedButton(
                 onPressed: _pickDueDate,
-                icon: const Icon(Icons.calendar_today),
-                label: Text(
-                  _selectedDueAt == null
-                      ? 'Select date and time'
-                      : _formatDateTime(_selectedDueAt!),
-                ),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                   alignment: Alignment.centerLeft,
+                ),
+                child: Text(
+                  _selectedDueAt == null
+                      ? 'Select date & time'
+                      : _formatDateTime(_selectedDueAt!),
                 ),
               ),
               if (_selectedDueAt != null)
@@ -245,23 +242,27 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
               ],
 
               const Gap(32),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _submit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppConstants.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.md)),
+                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2),
+                        )
+                      : const Text('Add Task',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2),
-                      )
-                    : const Text('Create Task', style: TextStyle(fontSize: 16)),
               ),
             ],
           ),
@@ -270,8 +271,7 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
     );
   }
 
-  String _formatDateTime(DateTime dt) =>
-      '${dt.day}/${dt.month}/${dt.year} at ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  String _formatDateTime(DateTime dt) => AppDateFormatter.format(dt);
 }
 
 class _PrioritySelector extends StatelessWidget {
@@ -282,43 +282,53 @@ class _PrioritySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: TaskPriority.values.map((priority) {
-        final isSelected = selected == priority;
-        final (label, color) = switch (priority) {
-          TaskPriority.high => ('High', AppConstants.primaryColor),
-          TaskPriority.medium => ('Medium', Colors.orange),
-          TaskPriority.low => ('Low', Colors.grey),
-        };
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(right: 8),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        children: TaskPriority.values.map((priority) {
+          final isSelected = selected == priority;
+          final (label, color) = switch (priority) {
+            TaskPriority.high => ('High', AppConstants.primaryColor),
+            TaskPriority.medium => ('Medium', Colors.orange),
+            TaskPriority.low => ('Low', Colors.grey.shade700),
+          };
+          return Expanded(
             child: GestureDetector(
               onTap: () => onChanged(priority),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: isSelected ? color.withValues(alpha: 0.12) : Colors.white,
-                  border: Border.all(
-                    color: isSelected ? color : Colors.grey.shade300,
-                    width: isSelected ? 2 : 1,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
+                  color: isSelected ? Colors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          )
+                        ]
+                      : null,
                 ),
                 child: Text(
                   label,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: isSelected ? color : Colors.grey.shade600,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? color : Colors.grey.shade500,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                     fontSize: 13,
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
 }

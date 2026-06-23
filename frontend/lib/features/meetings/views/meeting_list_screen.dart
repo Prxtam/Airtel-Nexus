@@ -5,6 +5,7 @@ import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_filter_provider.dart';
@@ -251,7 +252,6 @@ class _MeetingTile extends StatelessWidget {
   }
 
   String _formatDateTime(DateTime dt) {
-    final local = dt.toLocal();
-    return '${local.day}/${local.month}/${local.year}  ${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
+    return AppDateFormatter.format(dt);
   }
 }

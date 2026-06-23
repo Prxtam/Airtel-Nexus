@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
@@ -182,15 +184,11 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Icon(Icons.event, size: 64, color: AppConstants.primaryColor),
-            const Gap(24),
-            const Text('Meeting Details',
-                style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const Gap(4),
-            const Text('Fill in the details for your new meeting.',
-                style: TextStyle(color: Colors.grey)),
-            const Gap(24),
+            Text(
+              'Meeting Information',
+              style: AppTypography.sectionTitle,
+            ),
+            const Gap(AppSpacing.lg),
 
             // Customer Dropdown
             const Text('Customer *',
@@ -220,7 +218,7 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
             TextFormField(
               controller: _titleController,
               decoration: const InputDecoration(
-                labelText: 'Title (optional)',
+                labelText: 'Meeting Title (optional)',
                 hintText: 'e.g. Q3 Review with Acme',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.title),
@@ -244,7 +242,7 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
               icon: const Icon(Icons.calendar_today),
               label: Text(
                 _selectedMeetingAt == null
-                    ? 'Select date and time'
+                    ? 'Select date & time'
                     : _formatDateTime(_selectedMeetingAt!),
               ),
               style: OutlinedButton.styleFrom(
@@ -278,24 +276,27 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
             ],
 
             const Gap(32),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _submit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppConstants.primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppConstants.primaryColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.md)),
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2),
+                      )
+                    : const Text('Schedule Meeting',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               ),
-              child: _isLoading
-                  ? const SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(
-                          color: Colors.white, strokeWidth: 2),
-                    )
-                  : const Text('Schedule Meeting',
-                      style: TextStyle(fontSize: 16)),
             ),
           ],
         ),
@@ -304,7 +305,6 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
   }
 
   String _formatDateTime(DateTime dt) {
-    final local = dt.toLocal();
-    return '${local.day}/${local.month}/${local.year}  ${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
+    return AppDateFormatter.format(dt);
   }
 }

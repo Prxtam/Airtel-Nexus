@@ -100,6 +100,34 @@ class TaskRepository {
     return updated;
   }
 
+  Future<Task> toggleTaskStatus(String id) async {
+    final box = HiveService.tasksBox;
+    final existing = box.get(id);
+    
+    if (existing == null) {
+      throw Exception('Task not found');
+    }
+
+    final isCompleted = existing.status == TaskStatus.completed;
+
+    final updated = Task(
+      id: existing.id,
+      userId: existing.userId,
+      title: existing.title,
+      description: existing.description,
+      priority: existing.priority,
+      status: isCompleted ? TaskStatus.pending : TaskStatus.completed,
+      dueAt: existing.dueAt,
+      completedAt: isCompleted ? null : DateTime.now(),
+      createdAt: existing.createdAt,
+      updatedAt: DateTime.now(),
+      customerId: existing.customerId,
+    );
+
+    await box.put(updated.id, updated);
+    return updated;
+  }
+
   Future<Task> updateTask(
     String id, {
     String? title,

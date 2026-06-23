@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/meeting_notes/providers/meeting_note_provider.dart';
 import 'package:gap/gap.dart';
 
@@ -62,33 +63,41 @@ class _NoteCreateScreenState extends ConsumerState<NoteCreateScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.note_add,
-                  size: 64, color: AppConstants.primaryColor),
-              const Gap(24),
-              const Text('New Note',
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
-              const Gap(4),
-              const Text('Add a note to this meeting.',
-                  style: TextStyle(color: Colors.grey)),
-              const Gap(24),
-              TextFormField(
-                controller: _noteController,
-                decoration: const InputDecoration(
-                  labelText: 'Note *',
-                  hintText: 'Write your meeting notes here...',
-                  border: OutlineInputBorder(),
-                  alignLabelWithHint: true,
+              Text(
+                'Note Information',
+                style: AppTypography.sectionTitle,
+              ),
+              const Gap(AppSpacing.lg),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.03),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    )
+                  ],
                 ),
-                maxLines: 8,
-                textCapitalization: TextCapitalization.sentences,
-                autofocus: true,
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty) {
-                    return 'Note text is required';
-                  }
-                  return null;
-                },
+                child: TextFormField(
+                  controller: _noteController,
+                  decoration: const InputDecoration(
+                    hintText: 'Capture key discussion points, decisions and follow-up actions.',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(AppSpacing.lg),
+                  ),
+                  maxLines: 12,
+                  minLines: 8,
+                  textCapitalization: TextCapitalization.sentences,
+                  autofocus: true,
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) {
+                      return 'Note text is required';
+                    }
+                    return null;
+                  },
+                ),
               ),
               if (_errorMessage != null) ...[
                 const Gap(16),
@@ -113,24 +122,27 @@ class _NoteCreateScreenState extends ConsumerState<NoteCreateScreen> {
                 ),
               ],
               const Gap(32),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _submit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppConstants.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.md)),
+                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2),
+                        )
+                      : const Text('Save Note',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2),
-                      )
-                    : const Text('Save Note',
-                        style: TextStyle(fontSize: 16)),
               ),
             ],
           ),

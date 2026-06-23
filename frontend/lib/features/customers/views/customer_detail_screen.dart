@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
@@ -188,6 +189,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
           Card(
             elevation: AppElevation.flat,
             color: Colors.white,
+            surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppRadius.lg),
                 side: BorderSide(color: Colors.grey.shade200)),
@@ -225,7 +227,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                               ),
                               const Gap(4),
                               Text(
-                                'Created on ${_formatDateOnly(widget.customer.createdAt)}',
+                                'Created on ${AppDateFormatter.format(widget.customer.createdAt)}',
                                 style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
                               ),
                             ],
@@ -321,6 +323,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
           Card(
             elevation: AppElevation.flat,
             color: Colors.white,
+            surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.md),
               side: BorderSide(color: Colors.grey.shade200),
@@ -359,6 +362,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
             Card(
               elevation: AppElevation.flat,
               color: Colors.white,
+              surfaceTintColor: Colors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppRadius.md),
                 side: BorderSide(color: Colors.grey.shade200),
@@ -370,7 +374,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                     child: const Icon(Icons.event, color: AppConstants.primaryColor, size: 20),
                   ),
                   title: Text(meeting.title ?? 'Meeting', style: const TextStyle(fontWeight: FontWeight.w500)),
-                  subtitle: Text(_formatDateOnly(meeting.meetingAt)),
+                  subtitle: Text(AppDateFormatter.format(meeting.meetingAt)),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push('/meetings/${meeting.id}'),
                 )).toList(),
@@ -399,6 +403,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
             Card(
               elevation: AppElevation.flat,
               color: Colors.white,
+              surfaceTintColor: Colors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppRadius.md),
                 side: BorderSide(color: Colors.grey.shade200),
@@ -417,7 +422,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                     fontWeight: FontWeight.w500,
                     decoration: task.status == TaskStatus.completed ? TextDecoration.lineThrough : null,
                   )),
-                  subtitle: Text(task.dueAt != null ? 'Due ${_formatDateOnly(task.dueAt!)}' : 'No due date'),
+                  subtitle: Text(task.dueAt != null ? 'Due ${AppDateFormatter.format(task.dueAt!)}' : 'No due date'),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push('/tasks/${task.id}'),
                 )).toList(),
@@ -458,15 +463,13 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
     );
   }
 
-  String _formatDateOnly(DateTime dt) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return '${dt.day} ${months[dt.month - 1]} ${dt.year}';
-  }
+
 
   Widget _buildEmptyState(IconData icon, String message, VoidCallback? onAction) {
     return Card(
       elevation: AppElevation.flat,
       color: Colors.white,
+      surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.md),
         side: BorderSide(color: Colors.grey.shade200),
