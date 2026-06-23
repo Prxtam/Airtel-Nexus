@@ -27,13 +27,14 @@ class TaskAdapter extends TypeAdapter<Task> {
       completedAt: fields[7] as DateTime?,
       createdAt: fields[8] as DateTime,
       updatedAt: fields[9] as DateTime,
+      customerId: fields[10] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Task obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class TaskAdapter extends TypeAdapter<Task> {
       ..writeByte(8)
       ..write(obj.createdAt)
       ..writeByte(9)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(10)
+      ..write(obj.customerId);
   }
 
   @override
@@ -169,6 +172,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) => Task(
           : DateTime.parse(json['completed_at'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      customerId: json['customer_id'] as String?,
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
@@ -182,6 +186,7 @@ Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'completed_at': instance.completedAt?.toIso8601String(),
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
+      'customer_id': instance.customerId,
     };
 
 const _$TaskPriorityEnumMap = {

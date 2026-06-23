@@ -26,6 +26,8 @@ class AuthRepository {
       email: employeeId ?? '${fullName.replaceAll(' ', '.').toLowerCase()}@airtel.com',
       fullName: fullName,
       roles: [internalRole],
+      employeeId: employeeId,
+      circle: circle,
     );
     
     await userBox.put('current_user', user);
@@ -34,6 +36,11 @@ class AuthRepository {
   Future<User?> getMe() async {
     final userBox = HiveService.userBox;
     return userBox.get('current_user');
+  }
+
+  Future<void> updateUser(User user) async {
+    final userBox = HiveService.userBox;
+    await userBox.put('current_user', user);
   }
 
   Future<void> logout() async {

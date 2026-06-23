@@ -41,6 +41,7 @@ class TaskRepository {
     String? description,
     required String priority,
     DateTime? dueAt,
+    String? customerId,
   }) async {
     final box = HiveService.tasksBox;
     final currentUser = HiveService.userBox.get('current_user');
@@ -66,6 +67,7 @@ class TaskRepository {
       completedAt: null,
       createdAt: now,
       updatedAt: now,
+      customerId: customerId,
     );
 
     await box.put(newTask.id, newTask);
@@ -91,6 +93,7 @@ class TaskRepository {
       completedAt: DateTime.now(),
       createdAt: existing.createdAt,
       updatedAt: DateTime.now(),
+      customerId: existing.customerId,
     );
 
     await box.put(updated.id, updated);
@@ -103,6 +106,7 @@ class TaskRepository {
     String? description,
     TaskPriority? priority,
     DateTime? dueAt,
+    String? customerId,
   }) async {
     final box = HiveService.tasksBox;
     final existing = box.get(id);
@@ -122,6 +126,7 @@ class TaskRepository {
       completedAt: existing.completedAt,
       createdAt: existing.createdAt,
       updatedAt: DateTime.now(),
+      customerId: customerId ?? existing.customerId,
     );
 
     await box.put(updated.id, updated);

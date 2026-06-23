@@ -39,6 +39,8 @@ class Task {
   final DateTime createdAt;
   @HiveField(9)
   final DateTime updatedAt;
+  @HiveField(10)
+  final String? customerId;
 
   Task({
     required this.id,
@@ -51,6 +53,7 @@ class Task {
     this.completedAt,
     required this.createdAt,
     required this.updatedAt,
+    this.customerId,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);

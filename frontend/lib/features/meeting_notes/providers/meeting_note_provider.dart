@@ -47,6 +47,11 @@ final meetingNoteListProvider = StateNotifierProvider.family<
   },
 );
 
+final allMeetingNotesProvider = FutureProvider<List<MeetingNote>>((ref) async {
+  final repository = ref.watch(meetingNoteRepositoryProvider);
+  return repository.listAllNotes();
+});
+
 // ---------------------------------------------------------------------------
 // Meeting Note Detail Provider (family — keyed by noteId)
 // ---------------------------------------------------------------------------

@@ -51,6 +51,30 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(status: AuthStatus.authenticated, user: user);
   }
 
+  Future<void> updateUser({
+    required String fullName,
+    required String role,
+    String? employeeId,
+    String? circle,
+  }) async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    String internalRole = 'account_manager';
+    if (role == 'Zonal Sales Manager') internalRole = 'zonal_sales_manager';
+    if (role == 'Circle Business Head') internalRole = 'circle_business_head';
+
+    final updatedUser = currentUser.copyWith(
+      fullName: fullName,
+      roles: [internalRole],
+      employeeId: employeeId,
+      circle: circle,
+    );
+
+    await _repository.updateUser(updatedUser);
+    state = state.copyWith(user: updatedUser);
+  }
+
   Future<void> logout() async {
     await _repository.logout();
     state = state.copyWith(status: AuthStatus.unauthenticated, user: null);

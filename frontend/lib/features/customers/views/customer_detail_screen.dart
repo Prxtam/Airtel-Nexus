@@ -3,8 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
+import 'package:frontend/features/meetings/providers/meeting_provider.dart';
+import 'package:frontend/features/tasks/models/task.dart';
+import 'package:frontend/features/tasks/providers/task_provider.dart';
+import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:gap/gap.dart';
 
 class CustomerDetailScreen extends ConsumerWidget {
@@ -159,55 +164,73 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Fetch data
+    final meetingsAsync = ref.watch(meetingListProvider);
+    final tasksAsync = ref.watch(taskListProvider);
+
+    // 2. Filter data
+    final customerMeetings = meetingsAsync.maybeWhen(
+      data: (list) => list.where((m) => m.customerId == widget.customerId).toList(),
+      orElse: () => [],
+    );
+
+    final customerTasks = tasksAsync.maybeWhen(
+      data: (list) => list.where((t) => t.customerId == widget.customerId).toList(),
+      orElse: () => [],
+    );
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Customer Card
+          // 1. Identity Card
           Card(
-            elevation: 2,
+            elevation: AppElevation.flat,
+            color: Colors.white,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                side: BorderSide(color: Colors.grey.shade200)),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(AppSpacing.xl),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CircleAvatar(
-                        radius: 28,
-                        backgroundColor:
-                            AppConstants.primaryColor.withValues(alpha: 0.1),
-                        child: Text(
-                          widget.customer.name.isNotEmpty
-                              ? widget.customer.name[0].toUpperCase()
-                              : '?',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: AppConstants.primaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const Gap(16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Customer',
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 12)),
-                            Text(
-                              widget.customer.name,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 32,
+                            backgroundColor:
+                                AppConstants.primaryColor.withValues(alpha: 0.1),
+                            child: Text(
+                              widget.customer.name.isNotEmpty
+                                  ? widget.customer.name[0].toUpperCase()
+                                  : '?',
+                              style: AppTypography.pageTitle.copyWith(
+                                color: AppConstants.primaryColor,
+                                fontSize: 28,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const Gap(AppSpacing.lg),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.customer.name,
+                                style: AppTypography.pageTitle.copyWith(fontSize: 20),
+                              ),
+                              const Gap(4),
+                              Text(
+                                'Created on ${_formatDateOnly(widget.customer.createdAt)}',
+                                style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       if (!_isEditing)
                         IconButton(
@@ -218,23 +241,36 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                         ),
                     ],
                   ),
-                  if (_isEditing) ...[
-                    const Gap(20),
+                  
+                  if (widget.customer.ownerId != null) ...[
+                    const Gap(AppSpacing.lg),
                     const Divider(),
-                    const Gap(12),
-                    const Text('Edit Customer Name',
-                        style: TextStyle(fontWeight: FontWeight.w600)),
-                    const Gap(8),
+                    const Gap(AppSpacing.md),
+                    Row(
+                      children: [
+                        OwnerBadge(ownerId: widget.customer.ownerId!),
+                      ],
+                    ),
+                  ],
+
+                  if (_isEditing) ...[
+                    const Gap(AppSpacing.xl),
+                    const Divider(),
+                    const Gap(AppSpacing.md),
+                    Text('Edit Customer Name', style: AppTypography.sectionTitle),
+                    const Gap(AppSpacing.md),
                     TextField(
                       controller: _nameController,
                       decoration: InputDecoration(
                         labelText: 'Name',
-                        border: const OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
                         errorText: _editError,
                       ),
                       textCapitalization: TextCapitalization.words,
                     ),
-                    const Gap(12),
+                    const Gap(AppSpacing.md),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -250,12 +286,15 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                                 },
                           child: const Text('Cancel'),
                         ),
-                        const Gap(8),
+                        const Gap(AppSpacing.sm),
                         ElevatedButton(
                           onPressed: _isSaving ? null : _saveEdit,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppConstants.primaryColor,
                             foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppRadius.md),
+                            ),
                           ),
                           child: _isSaving
                               ? const SizedBox(
@@ -274,93 +313,194 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
             ),
           ),
 
-          const Gap(16),
+          const Gap(AppSpacing.xxl),
 
-          // Metadata Card
+          // Overview Section
+          Text('Overview', style: AppTypography.sectionTitle),
+          const Gap(AppSpacing.md),
           Card(
-            elevation: 1,
+            elevation: AppElevation.flat,
+            color: Colors.white,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              side: BorderSide(color: Colors.grey.shade200),
+            ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.all(AppSpacing.xl),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Text('Record Details',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16)),
-                  const Gap(12),
-                  _InfoRow(
-                    label: 'Created',
-                    value: _formatDate(widget.customer.createdAt),
-                  ),
-                  const Divider(height: 24),
-                  _InfoRow(
-                    label: 'Last Updated',
-                    value: _formatDate(widget.customer.updatedAt),
-                  ),
-                  const Divider(height: 24),
-                  _InfoRow(label: 'ID', value: widget.customer.id),
+                  _buildStatColumn('Meetings', customerMeetings.length.toString()),
+                  _buildStatColumn('Tasks', customerTasks.length.toString()),
                 ],
               ),
             ),
           ),
 
-          const Gap(32),
+          const Gap(AppSpacing.xxl),
 
-          // Delete Button
-          OutlinedButton.icon(
-            onPressed: _isDeleting ? null : _confirmDelete,
-            icon: _isDeleting
-                ? const SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CircularProgressIndicator(
-                        color: Colors.red, strokeWidth: 2),
-                  )
-                : const Icon(Icons.delete_outline, color: Colors.red),
-            label: Text(
-              _isDeleting ? 'Deleting...' : 'Delete Customer',
-              style: const TextStyle(color: Colors.red),
-            ),
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Colors.red),
-              padding: const EdgeInsets.symmetric(vertical: 14),
+          // Meetings Section
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Meetings', style: AppTypography.sectionTitle),
+              if (customerMeetings.isNotEmpty)
+                TextButton.icon(
+                  onPressed: () => context.push('/meetings/create'),
+                  icon: const Icon(Icons.add, size: 16),
+                  label: const Text('Add Meeting'),
+                ),
+            ],
+          ),
+          const Gap(AppSpacing.md),
+          if (customerMeetings.isEmpty)
+            _buildEmptyState(Icons.event_outlined, 'No meetings yet.', () => context.push('/meetings/create'))
+          else
+            Card(
+              elevation: AppElevation.flat,
+              color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                side: BorderSide(color: Colors.grey.shade200),
+              ),
+              child: Column(
+                children: customerMeetings.map((meeting) => ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
+                    child: const Icon(Icons.event, color: AppConstants.primaryColor, size: 20),
+                  ),
+                  title: Text(meeting.title ?? 'Meeting', style: const TextStyle(fontWeight: FontWeight.w500)),
+                  subtitle: Text(_formatDateOnly(meeting.meetingAt)),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push('/meetings/${meeting.id}'),
+                )).toList(),
+              ),
+            ),
+
+          const Gap(AppSpacing.xxl),
+
+          // Tasks Section
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Tasks', style: AppTypography.sectionTitle),
+              if (customerTasks.isNotEmpty)
+                TextButton.icon(
+                  onPressed: () => context.push('/tasks/create'),
+                  icon: const Icon(Icons.add, size: 16),
+                  label: const Text('Add Task'),
+                ),
+            ],
+          ),
+          const Gap(AppSpacing.md),
+          if (customerTasks.isEmpty)
+            _buildEmptyState(Icons.check_circle_outline, 'No pending tasks.', () => context.push('/tasks/create'))
+          else
+            Card(
+              elevation: AppElevation.flat,
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                side: BorderSide(color: Colors.grey.shade200),
+              ),
+              child: Column(
+                children: customerTasks.map((task) => ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: task.status == TaskStatus.completed ? Colors.green.withValues(alpha: 0.1) : Colors.orange.withValues(alpha: 0.1),
+                    child: Icon(
+                      task.status == TaskStatus.completed ? Icons.check : Icons.circle_outlined,
+                      color: task.status == TaskStatus.completed ? Colors.green : Colors.orange,
+                      size: 20,
+                    ),
+                  ),
+                  title: Text(task.title, style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    decoration: task.status == TaskStatus.completed ? TextDecoration.lineThrough : null,
+                  )),
+                  subtitle: Text(task.dueAt != null ? 'Due ${_formatDateOnly(task.dueAt!)}' : 'No due date'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push('/tasks/${task.id}'),
+                )).toList(),
+              ),
+            ),
+
+          const Gap(AppSpacing.xxl),
+          const Gap(AppSpacing.xxl),
+
+          // Delete Button (Small and Less Aggressive)
+          Center(
+            child: OutlinedButton.icon(
+              onPressed: _isDeleting ? null : _confirmDelete,
+              icon: _isDeleting
+                  ? const SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: CircularProgressIndicator(
+                          color: Colors.red, strokeWidth: 2),
+                    )
+                  : const Icon(Icons.delete_outline, color: Colors.red, size: 18),
+              label: Text(
+                _isDeleting ? 'Deleting...' : 'Delete Customer',
+                style: const TextStyle(color: Colors.red),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.red),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                ),
               ),
             ),
           ),
+          const Gap(AppSpacing.xl),
         ],
       ),
     );
   }
 
-  String _formatDate(DateTime dt) {
-    return '${dt.day}/${dt.month}/${dt.year} at ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  String _formatDateOnly(DateTime dt) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return '${dt.day} ${months[dt.month - 1]} ${dt.year}';
   }
-}
 
-class _InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
+  Widget _buildEmptyState(IconData icon, String message, VoidCallback? onAction) {
+    return Card(
+      elevation: AppElevation.flat,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Center(
+          child: Column(
+            children: [
+              Icon(icon, color: Colors.grey, size: 32),
+              const Gap(AppSpacing.sm),
+              Text(
+                message,
+                style: const TextStyle(color: Colors.grey),
+              ),
+              if (onAction != null) ...[
+                const Gap(AppSpacing.md),
+                TextButton(
+                  onPressed: onAction,
+                  child: const Text('Create New'),
+                ),
+              ]
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-  const _InfoRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildStatColumn(String label, String value) {
+    return Column(
       children: [
-        SizedBox(
-          width: 100,
-          child: Text(label,
-              style: const TextStyle(color: Colors.grey, fontSize: 13)),
-        ),
-        Expanded(
-          child: Text(value,
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13)),
-        ),
+        Text(value, style: AppTypography.pageTitle.copyWith(color: AppConstants.primaryColor)),
+        Text(label, style: AppTypography.caption.copyWith(color: Colors.grey.shade600)),
       ],
     );
   }

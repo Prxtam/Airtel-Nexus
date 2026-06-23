@@ -26,6 +26,25 @@ class CustomerListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: const Text('Customers'),
+        backgroundColor: AppConstants.primaryColor,
+        foregroundColor: Colors.white,
+        actions: [
+          if (!hasNoCustomersAtAll)
+            PopupMenuButton<CustomerSort>(
+              icon: const Icon(Icons.sort, color: Colors.white),
+              initialValue: currentSort,
+              onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
+              itemBuilder: (context) => [
+                const PopupMenuItem(value: CustomerSort.nameAsc, child: Text('Name (A-Z)')),
+                const PopupMenuItem(value: CustomerSort.nameDesc, child: Text('Name (Z-A)')),
+                const PopupMenuItem(value: CustomerSort.newestFirst, child: Text('Newest First')),
+                const PopupMenuItem(value: CustomerSort.oldestFirst, child: Text('Oldest First')),
+              ],
+            ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/customers/create'),
         backgroundColor: AppConstants.primaryColor,
@@ -34,7 +53,6 @@ class CustomerListScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          _buildHeader(context, currentSort, hasNoCustomersAtAll, ref),
           Expanded(
             child: customersAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -88,54 +106,6 @@ class CustomerListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, CustomerSort currentSort, bool hasNoCustomersAtAll, WidgetRef ref) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.fromLTRB(AppSpacing.lg, MediaQuery.of(context).padding.top + AppSpacing.lg, AppSpacing.lg, AppSpacing.xl),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppConstants.primaryColor, Color(0xFFC00000)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Customers',
-                style: AppTypography.pageTitle.copyWith(color: Colors.white),
-              ),
-              Row(
-                children: [
-                  if (!hasNoCustomersAtAll)
-                    PopupMenuButton<CustomerSort>(
-                      icon: const Icon(Icons.sort, color: Colors.white),
-                      initialValue: currentSort,
-                      onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
-                      itemBuilder: (context) => [
-                        const PopupMenuItem(value: CustomerSort.nameAsc, child: Text('Name (A-Z)')),
-                        const PopupMenuItem(value: CustomerSort.nameDesc, child: Text('Name (Z-A)')),
-                        const PopupMenuItem(value: CustomerSort.newestFirst, child: Text('Newest First')),
-                        const PopupMenuItem(value: CustomerSort.oldestFirst, child: Text('Oldest First')),
-                      ],
-                    ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            'Manage enterprise relationships',
-            style: AppTypography.bodyText.copyWith(color: Colors.white70),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildList(BuildContext context, WidgetRef ref, List<Customer> customers) {
     if (customers.isEmpty) {

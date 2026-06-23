@@ -14,12 +14,18 @@ class User {
   final String? fullName;
   @HiveField(3)
   final List<String> roles;
+  @HiveField(4)
+  final String? employeeId;
+  @HiveField(5)
+  final String? circle;
 
   User({
     required this.id,
     required this.email,
     this.fullName,
     this.roles = const [],
+    this.employeeId,
+    this.circle,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -31,4 +37,22 @@ class User {
   bool get isAM => roles.contains('account_manager');
   
   bool get hasManagerAccess => isAdmin || isCBH || isZSM;
+  
+  User copyWith({
+    String? id,
+    String? email,
+    String? fullName,
+    List<String>? roles,
+    String? employeeId,
+    String? circle,
+  }) {
+    return User(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      fullName: fullName ?? this.fullName,
+      roles: roles ?? this.roles,
+      employeeId: employeeId ?? this.employeeId,
+      circle: circle ?? this.circle,
+    );
+  }
 }

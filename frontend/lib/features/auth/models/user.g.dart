@@ -21,13 +21,15 @@ class UserAdapter extends TypeAdapter<User> {
       email: fields[1] as String,
       fullName: fields[2] as String?,
       roles: (fields[3] as List).cast<String>(),
+      employeeId: fields[4] as String?,
+      circle: fields[5] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +37,11 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(2)
       ..write(obj.fullName)
       ..writeByte(3)
-      ..write(obj.roles);
+      ..write(obj.roles)
+      ..writeByte(4)
+      ..write(obj.employeeId)
+      ..writeByte(5)
+      ..write(obj.circle);
   }
 
   @override
@@ -60,6 +66,8 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       roles:
           (json['roles'] as List<dynamic>?)?.map((e) => e as String).toList() ??
               const [],
+      employeeId: json['employee_id'] as String?,
+      circle: json['circle'] as String?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -67,4 +75,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'email': instance.email,
       'full_name': instance.fullName,
       'roles': instance.roles,
+      'employee_id': instance.employeeId,
+      'circle': instance.circle,
     };

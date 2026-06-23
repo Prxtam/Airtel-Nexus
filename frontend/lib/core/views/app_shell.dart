@@ -42,7 +42,7 @@ class AppShell extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.smart_toy_outlined),
             activeIcon: Icon(Icons.smart_toy),
-            label: 'Airtel IQ',
+            label: 'Airtel Assist',
           ),
         ],
       ),

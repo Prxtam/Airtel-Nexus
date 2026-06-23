@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
+import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
+import 'package:frontend/features/airtel_iq/views/about_airtel/about_airtel_screen.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -35,61 +37,44 @@ class AppDrawer extends ConsumerWidget {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                      child: Text(
-                        initials,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: AppConstants.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+                context.push('/profile');
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Text(
+                      initials,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: AppConstants.primaryColor,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Close drawer
-                        context.push('/profile');
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(0, 0),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: const Text(
-                        'View Profile',
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
-                      ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    user?.fullName ?? 'Unknown User',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  user?.fullName ?? 'Unknown User',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                Text(
-                  user != null && user.roles.isNotEmpty ? user.roles.first : 'No Role',
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
+                  Text(
+                    _formatRole(user != null && user.roles.isNotEmpty ? user.roles.first : 'No Role'),
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -97,22 +82,88 @@ class AppDrawer extends ConsumerWidget {
           _buildSectionHeader('My Workspace'),
           _buildDrawerItem(
             icon: Icons.person_outline,
-            title: 'Profile',
+            title: 'My Profile',
             onTap: () {
               Navigator.pop(context);
               context.push('/profile');
             },
           ),
-          const Divider(),
-
-          // 3. Sales Tools
-          _buildSectionHeader('Sales Tools'),
           _buildDrawerItem(
-            icon: Icons.smart_toy_outlined,
-            title: 'Airtel IQ',
+            icon: Icons.people_outline,
+            title: 'Customers',
             onTap: () {
               Navigator.pop(context);
-              context.push('/knowledge');
+              context.push('/customers');
+            },
+          ),
+          _buildDrawerItem(
+            icon: Icons.handshake_outlined,
+            title: 'Meetings',
+            onTap: () {
+              Navigator.pop(context);
+              context.push('/meetings');
+            },
+          ),
+          _buildDrawerItem(
+            icon: Icons.task_alt,
+            title: 'Tasks',
+            onTap: () {
+              Navigator.pop(context);
+              context.push('/tasks');
+            },
+          ),
+          const Divider(),
+
+          // 3. Airtel Assist
+          _buildSectionHeader('Airtel Assist'),
+          _buildDrawerItem(
+            icon: Icons.smart_toy_outlined,
+            title: 'Sales Coach',
+            onTap: () {
+              Navigator.pop(context);
+              context.push('/airtel-iq/ai-coach');
+            },
+          ),
+          _buildDrawerItem(
+            icon: Icons.menu_book_outlined,
+            title: 'Industry Playbooks',
+            onTap: () {
+              Navigator.pop(context);
+              context.push('/airtel-iq/playbooks');
+            },
+          ),
+          _buildDrawerItem(
+            icon: Icons.inventory_2_outlined,
+            title: 'Airtel Products',
+            onTap: () {
+              Navigator.pop(context);
+              context.push('/airtel-iq/products');
+            },
+          ),
+          _buildDrawerItem(
+            icon: Icons.library_books_outlined,
+            title: 'Knowledge Hub',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const KnowledgeExplorerScreen(),
+                ),
+              );
+            },
+          ),
+          _buildDrawerItem(
+            icon: Icons.info_outline,
+            title: 'About Airtel',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutAirtelScreen(),
+                ),
+              );
             },
           ),
           const Divider(),
@@ -133,6 +184,14 @@ class AppDrawer extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  String _formatRole(String role) {
+    if (role.isEmpty || role == 'No Role') return role;
+    return role.split('_').map((word) {
+      if (word.isEmpty) return '';
+      return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
+    }).join(' ');
   }
 
   Widget _buildSectionHeader(String title) {

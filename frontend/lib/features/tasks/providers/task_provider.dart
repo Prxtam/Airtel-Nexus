@@ -68,12 +68,14 @@ class TaskListNotifier extends StateNotifier<AsyncValue<List<Task>>> {
     String? description,
     required String priority,
     DateTime? dueAt,
+    String? customerId,
   }) async {
     await _repository.createTask(
       title: title,
       description: description,
       priority: priority,
       dueAt: dueAt,
+      customerId: customerId,
     );
     await load();
   }

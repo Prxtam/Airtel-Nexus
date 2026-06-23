@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/features/customers/models/customer.dart';
+import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:gap/gap.dart';
@@ -20,6 +22,7 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
   final _descriptionController = TextEditingController();
   TaskPriority _selectedPriority = TaskPriority.medium;
   DateTime? _selectedDueAt;
+  Customer? _selectedCustomer;
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -80,6 +83,7 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
                 : _descriptionController.text.trim(),
             priority: _selectedPriority.name,
             dueAt: _selectedDueAt,
+            customerId: _selectedCustomer?.id,
           );
       if (mounted) context.pushReplacement('/tasks');
     } catch (e) {
@@ -93,6 +97,8 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final customersAsync = ref.watch(customerListProvider);
+
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -152,6 +158,34 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
                   }
                   return null;
                 },
+              ),
+              const Gap(16),
+
+              // Customer Link (Optional)
+              const Text('Link to Customer (optional)', style: TextStyle(fontWeight: FontWeight.w600)),
+              const Gap(8),
+              customersAsync.when(
+                data: (customers) => DropdownButtonFormField<Customer>(
+                  value: _selectedCustomer,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.business),
+                    hintText: 'Select a customer',
+                  ),
+                  items: [
+                    const DropdownMenuItem<Customer>(
+                      value: null,
+                      child: Text('No Customer'),
+                    ),
+                    ...customers.map((c) => DropdownMenuItem(
+                          value: c,
+                          child: Text(c.name, overflow: TextOverflow.ellipsis),
+                        ))
+                  ],
+                  onChanged: (c) => setState(() => _selectedCustomer = c),
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (e, _) => Text('Error loading customers: $e', style: const TextStyle(color: Colors.red)),
               ),
               const Gap(16),
 

@@ -164,7 +164,7 @@ class AirtelIqDashboardScreen extends StatelessWidget {
               ),
               const Gap(AppSpacing.md),
               Text(
-                'Airtel IQ',
+                'Airtel Assist',
                 style: AppTypography.pageTitle.copyWith(
                   color: Colors.white,
                   fontSize: 28,

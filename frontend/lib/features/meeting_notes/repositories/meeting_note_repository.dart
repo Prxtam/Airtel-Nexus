@@ -17,6 +17,11 @@ class MeetingNoteRepository {
     return notes;
   }
 
+  Future<List<MeetingNote>> listAllNotes() async {
+    final box = HiveService.meetingNotesBox;
+    return box.values.toList();
+  }
+
   Future<MeetingNote> getNote(String id) async {
     final box = HiveService.meetingNotesBox;
     final note = box.get(id);
