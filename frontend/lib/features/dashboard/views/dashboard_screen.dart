@@ -12,6 +12,7 @@ import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/core/widgets/app_drawer.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:gap/gap.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -29,39 +30,39 @@ class DashboardScreen extends ConsumerWidget {
       drawer: const AppDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 1. Greeting Section
               _buildGreetingSection(context, user),
-              const Gap(24),
+              const Gap(AppSpacing.xl),
 
               // 2. Hero Card (Personalized Workspace)
               _buildHeroCard(context, user, customersAsync, meetingsAsync, tasksAsync),
-              const Gap(24),
+              const Gap(AppSpacing.xl),
 
               // 3. Primary Actions (Airtel Thanks Style Shortcuts)
               _buildPrimaryActions(context),
-              const Gap(32),
+              const Gap(AppSpacing.xxl),
 
               // 4. Upcoming Meetings Section
               _buildSectionHeader('Upcoming Meetings', () => context.push('/activities')),
-              const Gap(12),
+              const Gap(AppSpacing.md),
               _buildUpcomingMeetings(context, meetingsAsync),
-              const Gap(32),
+              const Gap(AppSpacing.xxl),
 
               // 5. Recent Customers Section
               _buildSectionHeader('Recent Customers', () => context.push('/customers')),
-              const Gap(12),
+              const Gap(AppSpacing.md),
               _buildRecentCustomers(context, customersAsync),
-              const Gap(32),
+              const Gap(AppSpacing.xxl),
 
               // 6. Key Metrics Row
-              const Text('Performance This Month', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const Gap(12),
+              const Text('Performance This Month', style: AppTypography.sectionTitle),
+              const Gap(AppSpacing.md),
               _buildMonthlyAnalyticsGrid(customersAsync, meetingsAsync, tasksAsync),
-              const Gap(24),
+              const Gap(AppSpacing.xl),
             ],
           ),
         ),
@@ -85,10 +86,10 @@ class DashboardScreen extends ConsumerWidget {
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
-        const Gap(16),
+        const Gap(AppSpacing.lg),
         Text(
           '$greeting, $firstName',
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: -0.5),
+          style: AppTypography.pageTitle.copyWith(letterSpacing: -0.5),
         ),
       ],
     );
@@ -122,7 +123,7 @@ class DashboardScreen extends ConsumerWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         boxShadow: [
           BoxShadow(
             color: AppConstants.primaryColor.withValues(alpha: 0.3),
@@ -132,20 +133,20 @@ class DashboardScreen extends ConsumerWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Today\'s Overview',
-              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+              style: AppTypography.sectionTitle.copyWith(color: Colors.white),
             ),
-            const Gap(16),
-            const Text(
+            const Gap(AppSpacing.lg),
+            Text(
               'You have:',
-              style: TextStyle(color: Colors.white70, fontSize: 14),
+              style: AppTypography.bodyText.copyWith(color: Colors.white70),
             ),
-            const Gap(12),
+            const Gap(AppSpacing.md),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -154,15 +155,15 @@ class DashboardScreen extends ConsumerWidget {
                 _HeroStatItem(pendingTasksCount, 'Pending\nTasks'),
               ],
             ),
-            const Gap(24),
+            const Gap(AppSpacing.xl),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Stay on top of your enterprise relationships.',
-                    style: TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+                    style: AppTypography.bodyText.copyWith(color: Colors.white70, fontSize: 13, height: 1.4),
                   ),
                 ),
                 TextButton(
@@ -173,12 +174,12 @@ class DashboardScreen extends ConsumerWidget {
                     minimumSize: const Size(0, 0),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('View Activities', style: TextStyle(fontWeight: FontWeight.w600)),
-                      Gap(4),
-                      Icon(Icons.arrow_forward, size: 16),
+                      Text('View Activities', style: AppTypography.bodyText.copyWith(color: Colors.white, fontWeight: FontWeight.w600)),
+                      const Gap(AppSpacing.sm),
+                      const Icon(Icons.arrow_forward, size: 16),
                     ],
                   ),
                 ),
@@ -197,9 +198,9 @@ class DashboardScreen extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(child: _ServiceShortcutCard(icon: Icons.person_add, label: "Add\nCustomer", onTap: () => context.push('/customers/create'))),
-        const Gap(12),
+        const Gap(AppSpacing.md),
         Expanded(child: _ServiceShortcutCard(icon: Icons.calendar_today, label: "Schedule\nMeeting", onTap: () => context.push('/meetings/create'))),
-        const Gap(12),
+        const Gap(AppSpacing.md),
         Expanded(child: _ServiceShortcutCard(icon: Icons.add_task, label: "Create\nTask", onTap: () => context.push('/tasks/create'))),
       ],
     );
@@ -209,7 +210,7 @@ class DashboardScreen extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(title, style: AppTypography.sectionTitle),
         TextButton(
           onPressed: onViewAll,
           style: TextButton.styleFrom(
@@ -218,7 +219,7 @@ class DashboardScreen extends ConsumerWidget {
             minimumSize: const Size(0, 0),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: const Text('View All', style: TextStyle(fontWeight: FontWeight.w600)),
+          child: Text('View All', style: AppTypography.bodyText.copyWith(color: AppColors.primary, fontWeight: FontWeight.w600)),
         ),
       ],
     );
@@ -231,10 +232,10 @@ class DashboardScreen extends ConsumerWidget {
           ..sort((a, b) => a.meetingAt.compareTo(b.meetingAt));
         
         if (upcoming.isEmpty) {
-          return const Center(
+          return Center(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text("No upcoming meetings", style: TextStyle(color: Colors.grey)),
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Text("No upcoming meetings", style: AppTypography.bodyText.copyWith(color: Colors.grey)),
             ),
           );
         }
@@ -243,7 +244,7 @@ class DashboardScreen extends ConsumerWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: upcoming.length > 3 ? 3 : upcoming.length,
-          separatorBuilder: (_, __) => const Gap(8),
+          separatorBuilder: (_, __) => const Gap(AppSpacing.sm),
           itemBuilder: (context, index) => _ModernMeetingTile(meeting: upcoming[index]),
         );
       },
@@ -256,10 +257,10 @@ class DashboardScreen extends ConsumerWidget {
     return customersAsync.when(
       data: (list) {
         if (list.isEmpty) {
-          return const Center(
+          return Center(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text("No recent customers", style: TextStyle(color: Colors.grey)),
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Text("No recent customers", style: AppTypography.bodyText.copyWith(color: Colors.grey)),
             ),
           );
         }
@@ -270,7 +271,7 @@ class DashboardScreen extends ConsumerWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: sorted.length > 3 ? 3 : sorted.length,
-          separatorBuilder: (_, __) => const Gap(8),
+          separatorBuilder: (_, __) => const Gap(AppSpacing.sm),
           itemBuilder: (context, index) => _ModernCustomerTile(customer: sorted[index]),
         );
       },
@@ -289,8 +290,8 @@ class DashboardScreen extends ConsumerWidget {
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
+      mainAxisSpacing: AppSpacing.md,
+      crossAxisSpacing: AppSpacing.md,
       childAspectRatio: 1.5,
       children: [
         _buildAnalyticsCard(
@@ -370,14 +371,14 @@ class DashboardScreen extends ConsumerWidget {
 
   Widget _buildAnalyticsCard(String title, String value, IconData icon) {
     return Card(
-      elevation: 0,
+      elevation: AppElevation.flat,
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.md),
         side: BorderSide(color: Colors.grey.shade200),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -386,11 +387,11 @@ class DashboardScreen extends ConsumerWidget {
               children: [
                 Icon(icon, size: 20, color: AppConstants.primaryColor),
                 const Spacer(),
-                Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                Text(value, style: AppTypography.pageTitle),
               ],
             ),
-            const Gap(8),
-            Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+            const Gap(AppSpacing.sm),
+            Text(title, style: AppTypography.caption.copyWith(color: Colors.grey)),
           ],
         ),
       ),
@@ -404,13 +405,12 @@ class _HeroStatItem extends StatelessWidget {
 
   const _HeroStatItem(this.count, this.label);
 
-  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(count, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white)),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.white70, height: 1.2)),
+        Text(count, style: AppTypography.pageTitle.copyWith(fontSize: 32, color: Colors.white)),
+        Text(label, style: AppTypography.caption.copyWith(color: Colors.white70, height: 1.2)),
       ],
     );
   }
@@ -423,16 +423,15 @@ class _ServiceShortcutCard extends StatelessWidget {
 
   const _ServiceShortcutCard({required this.icon, required this.label, required this.onTap});
 
-  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppRadius.md),
       child: Container(
         height: 100,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
@@ -443,7 +442,7 @@ class _ServiceShortcutCard extends StatelessWidget {
           border: Border.all(color: Colors.grey.shade100),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(AppSpacing.md),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,10 +452,10 @@ class _ServiceShortcutCard extends StatelessWidget {
                 radius: 16,
                 child: Icon(icon, color: AppConstants.primaryColor, size: 18),
               ),
-              const Gap(12),
+              const Gap(AppSpacing.md),
               Text(
                 label,
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, height: 1.2),
+                style: AppTypography.caption.copyWith(fontWeight: FontWeight.w600, height: 1.2),
               ),
             ],
           ),
@@ -470,31 +469,30 @@ class _ModernMeetingTile extends StatelessWidget {
   final Meeting meeting;
   const _ModernMeetingTile({required this.meeting});
 
-  @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
+      elevation: AppElevation.flat,
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
         side: BorderSide(color: Colors.grey.shade200),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.green.shade50,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
           child: Icon(Icons.event, color: Colors.green.shade700),
         ),
-        title: Text(meeting.title ?? 'Untitled Meeting', style: const TextStyle(fontWeight: FontWeight.w600)),
+        title: Text(meeting.title ?? 'Untitled Meeting', style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600)),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4.0),
           child: Text(
             _formatDateTime(meeting.meetingAt),
-            style: TextStyle(fontSize: 12, color: Colors.green.shade700, fontWeight: FontWeight.w500),
+            style: AppTypography.caption.copyWith(color: Colors.green.shade700, fontWeight: FontWeight.w500),
           ),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
@@ -517,31 +515,30 @@ class _ModernCustomerTile extends StatelessWidget {
   final Customer customer;
   const _ModernCustomerTile({required this.customer});
 
-  @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
+      elevation: AppElevation.flat,
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
         side: BorderSide(color: Colors.grey.shade200),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
           child: Icon(Icons.business, color: Colors.blue.shade700),
         ),
-        title: Text(customer.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+        title: Text(customer.name, style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600)),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 6.0),
           child: customer.ownerId != null 
               ? OwnerBadge(ownerId: customer.ownerId!)
-              : const Text('No Owner', style: TextStyle(fontSize: 12, color: Colors.grey)),
+              : Text('No Owner', style: AppTypography.caption.copyWith(color: Colors.grey)),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: () => context.push('/customers/${customer.id}'),

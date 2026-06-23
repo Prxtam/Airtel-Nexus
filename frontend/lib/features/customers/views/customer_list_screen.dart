@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/customers/providers/customer_filter_provider.dart';
@@ -54,7 +55,7 @@ class CustomerListScreen extends ConsumerWidget {
                 return Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, AppSpacing.sm),
                       child: TextField(
                         onChanged: (val) => ref.read(customerSearchProvider.notifier).state = val,
                         decoration: InputDecoration(
@@ -63,14 +64,14 @@ class CustomerListScreen extends ConsumerWidget {
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppRadius.md),
                             borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppRadius.md),
                             borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 0),
                         ),
                       ),
                     ),
@@ -90,7 +91,7 @@ class CustomerListScreen extends ConsumerWidget {
   Widget _buildHeader(BuildContext context, CustomerSort currentSort, bool hasNoCustomersAtAll, WidgetRef ref) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.fromLTRB(16, MediaQuery.of(context).padding.top + 16, 16, 24),
+      padding: EdgeInsets.fromLTRB(AppSpacing.lg, MediaQuery.of(context).padding.top + AppSpacing.lg, AppSpacing.lg, AppSpacing.xl),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [AppConstants.primaryColor, Color(0xFFC00000)],
@@ -104,9 +105,9 @@ class CustomerListScreen extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Customers',
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                style: AppTypography.pageTitle.copyWith(color: Colors.white),
               ),
               Row(
                 children: [
@@ -126,10 +127,10 @@ class CustomerListScreen extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 4),
-          const Text(
+          const SizedBox(height: AppSpacing.sm),
+          Text(
             'Manage enterprise relationships',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+            style: AppTypography.bodyText.copyWith(color: Colors.white70),
           ),
         ],
       ),
@@ -150,9 +151,9 @@ class CustomerListScreen extends ConsumerWidget {
       color: AppConstants.primaryColor,
       onRefresh: () => ref.read(customerListProvider.notifier).refresh(),
       child: ListView.separated(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
+        padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, 88),
         itemCount: customers.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
         itemBuilder: (context, index) {
           final customer = customers[index];
           return _CustomerTile(customer: customer);
@@ -169,33 +170,33 @@ class _CustomerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
+      elevation: AppElevation.flat,
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
         side: BorderSide(color: Colors.grey.shade200),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
         leading: Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           decoration: BoxDecoration(
             color: Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
           child: Icon(Icons.business, color: Colors.blue.shade700),
         ),
-        title: Text(customer.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+        title: Text(customer.name, style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600)),
         subtitle: Padding(
-          padding: const EdgeInsets.only(top: 6.0),
+          padding: const EdgeInsets.only(top: AppSpacing.sm),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (customer.ownerId != null) OwnerBadge(ownerId: customer.ownerId!),
-              const SizedBox(height: 4),
+              const SizedBox(height: AppSpacing.sm),
               Text(
                 'Added ${_formatDate(customer.createdAt)}',
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                style: AppTypography.caption.copyWith(color: Colors.grey),
               ),
             ],
           ),

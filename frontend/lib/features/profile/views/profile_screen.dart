@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -22,10 +23,10 @@ class ProfileScreen extends ConsumerWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             // Avatar
             CircleAvatar(
@@ -33,37 +34,36 @@ class ProfileScreen extends ConsumerWidget {
               backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
               child: Text(
                 initials,
-                style: const TextStyle(fontSize: 36, color: AppConstants.primaryColor, fontWeight: FontWeight.bold),
+                style: AppTypography.pageTitle.copyWith(fontSize: 36, color: AppConstants.primaryColor),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             // Name
             Text(
               user?.fullName ?? 'Unknown User',
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: AppTypography.sectionTitle,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
 
             // Role badge
             if (user?.roles.isNotEmpty == true)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppConstants.primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
                 ),
                 child: Text(
                   user!.roles.first,
-                  style: const TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: AppConstants.primaryColor,
                     fontWeight: FontWeight.w600,
-                    fontSize: 13,
                   ),
                 ),
               ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: AppSpacing.xxl),
 
             // Logout
             SizedBox(
@@ -75,9 +75,9 @@ class ProfileScreen extends ConsumerWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.red,
                   side: const BorderSide(color: Colors.red),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                   ),
                 ),
               ),
