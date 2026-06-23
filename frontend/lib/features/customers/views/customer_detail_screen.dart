@@ -19,7 +19,9 @@ class CustomerDetailScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Customer Details'),
+        title: Text(
+          customerAsync.maybeWhen(data: (c) => c.name, orElse: () => 'Customer'),
+        ),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
       ),

@@ -20,7 +20,12 @@ class MeetingDetailScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Meeting Details'),
+        title: Text(
+          meetingAsync.maybeWhen(
+            data: (m) => m.title ?? 'Meeting',
+            orElse: () => 'Meeting',
+          ),
+        ),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
       ),

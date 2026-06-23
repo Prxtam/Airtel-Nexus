@@ -33,14 +33,14 @@ class AiCoachPlaceholderScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               const Text(
-                'AI Copilot is Coming Soon',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                'AI Sales Coach',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Phase 8B.2 will introduce intelligent meeting preparation, pitch suggestions, and real-time objection coaching powered by Airtel IQ.',
-                style: TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
+              Text(
+                'This feature is currently unavailable.',
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade600, height: 1.5),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
@@ -49,7 +49,7 @@ class AiCoachPlaceholderScreen extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 icon: const Icon(Icons.arrow_back),
-                label: const Text('Return to Dashboard'),
+                label: const Text('Go Back'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppConstants.primaryColor,
                   side: const BorderSide(color: AppConstants.primaryColor),

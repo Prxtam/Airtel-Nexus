@@ -41,23 +41,23 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
     return AppConstants.primaryColor;
   }
 
-  String _iconLabelForIndustry(String name) {
-    if (name.contains('Banking')) return '🏦';
-    if (name.contains('Manufacturing')) return '🏭';
-    if (name.contains('Retail')) return '🛍️';
-    if (name.contains('Healthcare')) return '🏥';
-    if (name.contains('IT')) return '💻';
-    if (name.contains('Logistics')) return '🚚';
-    if (name.contains('Government')) return '🏛️';
-    if (name.contains('E-Commerce')) return '📦';
-    if (name.contains('Education')) return '🎓';
-    if (name.contains('Hospitality')) return '🏨';
-    if (name.contains('Energy')) return '⚡';
-    if (name.contains('Automotive')) return '🚗';
-    if (name.contains('Media')) return '🎬';
-    if (name.contains('Travel')) return '✈️';
-    if (name.contains('Telecom')) return '📡';
-    return '🏢';
+  IconData _iconForIndustry(String name) {
+    if (name.contains('Banking')) return Icons.account_balance_outlined;
+    if (name.contains('Manufacturing')) return Icons.precision_manufacturing_outlined;
+    if (name.contains('Retail')) return Icons.storefront_outlined;
+    if (name.contains('Healthcare')) return Icons.local_hospital_outlined;
+    if (name.contains('IT')) return Icons.computer_outlined;
+    if (name.contains('Logistics')) return Icons.local_shipping_outlined;
+    if (name.contains('Government')) return Icons.gavel_outlined;
+    if (name.contains('E-Commerce')) return Icons.shopping_bag_outlined;
+    if (name.contains('Education')) return Icons.school_outlined;
+    if (name.contains('Hospitality')) return Icons.hotel_outlined;
+    if (name.contains('Energy')) return Icons.bolt_outlined;
+    if (name.contains('Automotive')) return Icons.directions_car_outlined;
+    if (name.contains('Media')) return Icons.movie_outlined;
+    if (name.contains('Travel')) return Icons.flight_outlined;
+    if (name.contains('Telecom')) return Icons.cell_tower_outlined;
+    return Icons.business_outlined;
   }
 
   @override
@@ -137,11 +137,11 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
               itemBuilder: (context, index) {
                 final pb = _filtered[index];
                 final color = _colorForIndustry(pb.industryName);
-                final emoji = _iconLabelForIndustry(pb.industryName);
+                final icon = _iconForIndustry(pb.industryName);
                 return _IndustryCard(
                   playbook: pb,
                   color: color,
-                  emoji: emoji,
+                  icon: icon,
                   onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
                 );
               },
@@ -153,13 +153,13 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
 class _IndustryCard extends StatelessWidget {
   final IndustryPlaybook playbook;
   final Color color;
-  final String emoji;
+  final IconData icon;
   final VoidCallback onTap;
 
   const _IndustryCard({
     required this.playbook,
     required this.color,
-    required this.emoji,
+    required this.icon,
     required this.onTap,
   });
 
@@ -194,7 +194,7 @@ class _IndustryCard extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Text(emoji, style: const TextStyle(fontSize: 24)),
+                    Icon(icon, color: Colors.white, size: 22),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(

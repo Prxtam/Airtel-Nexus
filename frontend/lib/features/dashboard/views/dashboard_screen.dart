@@ -77,28 +77,13 @@ class DashboardScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu, size: 28),
-                padding: EdgeInsets.zero,
-                alignment: Alignment.centerLeft,
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.notifications_none, size: 28),
-              padding: EdgeInsets.zero,
-              alignment: Alignment.centerRight,
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Notifications coming soon')),
-                );
-              },
-            ),
-          ],
+        Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, size: 28),
+            padding: EdgeInsets.zero,
+            alignment: Alignment.centerLeft,
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
         ),
         const Gap(16),
         Text(

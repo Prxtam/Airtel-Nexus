@@ -599,3 +599,20 @@ PHASE 8B - Airtel IQ Knowledge Center
 - FAQ
 - Objection Handling
 - AI Sales Coach
+
+
+
+
+Airtel Nexus - Current Architecture
+
+Frontend:
+Flutter + Riverpod + Hive
+
+Backend:
+FastAPI + PostgreSQL (Archived / Unused)
+
+Status:
+✅ Offline-first
+✅ Standalone APK
+✅ No deployment required
+✅ No internet required

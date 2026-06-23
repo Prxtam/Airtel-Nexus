@@ -17,7 +17,9 @@ class TaskDetailScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Task Details'),
+        title: Text(
+          taskAsync.maybeWhen(data: (t) => t.title, orElse: () => 'Task'),
+        ),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
       ),

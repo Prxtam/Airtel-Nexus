@@ -103,22 +103,6 @@ class AppDrawer extends ConsumerWidget {
               context.push('/profile');
             },
           ),
-          _buildDrawerItem(
-            icon: Icons.notifications_none,
-            title: 'Notifications',
-            onTap: () {
-              Navigator.pop(context);
-              _showComingSoon(context, 'Notifications');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            onTap: () {
-              Navigator.pop(context);
-              _showComingSoon(context, 'Settings');
-            },
-          ),
           const Divider(),
 
           // 3. Sales Tools
@@ -131,41 +115,9 @@ class AppDrawer extends ConsumerWidget {
               context.push('/knowledge');
             },
           ),
-          _buildDrawerItem(
-            icon: Icons.menu_book_outlined,
-            title: 'Sales Playbooks',
-            onTap: () {
-              Navigator.pop(context);
-              _showComingSoonPhase8B(context, 'Sales Playbooks');
-            },
-          ),
           const Divider(),
 
-          // 4. Management
-          if (user != null && (user.isZSM || user.isAdmin)) ...[
-            _buildSectionHeader('Management'),
-            if (user.isZSM && !user.isAdmin && !user.isCBH)
-              _buildDrawerItem(
-                icon: Icons.group_outlined,
-                title: 'Team Dashboard',
-                onTap: () {
-                  Navigator.pop(context);
-                  context.push('/team');
-                },
-              ),
-            if (user.isAdmin)
-              _buildDrawerItem(
-                icon: Icons.admin_panel_settings_outlined,
-                title: 'Admin Panel',
-                onTap: () {
-                  Navigator.pop(context);
-                  context.push('/admin');
-                },
-              ),
-            const Divider(),
-          ],
-
-          // 5. Account
+          // 4. Account
           _buildSectionHeader('Account'),
           _buildDrawerItem(
             icon: Icons.logout,
@@ -214,18 +166,6 @@ class AppDrawer extends ConsumerWidget {
       dense: true,
       horizontalTitleGap: 8,
       onTap: onTap,
-    );
-  }
-
-  void _showComingSoon(BuildContext context, String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$feature coming soon')),
-    );
-  }
-
-  void _showComingSoonPhase8B(BuildContext context, String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$feature coming in Phase 8B')),
     );
   }
 }

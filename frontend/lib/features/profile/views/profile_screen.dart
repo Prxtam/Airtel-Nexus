@@ -10,6 +10,10 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authProvider).user;
 
+    final initials = (user?.fullName?.isNotEmpty ?? false)
+        ? user!.fullName!.trim().split(' ').map((p) => p[0]).take(2).join().toUpperCase()
+        : 'U';
+
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -18,90 +22,59 @@ class ProfileScreen extends ConsumerWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+
+            // Avatar
             CircleAvatar(
-              radius: 50,
+              radius: 48,
               backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
               child: Text(
-                (user?.fullName?.isNotEmpty ?? false) ? user!.fullName![0].toUpperCase() : 'U',
-                style: const TextStyle(fontSize: 40, color: AppConstants.primaryColor),
+                initials,
+                style: const TextStyle(fontSize: 36, color: AppConstants.primaryColor, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 16),
+
+            // Name
             Text(
               user?.fullName ?? 'Unknown User',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppConstants.primaryColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                (user?.roles.isNotEmpty == true) ? user!.roles.first : 'No Role',
-                style: const TextStyle(
-                  color: AppConstants.primaryColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-            Card(
-              elevation: 1,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.email_outlined, color: Colors.grey),
-                    title: const Text('Email'),
-                    subtitle: Text(user?.email ?? 'N/A'),
-                  ),
 
-                  const Divider(height: 1),
-                  const ListTile(
-                    leading: Icon(Icons.phone_outlined, color: Colors.grey),
-                    title: Text('Phone'),
-                    subtitle: Text('+91 98765 43210 (Placeholder)'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  // Placeholder action
-                },
-                icon: const Icon(Icons.edit_outlined),
-                label: const Text('Edit Profile'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppConstants.primaryColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            // Role badge
+            if (user?.roles.isNotEmpty == true)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppConstants.primaryColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Text(
+                  user!.roles.first,
+                  style: const TextStyle(
+                    color: AppConstants.primaryColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
+
+            const SizedBox(height: 40),
+
+            // Logout
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: () {
-                  // Placeholder action
-                },
-                icon: const Icon(Icons.lock_outline),
-                label: const Text('Change Password'),
+                onPressed: () => ref.read(authProvider.notifier).logout(),
+                icon: const Icon(Icons.logout),
+                label: const Text('Logout'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppConstants.primaryColor,
-                  side: const BorderSide(color: AppConstants.primaryColor),
+                  foregroundColor: Colors.red,
+                  side: const BorderSide(color: Colors.red),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
