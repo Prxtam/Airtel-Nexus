@@ -24,13 +24,16 @@ class MeetingAdapter extends TypeAdapter<Meeting> {
       meetingAt: fields[4] as DateTime,
       createdAt: fields[5] as DateTime,
       updatedAt: fields[6] as DateTime,
+      status: fields[7] == null
+          ? MeetingStatus.scheduled
+          : fields[7] as MeetingStatus,
     );
   }
 
   @override
   void write(BinaryWriter writer, Meeting obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +47,9 @@ class MeetingAdapter extends TypeAdapter<Meeting> {
       ..writeByte(5)
       ..write(obj.createdAt)
       ..writeByte(6)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(7)
+      ..write(obj.status);
   }
 
   @override
@@ -54,6 +59,50 @@ class MeetingAdapter extends TypeAdapter<Meeting> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is MeetingAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MeetingStatusAdapter extends TypeAdapter<MeetingStatus> {
+  @override
+  final int typeId = 7;
+
+  @override
+  MeetingStatus read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return MeetingStatus.scheduled;
+      case 1:
+        return MeetingStatus.awaitingConfirmation;
+      case 2:
+        return MeetingStatus.conducted;
+      default:
+        return MeetingStatus.scheduled;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, MeetingStatus obj) {
+    switch (obj) {
+      case MeetingStatus.scheduled:
+        writer.writeByte(0);
+        break;
+      case MeetingStatus.awaitingConfirmation:
+        writer.writeByte(1);
+        break;
+      case MeetingStatus.conducted:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MeetingStatusAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -70,6 +119,8 @@ Meeting _$MeetingFromJson(Map<String, dynamic> json) => Meeting(
       meetingAt: DateTime.parse(json['meeting_at'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      status: $enumDecodeNullable(_$MeetingStatusEnumMap, json['status']) ??
+          MeetingStatus.scheduled,
     );
 
 Map<String, dynamic> _$MeetingToJson(Meeting instance) => <String, dynamic>{
@@ -80,4 +131,11 @@ Map<String, dynamic> _$MeetingToJson(Meeting instance) => <String, dynamic>{
       'meeting_at': instance.meetingAt.toIso8601String(),
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
+      'status': _$MeetingStatusEnumMap[instance.status]!,
     };
+
+const _$MeetingStatusEnumMap = {
+  MeetingStatus.scheduled: 'scheduled',
+  MeetingStatus.awaitingConfirmation: 'awaitingConfirmation',
+  MeetingStatus.conducted: 'conducted',
+};

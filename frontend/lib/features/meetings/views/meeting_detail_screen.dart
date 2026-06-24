@@ -136,6 +136,43 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
     }
   }
 
+  Future<void> _confirmStatusChange(MeetingStatus targetStatus, String title, String content) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        title: Text(title, style: const TextStyle(color: Colors.black)),
+        content: Text(content, style: const TextStyle(color: Colors.grey)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: AppConstants.primaryColor),
+            child: const Text('Confirm'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _isSaving = true);
+    try {
+      await ref.read(meetingDetailProvider(widget.meetingId).notifier).update(status: targetStatus);
+      ref.invalidate(meetingListProvider);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
+    }
+  }
+
   Future<void> _confirmDelete() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -181,7 +218,28 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
   @override
   Widget build(BuildContext context) {
     final meeting = widget.meeting;
-    final isUpcoming = meeting.meetingAt.isAfter(DateTime.now());
+    
+    String statusText;
+    Color statusColor;
+    IconData statusIcon;
+
+    switch (meeting.status) {
+      case MeetingStatus.scheduled:
+        statusText = 'Scheduled';
+        statusColor = Colors.blue;
+        statusIcon = Icons.event;
+        break;
+      case MeetingStatus.awaitingConfirmation:
+        statusText = 'Awaiting Confirmation';
+        statusColor = Colors.orange.shade800;
+        statusIcon = Icons.help_outline;
+        break;
+      case MeetingStatus.conducted:
+        statusText = 'Conducted';
+        statusColor = Colors.green;
+        statusIcon = Icons.event_available;
+        break;
+    }
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -203,12 +261,11 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundColor: (isUpcoming ? Colors.green : Colors.grey)
-                            .withValues(alpha: 0.12),
+                        backgroundColor: statusColor.withValues(alpha: 0.12),
                         radius: 26,
                         child: Icon(
-                          isUpcoming ? Icons.event : Icons.event_available,
-                          color: isUpcoming ? Colors.green : Colors.grey,
+                          statusIcon,
+                          color: statusColor,
                         ),
                       ),
                       const Gap(16),
@@ -225,9 +282,7 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                             Text(
                               AppDateFormatter.format(meeting.meetingAt),
                               style: TextStyle(
-                                color: isUpcoming
-                                    ? Colors.green.shade700
-                                    : Colors.grey,
+                                color: statusColor,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -242,7 +297,7 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                                   children: [
                                     Text('Customer: $customerName', style: const TextStyle(color: Colors.black87, fontSize: 13)),
                                     const Gap(2),
-                                    Text('Status: ${isUpcoming ? "Scheduled" : "Completed"}', style: const TextStyle(color: Colors.black87, fontSize: 13)),
+                                    Text('Status: $statusText', style: TextStyle(color: statusColor, fontSize: 13, fontWeight: FontWeight.w500)),
                                   ],
                                 );
                               },
@@ -258,6 +313,52 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                         ),
                     ],
                   ),
+                  
+                  if (meeting.status == MeetingStatus.awaitingConfirmation) ...[
+                    const Gap(16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: _isSaving ? null : () => _confirmStatusChange(
+                          MeetingStatus.conducted,
+                          'Mark as Conducted',
+                          'Are you sure you want to mark this meeting as conducted?'
+                        ),
+                        icon: const Icon(Icons.check_circle_outline, size: 20),
+                        label: const Text('Mark as Conducted', style: TextStyle(fontWeight: FontWeight.w600)),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: AppConstants.primaryColor,
+                          side: BorderSide(color: Colors.grey.shade300),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  if (meeting.status == MeetingStatus.conducted) ...[
+                    const Gap(16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: _isSaving ? null : () => _confirmStatusChange(
+                          MeetingStatus.scheduled,
+                          'Unmark Conducted',
+                          'Are you sure you want to revert this meeting to awaiting confirmation?'
+                        ),
+                        icon: const Icon(Icons.undo, size: 20),
+                        label: const Text('Unmark Conducted', style: TextStyle(fontWeight: FontWeight.w600)),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.grey.shade700,
+                          side: BorderSide(color: Colors.grey.shade300),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                      ),
+                    ),
+                  ],
 
                   if (_isEditing) ...[
                     const Gap(20),

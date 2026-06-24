@@ -25,7 +25,7 @@ class CustomerRepository {
     return customer;
   }
 
-  Future<Customer> createCustomer(String name) async {
+  Future<Customer> createCustomer(String name, {String? industry}) async {
     final box = HiveService.customersBox;
     final userBox = HiveService.userBox;
     final currentUser = userBox.get('current_user');
@@ -35,6 +35,7 @@ class CustomerRepository {
       id: const Uuid().v4(),
       ownerId: currentUser?.id,
       name: name,
+      industry: industry,
       createdAt: now,
       updatedAt: now,
     );
@@ -43,7 +44,7 @@ class CustomerRepository {
     return newCustomer;
   }
 
-  Future<Customer> updateCustomer(String id, String name) async {
+  Future<Customer> updateCustomer(String id, String name, {String? industry}) async {
     final box = HiveService.customersBox;
     final existingCustomer = box.get(id);
 
@@ -55,6 +56,7 @@ class CustomerRepository {
       id: existingCustomer.id,
       ownerId: existingCustomer.ownerId,
       name: name,
+      industry: industry,
       createdAt: existingCustomer.createdAt,
       updatedAt: DateTime.now(),
     );

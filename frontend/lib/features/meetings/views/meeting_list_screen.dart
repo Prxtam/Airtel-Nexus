@@ -10,7 +10,6 @@ import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_filter_provider.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
-import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:gap/gap.dart';
 
 class MeetingListScreen extends ConsumerWidget {
@@ -204,7 +203,24 @@ class _MeetingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isUpcoming = meeting.meetingAt.isAfter(DateTime.now());
+    Color statusColor;
+    IconData statusIcon;
+
+    switch (meeting.status) {
+      case MeetingStatus.scheduled:
+        statusColor = Colors.blue;
+        statusIcon = Icons.event;
+        break;
+      case MeetingStatus.awaitingConfirmation:
+        statusColor = Colors.orange.shade800;
+        statusIcon = Icons.help_outline;
+        break;
+      case MeetingStatus.conducted:
+        statusColor = Colors.green;
+        statusIcon = Icons.event_available;
+        break;
+    }
+
     return Card(
       elevation: AppElevation.flat,
       color: Colors.white,
@@ -217,12 +233,12 @@ class _MeetingTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: (isUpcoming ? Colors.green : Colors.grey).withValues(alpha: 0.1),
+            color: statusColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
-            isUpcoming ? Icons.event : Icons.event_available,
-            color: isUpcoming ? Colors.green.shade700 : Colors.grey.shade700,
+            statusIcon,
+            color: statusColor,
           ),
         ),
         title: Text(
@@ -234,13 +250,11 @@ class _MeetingTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              OwnerBadge(ownerId: meeting.createdByUserId),
-              const SizedBox(height: 4),
               Text(
                 _formatDateTime(meeting.meetingAt),
                 style: TextStyle(
                     fontSize: 12,
-                    color: isUpcoming ? Colors.green.shade700 : Colors.grey),
+                    color: statusColor),
               ),
             ],
           ),

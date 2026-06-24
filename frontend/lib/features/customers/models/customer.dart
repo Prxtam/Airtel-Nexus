@@ -16,6 +16,8 @@ class Customer {
   final DateTime createdAt;
   @HiveField(4)
   final DateTime updatedAt;
+  @HiveField(5)
+  final String? industry;
 
   Customer({
     required this.id,
@@ -23,6 +25,7 @@ class Customer {
     required this.name,
     required this.createdAt,
     required this.updatedAt,
+    this.industry,
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) =>

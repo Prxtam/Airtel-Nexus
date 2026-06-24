@@ -3,6 +3,16 @@ import 'package:hive/hive.dart';
 
 part 'meeting.g.dart';
 
+@HiveType(typeId: 7)
+enum MeetingStatus {
+  @HiveField(0)
+  scheduled,
+  @HiveField(1)
+  awaitingConfirmation,
+  @HiveField(2)
+  conducted,
+}
+
 @HiveType(typeId: 2)
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Meeting {
@@ -20,6 +30,8 @@ class Meeting {
   final DateTime createdAt;
   @HiveField(6)
   final DateTime updatedAt;
+  @HiveField(7, defaultValue: MeetingStatus.scheduled)
+  final MeetingStatus status;
 
   Meeting({
     required this.id,
@@ -29,6 +41,7 @@ class Meeting {
     required this.meetingAt,
     required this.createdAt,
     required this.updatedAt,
+    this.status = MeetingStatus.scheduled,
   });
 
   factory Meeting.fromJson(Map<String, dynamic> json) =>

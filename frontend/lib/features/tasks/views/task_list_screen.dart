@@ -8,8 +8,9 @@ import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
+import 'package:frontend/features/tasks/models/task.dart';
+import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:frontend/features/tasks/providers/task_filter_provider.dart';
-import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:gap/gap.dart';
 
 class TaskListScreen extends ConsumerWidget {
@@ -251,8 +252,6 @@ class _TaskTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              OwnerBadge(ownerId: task.userId),
-              const SizedBox(height: 6),
               Row(
                 children: [
                   _PriorityBadge(priority: task.priority),

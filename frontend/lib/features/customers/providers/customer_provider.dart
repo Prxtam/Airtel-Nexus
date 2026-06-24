@@ -25,8 +25,8 @@ class CustomerListNotifier extends StateNotifier<AsyncValue<List<Customer>>> {
 
   Future<void> refresh() => load();
 
-  Future<void> createCustomer(String name) async {
-    await _repository.createCustomer(name);
+  Future<void> createCustomer(String name, {String? industry}) async {
+    await _repository.createCustomer(name, industry: industry);
     await load();
   }
 
@@ -67,9 +67,9 @@ class CustomerDetailNotifier extends StateNotifier<AsyncValue<Customer>> {
     }
   }
 
-  Future<void> update(String name) async {
+  Future<void> update(String name, {String? industry}) async {
     try {
-      final updated = await _repository.updateCustomer(customerId, name);
+      final updated = await _repository.updateCustomer(customerId, name, industry: industry);
       state = AsyncValue.data(updated);
     } catch (e, st) {
       state = AsyncValue.error(e, st);

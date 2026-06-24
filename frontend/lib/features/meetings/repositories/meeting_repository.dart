@@ -11,7 +11,27 @@ class MeetingRepository {
   Future<List<Meeting>> listMeetings({String? customerId}) async {
     final box = HiveService.meetingsBox;
     var meetings = box.values.toList();
-    
+    final now = DateTime.now();
+
+    // Auto-transition scheduled meetings that have passed their time
+    for (int i = 0; i < meetings.length; i++) {
+      var m = meetings[i];
+      if (m.status == MeetingStatus.scheduled && m.meetingAt.isBefore(now)) {
+        m = Meeting(
+          id: m.id,
+          customerId: m.customerId,
+          createdByUserId: m.createdByUserId,
+          title: m.title,
+          meetingAt: m.meetingAt,
+          createdAt: m.createdAt,
+          updatedAt: m.updatedAt,
+          status: MeetingStatus.awaitingConfirmation,
+        );
+        meetings[i] = m;
+        await box.put(m.id, m);
+      }
+    }
+
     if (customerId != null) {
       meetings = meetings.where((m) => m.customerId == customerId).toList();
     }
@@ -23,10 +43,25 @@ class MeetingRepository {
 
   Future<Meeting> getMeeting(String id) async {
     final box = HiveService.meetingsBox;
-    final meeting = box.get(id);
+    var meeting = box.get(id);
     if (meeting == null) {
       throw Exception('Meeting not found');
     }
+
+    if (meeting.status == MeetingStatus.scheduled && meeting.meetingAt.isBefore(DateTime.now())) {
+      meeting = Meeting(
+        id: meeting.id,
+        customerId: meeting.customerId,
+        createdByUserId: meeting.createdByUserId,
+        title: meeting.title,
+        meetingAt: meeting.meetingAt,
+        createdAt: meeting.createdAt,
+        updatedAt: meeting.updatedAt,
+        status: MeetingStatus.awaitingConfirmation,
+      );
+      await box.put(meeting.id, meeting);
+    }
+
     return meeting;
   }
 
@@ -57,6 +92,7 @@ class MeetingRepository {
     String id, {
     String? title,
     DateTime? meetingAt,
+    MeetingStatus? status,
   }) async {
     final box = HiveService.meetingsBox;
     final existing = box.get(id);
@@ -73,6 +109,7 @@ class MeetingRepository {
       meetingAt: meetingAt ?? existing.meetingAt,
       createdAt: existing.createdAt,
       updatedAt: DateTime.now(),
+      status: status ?? existing.status,
     );
 
     await box.put(updated.id, updated);

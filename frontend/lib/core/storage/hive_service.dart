@@ -19,6 +19,7 @@ class HiveService {
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(CustomerAdapter());
     Hive.registerAdapter(MeetingAdapter());
+    Hive.registerAdapter(MeetingStatusAdapter());
     Hive.registerAdapter(MeetingNoteAdapter());
     Hive.registerAdapter(TaskAdapter());
     Hive.registerAdapter(TaskStatusAdapter());

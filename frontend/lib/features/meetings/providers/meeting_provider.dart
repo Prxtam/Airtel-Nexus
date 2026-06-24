@@ -75,12 +75,13 @@ class MeetingDetailNotifier extends StateNotifier<AsyncValue<Meeting>> {
     }
   }
 
-  Future<void> update({String? title, DateTime? meetingAt}) async {
+  Future<void> update({String? title, DateTime? meetingAt, MeetingStatus? status}) async {
     try {
       final updated = await _repository.updateMeeting(
         meetingId,
         title: title,
         meetingAt: meetingAt,
+        status: status,
       );
       state = AsyncValue.data(updated);
     } catch (e, st) {

@@ -10,7 +10,6 @@ import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_provider.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
-import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:gap/gap.dart';
 
 class CustomerDetailScreen extends ConsumerWidget {
@@ -64,6 +63,7 @@ class _CustomerDetailBody extends ConsumerStatefulWidget {
 class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
   bool _isEditing = false;
   late TextEditingController _nameController;
+  late TextEditingController _industryController;
   bool _isSaving = false;
   bool _isDeleting = false;
   String? _editError;
@@ -72,6 +72,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.customer.name);
+    _industryController = TextEditingController(text: widget.customer.industry ?? '');
   }
 
   @override
@@ -79,12 +80,14 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
     super.didUpdateWidget(oldWidget);
     if (!_isEditing) {
       _nameController.text = widget.customer.name;
+      _industryController.text = widget.customer.industry ?? '';
     }
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _industryController.dispose();
     super.dispose();
   }
 
@@ -103,7 +106,10 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
     try {
       await ref
           .read(customerDetailProvider(widget.customerId).notifier)
-          .update(name);
+          .update(
+            name,
+            industry: _industryController.text.trim().isEmpty ? null : _industryController.text.trim(),
+          );
       // Also refresh the list so it stays in sync
       ref.invalidate(customerListProvider);
       if (mounted) {
@@ -227,8 +233,13 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                               ),
                               const Gap(4),
                               Text(
-                                'Created on ${AppDateFormatter.format(widget.customer.createdAt)}',
+                                widget.customer.industry?.isNotEmpty == true ? widget.customer.industry! : 'Industry not specified',
                                 style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+                              ),
+                              const Gap(2),
+                              Text(
+                                'Created on ${AppDateFormatter.format(widget.customer.createdAt)}',
+                                style: AppTypography.caption.copyWith(color: Colors.grey.shade500),
                               ),
                             ],
                           ),
@@ -243,18 +254,6 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                         ),
                     ],
                   ),
-                  
-                  if (widget.customer.ownerId != null) ...[
-                    const Gap(AppSpacing.lg),
-                    const Divider(),
-                    const Gap(AppSpacing.md),
-                    Row(
-                      children: [
-                        OwnerBadge(ownerId: widget.customer.ownerId!),
-                      ],
-                    ),
-                  ],
-
                   if (_isEditing) ...[
                     const Gap(AppSpacing.xl),
                     const Divider(),
@@ -272,6 +271,17 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                       ),
                       textCapitalization: TextCapitalization.words,
                     ),
+                    const Gap(AppSpacing.sm),
+                    TextField(
+                      controller: _industryController,
+                      decoration: InputDecoration(
+                        labelText: 'Industry (Optional)',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
+                      ),
+                      textCapitalization: TextCapitalization.words,
+                    ),
                     const Gap(AppSpacing.md),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -281,6 +291,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                               ? null
                               : () {
                                   _nameController.text = widget.customer.name;
+                                  _industryController.text = widget.customer.industry ?? '';
                                   setState(() {
                                     _isEditing = false;
                                     _editError = null;

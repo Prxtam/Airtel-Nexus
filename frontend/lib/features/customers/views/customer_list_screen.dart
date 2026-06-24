@@ -9,7 +9,6 @@ import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/customers/providers/customer_filter_provider.dart';
-import 'package:frontend/features/users/views/owner_badge.dart';
 
 class CustomerListScreen extends ConsumerWidget {
   const CustomerListScreen({super.key});
@@ -34,7 +33,7 @@ class CustomerListScreen extends ConsumerWidget {
         actions: [
           if (!hasNoCustomersAtAll)
             PopupMenuButton<CustomerSort>(
-              icon: const Icon(Icons.sort, color: Colors.white),
+              icon: const Icon(Icons.filter_list, color: Colors.white),
               initialValue: currentSort,
               onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
               itemBuilder: (context) => [
@@ -148,26 +147,29 @@ class _CustomerTile extends StatelessWidget {
         side: BorderSide(color: Colors.grey.shade200),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+        contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 4),
         leading: Container(
-          padding: const EdgeInsets.all(AppSpacing.sm),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.blue.shade50,
             borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
-          child: Icon(Icons.business, color: Colors.blue.shade700),
+          child: Icon(Icons.business, color: Colors.blue.shade700, size: 20),
         ),
         title: Text(customer.name, style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600)),
         subtitle: Padding(
-          padding: const EdgeInsets.only(top: AppSpacing.sm),
+          padding: const EdgeInsets.only(top: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (customer.ownerId != null) OwnerBadge(ownerId: customer.ownerId!),
-              const SizedBox(height: AppSpacing.sm),
               Text(
-                'Added ${_formatDate(customer.createdAt)}',
-                style: AppTypography.caption.copyWith(color: Colors.grey),
+                customer.industry?.isNotEmpty == true ? customer.industry! : 'Industry not specified',
+                style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Created • ${_formatDateShort(customer.createdAt)}',
+                style: AppTypography.caption.copyWith(color: Colors.grey.shade400, fontSize: 11),
               ),
             ],
           ),
@@ -178,7 +180,7 @@ class _CustomerTile extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime dt) {
-    return AppDateFormatter.format(dt);
+  String _formatDateShort(DateTime dt) {
+    return AppDateFormatter.format(dt).split(' • ').first;
   }
 }

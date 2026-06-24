@@ -17,12 +17,14 @@ class CustomerCreateScreen extends ConsumerStatefulWidget {
 class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _industryController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
 
   @override
   void dispose() {
     _nameController.dispose();
+    _industryController.dispose();
     super.dispose();
   }
 
@@ -37,7 +39,10 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
     try {
       await ref
           .read(customerListProvider.notifier)
-          .createCustomer(_nameController.text.trim());
+          .createCustomer(
+            _nameController.text.trim(),
+            industry: _industryController.text.trim().isEmpty ? null : _industryController.text.trim(),
+          );
 
       if (mounted) {
         context.pop();
@@ -92,6 +97,18 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
                   }
                   return null;
                 },
+                onFieldSubmitted: (_) => _submit(),
+              ),
+              const Gap(AppSpacing.md),
+              TextFormField(
+                controller: _industryController,
+                decoration: const InputDecoration(
+                  labelText: 'Industry (Optional)',
+                  hintText: 'e.g. Technology',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.category_outlined),
+                ),
+                textCapitalization: TextCapitalization.words,
                 onFieldSubmitted: (_) => _submit(),
               ),
               if (_errorMessage != null) ...[

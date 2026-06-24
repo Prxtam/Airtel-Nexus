@@ -35,12 +35,11 @@ final filteredMeetingListProvider =
 
     // 2. Filter by time
     if (timeFilter != MeetingTimeFilter.all) {
-      final now = DateTime.now();
       result = result.where((m) {
         if (timeFilter == MeetingTimeFilter.upcoming) {
-          return m.meetingAt.isAfter(now);
+          return m.status == MeetingStatus.scheduled || m.status == MeetingStatus.awaitingConfirmation;
         } else {
-          return m.meetingAt.isBefore(now);
+          return m.status == MeetingStatus.conducted;
         }
       }).toList();
     }

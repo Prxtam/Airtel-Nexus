@@ -11,8 +11,9 @@ import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:frontend/features/auth/models/user.dart';
 import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/customers/models/customer.dart';
-import 'package:frontend/features/users/views/owner_badge.dart';
 import 'package:frontend/features/tasks/models/task.dart';
+import 'package:frontend/features/tasks/providers/task_filter_provider.dart';
+import 'package:frontend/features/meetings/providers/meeting_filter_provider.dart';
 import 'package:frontend/core/widgets/app_drawer.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:gap/gap.dart';
@@ -41,7 +42,7 @@ class DashboardScreen extends ConsumerWidget {
               const Gap(AppSpacing.xl),
 
               // 2. Hero Card (Personalized Workspace)
-              _buildHeroCard(context, user, customersAsync, meetingsAsync, tasksAsync),
+              _buildHeroCard(context, ref, user, customersAsync, meetingsAsync, tasksAsync),
               const Gap(AppSpacing.xl),
 
               // 3. Primary Actions (Airtel Thanks Style Shortcuts)
@@ -63,7 +64,7 @@ class DashboardScreen extends ConsumerWidget {
               // 6. Key Metrics Row
               const Text('Performance This Month', style: AppTypography.sectionTitle),
               const Gap(AppSpacing.md),
-              _buildMonthlyAnalyticsGrid(customersAsync, meetingsAsync, tasksAsync),
+              _buildMonthlyAnalyticsGrid(context, ref, customersAsync, meetingsAsync, tasksAsync),
               const Gap(AppSpacing.xl),
             ],
           ),
@@ -99,6 +100,7 @@ class DashboardScreen extends ConsumerWidget {
 
   Widget _buildHeroCard(
     BuildContext context,
+    WidgetRef ref,
     User? user,
     AsyncValue<List<Customer>> customersAsync,
     AsyncValue<List<Meeting>> meetingsAsync,
@@ -113,7 +115,7 @@ class DashboardScreen extends ConsumerWidget {
     );
     final meetingsTodayCount = meetingsAsync.maybeWhen(
       data: (list) {
-        return '${list.where((m) => m.meetingAt.year == now.year && m.meetingAt.month == now.month && m.meetingAt.day == now.day).length}';
+        return '${list.where((m) => (m.status == MeetingStatus.scheduled || m.status == MeetingStatus.awaitingConfirmation) && m.meetingAt.year == now.year && m.meetingAt.month == now.month && m.meetingAt.day == now.day).length}';
       },
       orElse: () => '...',
     );
@@ -152,9 +154,19 @@ class DashboardScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _HeroStatItem(customerCount, 'Customers'),
-                _HeroStatItem(meetingsTodayCount, 'Meetings\nToday'),
-                _HeroStatItem(pendingTasksCount, 'Pending\nTasks'),
+                _HeroStatItem(customerCount, 'Customers', onTap: () => context.push('/customers')),
+                _HeroStatItem(meetingsTodayCount, 'Meetings\nToday', onTap: () {
+                  try {
+                    ref.read(meetingTimeFilterProvider.notifier).state = MeetingTimeFilter.upcoming;
+                  } catch (_) {}
+                  context.push('/activities');
+                }),
+                _HeroStatItem(pendingTasksCount, 'Pending\nTasks', onTap: () {
+                  try {
+                    ref.read(taskListProvider.notifier).setFilter(TaskStatusFilter.pending);
+                  } catch (_) {}
+                  context.push('/tasks');
+                }),
               ],
             ),
             const Gap(AppSpacing.xl),
@@ -283,6 +295,8 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildMonthlyAnalyticsGrid(
+    BuildContext context,
+    WidgetRef ref,
     AsyncValue<List<Customer>> customersAsync,
     AsyncValue<List<Meeting>> meetingsAsync,
     AsyncValue<dynamic> tasksAsync,
@@ -303,30 +317,35 @@ class DashboardScreen extends ConsumerWidget {
             orElse: () => '…'
           ),
           Icons.people_outline,
+          onTap: () => context.push('/customers'),
         ),
         _buildAnalyticsCard(
           'Meetings Conducted',
           meetingsAsync.maybeWhen(
-            data: (list) => '${list.where((m) => m.meetingAt.year == now.year && m.meetingAt.month == now.month && m.meetingAt.isBefore(now.add(const Duration(days: 1)))).length}', 
+            data: (list) => '${list.where((m) => m.status == MeetingStatus.conducted && m.meetingAt.year == now.year && m.meetingAt.month == now.month).length}', 
             orElse: () => '…'
           ),
           Icons.event_note,
+          onTap: () {
+            try {
+              ref.read(meetingTimeFilterProvider.notifier).state = MeetingTimeFilter.past;
+            } catch (_) {}
+            context.push('/activities');
+          },
         ),
         _buildAnalyticsCard(
-          'Pending Tasks',
-          tasksAsync.maybeWhen(
-            data: (list) => '${list.where((t) => t.status == TaskStatus.pending && t.createdAt.year == now.year && t.createdAt.month == now.month).length}', 
-            orElse: () => '…'
-          ),
-          Icons.pending_actions,
-        ),
-        _buildAnalyticsCard(
-          'Completed Tasks',
+          'Tasks Completed',
           tasksAsync.maybeWhen(
             data: (list) => '${list.where((t) => t.status == TaskStatus.completed && t.updatedAt.year == now.year && t.updatedAt.month == now.month).length}', 
             orElse: () => '…'
           ),
           Icons.task_alt,
+          onTap: () {
+            try {
+              ref.read(taskListProvider.notifier).setFilter(TaskStatusFilter.completed);
+            } catch (_) {}
+            context.push('/tasks');
+          },
         ),
       ],
     );
@@ -371,7 +390,7 @@ class DashboardScreen extends ConsumerWidget {
   }
   */
 
-  Widget _buildAnalyticsCard(String title, String value, IconData icon) {
+  Widget _buildAnalyticsCard(String title, String value, IconData icon, {VoidCallback? onTap}) {
     return Card(
       elevation: AppElevation.flat,
       color: Colors.white,
@@ -379,7 +398,10 @@ class DashboardScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(AppRadius.md),
         side: BorderSide(color: Colors.grey.shade200),
       ),
-      child: Padding(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,6 +419,7 @@ class DashboardScreen extends ConsumerWidget {
           ],
         ),
       ),
+      ),
     );
   }
 }
@@ -404,16 +427,24 @@ class DashboardScreen extends ConsumerWidget {
 class _HeroStatItem extends StatelessWidget {
   final String count;
   final String label;
+  final VoidCallback? onTap;
 
-  const _HeroStatItem(this.count, this.label);
+  const _HeroStatItem(this.count, this.label, {this.onTap});
 
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(count, style: AppTypography.pageTitle.copyWith(fontSize: 32, color: Colors.white)),
-        Text(label, style: AppTypography.caption.copyWith(color: Colors.white70, height: 1.2)),
-      ],
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppRadius.sm),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(count, style: AppTypography.pageTitle.copyWith(fontSize: 32, color: Colors.white)),
+            Text(label, style: AppTypography.caption.copyWith(color: Colors.white70, height: 1.2)),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -531,12 +562,6 @@ class _ModernCustomerTile extends StatelessWidget {
           child: Icon(Icons.business, color: Colors.blue.shade700),
         ),
         title: Text(customer.name, style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600)),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 6.0),
-          child: customer.ownerId != null 
-              ? OwnerBadge(ownerId: customer.ownerId!)
-              : Text('No Owner', style: AppTypography.caption.copyWith(color: Colors.grey)),
-        ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: () => context.push('/customers/${customer.id}'),
       ),
