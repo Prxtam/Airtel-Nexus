@@ -15,6 +15,16 @@ class ProductsListScreen extends StatefulWidget {
 
 class _ProductsListScreenState extends State<ProductsListScreen> {
   late Map<String, EnrichedProduct> _filteredProducts;
+  final List<String> _categories = [
+    'All Products',
+    'Mobility',
+    'Connectivity',
+    'Customer Engagement',
+    'Cloud',
+    'Security'
+  ];
+  String _selectedCategory = 'All Products';
+  String _searchQuery = '';
 
   @override
   void initState() {
@@ -22,128 +32,166 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     _filteredProducts = Map.from(productEnrichmentData);
   }
 
+  IconData _getIconForCategory(String category) {
+    final cat = category.toLowerCase();
+    if (cat.contains('mobility')) return Icons.stay_current_portrait_outlined;
+    if (cat.contains('connectivity')) return Icons.share_outlined;
+    if (cat.contains('engagement')) return Icons.verified_user_outlined;
+    if (cat.contains('cloud')) return Icons.cloud_outlined;
+    if (cat.contains('security')) return Icons.security_outlined;
+    if (cat.contains('unified')) return Icons.phone_in_talk_outlined;
+    return Icons.business_outlined;
+  }
+
+  void _applyFilters() {
+    setState(() {
+      _filteredProducts = Map.fromEntries(
+        productEnrichmentData.entries.where((entry) {
+          final product = entry.value;
+          final matchesSearch = _searchQuery.isEmpty || 
+                 product.productName.toLowerCase().contains(_searchQuery) ||
+                 product.primaryUseCase.toLowerCase().contains(_searchQuery) ||
+                 product.category.toLowerCase().contains(_searchQuery);
+                 
+          final matchesCategory = _selectedCategory == 'All Products' || 
+                 product.category.toLowerCase().contains(_selectedCategory.toLowerCase());
+                 
+          return matchesSearch && matchesCategory;
+        }),
+      );
+    });
+  }
+
   void _onSearchChanged(String query) {
     setState(() {
-      if (query.isEmpty) {
-        _filteredProducts = Map.from(productEnrichmentData);
-      } else {
-        _filteredProducts = Map.fromEntries(
-          productEnrichmentData.entries.where((entry) {
-            final product = entry.value;
-            return product.productName.toLowerCase().contains(query.toLowerCase()) ||
-                   product.primaryUseCase.toLowerCase().contains(query.toLowerCase()) ||
-                   product.category.toLowerCase().contains(query.toLowerCase());
-          }),
-        );
-      }
+      _searchQuery = query.toLowerCase();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: const AirtelHeader(
-        title: 'Airtel Products',
-        automaticallyImplyLeading: true,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: AirtelIqSearchBar(
-              hintText: 'Search products by name or category...',
-              onChanged: _onSearchChanged,
+    return DefaultTabController(
+      length: _categories.length,
+      child: Scaffold(
+        backgroundColor: AppConstants.scaffoldBackgroundColor,
+        appBar: const AirtelHeader(
+          title: 'Airtel Products',
+          automaticallyImplyLeading: true,
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: AirtelIqSearchBar(
+                hintText: 'Search products by name or category...',
+                onChanged: _onSearchChanged,
+              ),
             ),
-          ),
-          Expanded(
-            child: _filteredProducts.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No products match your search.',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  )
-                : ListView.separated(
+            // Slidable Category Tabs
+            TabBar(
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              labelColor: AppConstants.primaryColor,
+              unselectedLabelColor: Colors.grey.shade700,
+              indicatorColor: AppConstants.primaryColor,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 2,
+              dividerColor: Colors.transparent,
+              tabs: _categories.map((c) => Tab(text: c)).toList(),
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: TabBarView(
+                children: _categories.map((category) {
+                  // Filter products dynamically for this specific tab
+                  final tabProducts = productEnrichmentData.entries.where((entry) {
+                    final product = entry.value;
+                    final matchesSearch = _searchQuery.isEmpty || 
+                           product.productName.toLowerCase().contains(_searchQuery) ||
+                           product.primaryUseCase.toLowerCase().contains(_searchQuery) ||
+                           product.category.toLowerCase().contains(_searchQuery);
+                           
+                    final matchesCategory = category == 'All Products' || 
+                           product.category.toLowerCase().contains(category.toLowerCase());
+                           
+                    return matchesSearch && matchesCategory;
+                  }).toList();
+
+                  if (tabProducts.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'No products match your search.',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  }
+
+                  return ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    itemCount: _filteredProducts.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    itemCount: tabProducts.length,
                     itemBuilder: (context, index) {
-                      final productId = _filteredProducts.keys.elementAt(index);
-                      final product = _filteredProducts.values.elementAt(index);
+                      final productId = tabProducts[index].key;
+                      final product = tabProducts[index].value;
                       
-                      return Card(
-                        elevation: 0,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(color: Colors.grey.shade200),
+                          border: Border.all(color: Colors.grey.shade200),
                         ),
                         child: InkWell(
                           onTap: () => context.push('/airtel-iq/products/$productId'),
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
-                            padding: const EdgeInsets.all(AppSpacing.lg),
-                            child: Column(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: Colors.purple.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(4),
+                                // Icon Box
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: AppConstants.primaryColor.withValues(alpha: 0.08),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    _getIconForCategory(product.category), 
+                                    color: AppConstants.primaryColor, 
+                                    size: 24,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                // Text Content
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        product.productName,
+                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
                                       ),
-                                      child: Text(
+                                      const SizedBox(height: 4),
+                                      Text(
                                         product.category,
-                                        style: TextStyle(color: Colors.purple.shade700, fontSize: 12, fontWeight: FontWeight.bold),
+                                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  product.productName,
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  product.whatItIs,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: Colors.grey.shade600, height: 1.4),
-                                ),
-                                const SizedBox(height: 16),
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: product.idealIndustries.take(3).map((industry) {
-                                    return Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade100,
-                                        borderRadius: BorderRadius.circular(4),
-                                        border: Border.all(color: Colors.grey.shade300),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        product.idealIndustries.take(3).join('  •  '),
+                                        style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                                       ),
-                                      child: Text(
-                                        industry,
-                                        style: TextStyle(color: Colors.grey.shade700, fontSize: 11),
-                                      ),
-                                    );
-                                  }).toList(),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(height: 16),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'View Details',
-                                      style: TextStyle(color: AppConstants.primaryColor, fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Icon(Icons.arrow_forward, size: 16, color: AppConstants.primaryColor),
-                                  ],
+                                const SizedBox(width: 8),
+                                // Chevron
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 24.0),
+                                    child: Icon(Icons.chevron_right, color: Colors.grey.shade400, size: 20),
+                                  ),
                                 ),
                               ],
                             ),
@@ -151,9 +199,12 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                         ),
                       );
                     },
-                  ),
-          ),
-        ],
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -88,12 +88,12 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue.withValues(alpha: 0.1),
+                                        color: AppConstants.primaryColor.withValues(alpha: 0.1),
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Text(
                                         article.category,
-                                        style: TextStyle(color: Colors.blue.shade700, fontSize: 12, fontWeight: FontWeight.bold),
+                                        style: TextStyle(color: AppConstants.primaryColor, fontSize: 12, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Text(

@@ -112,29 +112,26 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
           ),
           Expanded(
             child: _filtered.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No industries match your search.',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    itemCount: _filtered.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final pb = _filtered[index];
-                      final color = _colorForIndustry(pb.industryName);
-                      final icon = _iconForIndustry(pb.industryName);
-                      return _IndustryCard(
-                        playbook: pb,
-                        color: color,
-                        icon: icon,
-                        onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
-                      );
-                    },
-                  ),
-          ),
+                    ? const Center(
+                        child: Text(
+                          'No industries match your search.',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        itemCount: _filtered.length,
+                        itemBuilder: (context, index) {
+                          final pb = _filtered[index];
+                          final icon = _iconForIndustry(pb.industryName);
+                          return _IndustryCard(
+                            playbook: pb,
+                            icon: icon,
+                            onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
+                          );
+                        },
+                      ),
+              ),
         ],
       ),
     );
@@ -143,142 +140,85 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
 
 class _IndustryCard extends StatelessWidget {
   final IndustryPlaybook playbook;
-  final Color color;
   final IconData icon;
   final VoidCallback onTap;
 
   const _IndustryCard({
     required this.playbook,
-    required this.color,
     required this.icon,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final topPriorities = playbook.businessPriorities.take(3).toList();
-
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(14),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
         onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.grey.shade200),
-          ),
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header stripe
-              Container(
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(14),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Icon Box
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppConstants.primaryColor.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      icon, 
+                      color: AppConstants.primaryColor, 
+                      size: 28,
+                    ),
                   ),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
-                child: Row(
-                  children: [
-                    Icon(icon, color: Colors.white, size: 22),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        playbook.industryName,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        '${playbook.relevantSolutions.length} solutions',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Body
-              Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Top Business Priorities',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: color,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ...topPriorities.map(
-                      (p) => Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(top: 6),
-                              width: 4,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                color: color,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                p,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey.shade700,
-                                  height: 1.35,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                  const SizedBox(width: 16),
+                  // Text Content
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Open Playbook',
-                          style: TextStyle(
-                            color: color,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
+                          playbook.industryName,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87),
                         ),
-                        const SizedBox(width: 4),
-                        Icon(Icons.arrow_forward, size: 14, color: color),
+                        const SizedBox(height: 6),
+                        Text(
+                          '${playbook.relevantSolutions.length} Solutions Available',
+                          style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                        ),
                       ],
                     ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              // Bottom Right Link
+              Align(
+                alignment: Alignment.centerRight,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Open Playbook',
+                      style: TextStyle(
+                        color: AppConstants.primaryColor, 
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, size: 16, color: AppConstants.primaryColor),
                   ],
                 ),
               ),
