@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/about_airtel_data.dart';
 import 'package:frontend/features/airtel_iq/services/product_alias_resolver.dart';
 
@@ -14,49 +15,8 @@ class AboutAirtelScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           // ── Header ────────────────────────────────────────────────────────
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 140,
-            backgroundColor: AppConstants.primaryColor,
-            foregroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppConstants.primaryColor, Color(0xFFC00000)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 70, 20, 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'About Airtel',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 26,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Understand Airtel\'s history, global footprint, enterprise ecosystem, innovations, partnerships, and strategic evolution.',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85),
-                        fontSize: 12,
-                        height: 1.4,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          const AirtelSliverHeader(
+            title: 'About Airtel',
           ),
 
           // ── Body ─────────────────────────────────────────────────────────

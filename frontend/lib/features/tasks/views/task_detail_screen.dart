@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/tasks/models/task.dart';
@@ -18,12 +19,9 @@ class TaskDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          taskAsync.maybeWhen(data: (t) => t.title, orElse: () => 'Task'),
-        ),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: AirtelHeader(
+        title: taskAsync.maybeWhen(data: (t) => t.title, orElse: () => 'Task'),
+        automaticallyImplyLeading: true,
       ),
       body: taskAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

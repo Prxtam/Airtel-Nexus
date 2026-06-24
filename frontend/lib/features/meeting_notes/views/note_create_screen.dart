@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/meeting_notes/providers/meeting_note_provider.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:gap/gap.dart';
 
 class NoteCreateScreen extends ConsumerStatefulWidget {
@@ -51,10 +52,9 @@ class _NoteCreateScreenState extends ConsumerState<NoteCreateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Add Note'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: const AirtelHeader(
+        title: 'Add Note',
+        automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),

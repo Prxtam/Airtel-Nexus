@@ -5,6 +5,7 @@ import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
@@ -24,16 +25,18 @@ class TaskListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: hideAppBar ? null : AppBar(
-        title: const Text('Tasks'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
-        actions: const [],
+      appBar: hideAppBar ? null : const AirtelHeader(
+        title: 'Tasks',
+        automaticallyImplyLeading: true,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/tasks/create'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: AppConstants.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
+        ),
         child: const Icon(Icons.add),
       ),
       body: Column(

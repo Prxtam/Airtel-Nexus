@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 import 'package:frontend/features/airtel_iq/knowledge/industry_intelligence.dart';
 import 'package:frontend/features/airtel_iq/knowledge/knowledge_models.dart';
@@ -333,42 +335,8 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       body: CustomScrollView(
         slivers: [
           // ── Header ──────────────────────────────────────────────────────
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 120,
-            backgroundColor: AppConstants.primaryColor,
-            foregroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppConstants.primaryColor, Color(0xFFC00000)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 80, 20, 12),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Airtel Knowledge Hub',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Centralized Airtel reference encyclopedia',
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          const AirtelSliverHeader(
+            title: 'Airtel Knowledge Hub',
           ),
 
           // ── Search bar ──────────────────────────────────────────────────

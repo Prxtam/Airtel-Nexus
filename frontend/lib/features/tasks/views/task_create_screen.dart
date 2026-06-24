@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
-import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/utils/date_formatter.dart';
+import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/tasks/models/task.dart';
@@ -102,10 +104,9 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Create Task'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: const AirtelHeader(
+        title: 'Create Task',
+        automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.xl),
@@ -247,8 +248,9 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _submit,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppConstants.primaryColor,
-                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppConstants.primaryColor,
+                    side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
                     padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppRadius.md)),
@@ -258,7 +260,7 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                              color: Colors.white, strokeWidth: 2),
+                              color: AppConstants.primaryColor, strokeWidth: 2),
                         )
                       : const Text('Add Task',
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),

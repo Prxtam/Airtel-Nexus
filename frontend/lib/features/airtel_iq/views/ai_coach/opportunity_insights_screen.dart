@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/core/widgets/app_empty_widget.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/airtel_iq/knowledge/airtel_iq_knowledge_service.dart';
 import 'package:frontend/features/airtel_iq/models/opportunity_insights_models.dart';
@@ -175,10 +177,9 @@ class _OpportunityInsightsScreenState extends State<OpportunityInsightsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Opportunity Insights'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: AirtelHeader(
+        title: 'Opportunity Insights',
+        automaticallyImplyLeading: true,
         actions: [
           if (_result != null)
             TextButton.icon(

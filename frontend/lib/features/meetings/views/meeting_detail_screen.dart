@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
 import 'package:frontend/features/meeting_notes/models/meeting_note.dart';
@@ -21,15 +22,12 @@ class MeetingDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          meetingAsync.maybeWhen(
-            data: (m) => m.title ?? 'Meeting',
-            orElse: () => 'Meeting',
-          ),
+      appBar: AirtelHeader(
+        title: meetingAsync.maybeWhen(
+          data: (m) => m.title ?? 'Meeting',
+          orElse: () => 'Meeting',
         ),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+        automaticallyImplyLeading: true,
       ),
       body: meetingAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

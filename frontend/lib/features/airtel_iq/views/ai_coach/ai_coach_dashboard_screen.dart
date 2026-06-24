@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:gap/gap.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 
 
 class AiCoachDashboardScreen extends StatelessWidget {
@@ -12,24 +13,16 @@ class AiCoachDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('AI Sales Coach'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: const AirtelHeader(
+        title: 'Sales Coach',
+        automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Your AI-powered sales workspace',
-              style: AppTypography.sectionTitle.copyWith(
-                color: Colors.grey,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const Gap(AppSpacing.xl),
+            const Gap(AppSpacing.sm),
             _buildActionCard(
               context: context,
               title: 'Meeting Prep',

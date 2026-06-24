@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
 
@@ -42,10 +43,9 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Airtel Products'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: const AirtelHeader(
+        title: 'Airtel Products',
+        automaticallyImplyLeading: true,
       ),
       body: Column(
         children: [

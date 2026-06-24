@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/auth/models/user.dart';
 import 'package:gap/gap.dart';
 
@@ -33,10 +34,10 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('My Profile'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: const AirtelHeader(
+        title: 'My Profile',
+        subtitle: 'Manage your account',
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.xl),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/mock_data/airtel_iq_mock_data.dart';
 import 'package:frontend/features/airtel_iq/models/airtel_iq_models.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
@@ -39,10 +40,9 @@ class _KnowledgeListScreenState extends State<KnowledgeListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Product Knowledge'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: const AirtelHeader(
+        title: 'Product Knowledge',
+        automaticallyImplyLeading: true,
       ),
       body: Column(
         children: [

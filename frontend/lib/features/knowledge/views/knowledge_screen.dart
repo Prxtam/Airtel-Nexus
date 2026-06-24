@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
 import 'package:frontend/features/airtel_iq/views/about_airtel/about_airtel_screen.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 
 class KnowledgeScreen extends StatelessWidget {
   const KnowledgeScreen({super.key});
@@ -11,9 +12,13 @@ class KnowledgeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
+      appBar: const AirtelHeader(
+        title: 'Airtel Assist',
+        subtitle: 'Sales intelligence for Account Managers',
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         children: [
-          _buildHeader(context),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
@@ -23,20 +28,10 @@ class KnowledgeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'High Impact Tools',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
                   _buildKnowledgeCategory(
                     context: context,
                     icon: Icons.smart_toy_outlined,
-                    title: 'AI Sales Coach',
+                    title: 'Sales Coach',
                     subtitle: 'Intelligent meeting prep & pitch analysis',
                     color: AppConstants.primaryColor,
                   ),
@@ -49,16 +44,7 @@ class KnowledgeScreen extends StatelessWidget {
                     color: Colors.green,
                   ),
                   const SizedBox(height: 32),
-                  const Text(
-                    'Core Foundation',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
+
                   _buildKnowledgeCategory(
                     context: context,
                     icon: Icons.shopping_bag_outlined,
@@ -92,51 +78,6 @@ class KnowledgeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.fromLTRB(
-        20,
-        MediaQuery.of(context).padding.top + 16,
-        20,
-        20,
-      ),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppConstants.primaryColor, Color(0xFFC00000)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Airtel IQ',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.5,
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            'Sales intelligence for Account Managers',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildKnowledgeCategory({
     required BuildContext context,
@@ -167,7 +108,7 @@ class KnowledgeScreen extends StatelessWidget {
               context.push('/airtel-iq/products');
             } else if (title == 'Industry Playbooks') {
               context.push('/airtel-iq/playbooks');
-            } else if (title == 'AI Sales Coach') {
+            } else if (title == 'Sales Coach') {
               context.push('/airtel-iq/ai-coach');
             } else if (title == 'Knowledge Hub') {
               Navigator.push(

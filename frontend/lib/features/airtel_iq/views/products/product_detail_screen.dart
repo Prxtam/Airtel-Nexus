@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 
@@ -25,10 +26,9 @@ class ProductDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(product.productName),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: AirtelHeader(
+        title: product.productName,
+        automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.lg),

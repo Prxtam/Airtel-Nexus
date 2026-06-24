@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/industry_intelligence.dart';
 import 'package:frontend/features/airtel_iq/services/industry_playbook_adapter.dart';
+import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
 
 class PlaybooksListScreen extends StatefulWidget {
   const PlaybooksListScreen({super.key});
@@ -94,58 +97,46 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Industry Playbooks'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(64),
-          child: Container(
-            color: AppConstants.primaryColor,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: TextField(
-              controller: _search,
+      appBar: const AirtelHeader(
+        title: 'Industry Playbooks',
+        automaticallyImplyLeading: true,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: AirtelIqSearchBar(
+              hintText: 'Search industry or solution...',
               onChanged: _onSearch,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Search industry or solution...',
-                hintStyle: const TextStyle(color: Colors.white54),
-                prefixIcon: const Icon(Icons.search, color: Colors.white54),
-                filled: true,
-                fillColor: Colors.white.withValues(alpha: 0.15),
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
             ),
           ),
-        ),
+          Expanded(
+            child: _filtered.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No industries match your search.',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    itemCount: _filtered.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final pb = _filtered[index];
+                      final color = _colorForIndustry(pb.industryName);
+                      final icon = _iconForIndustry(pb.industryName);
+                      return _IndustryCard(
+                        playbook: pb,
+                        color: color,
+                        icon: icon,
+                        onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
-      body: _filtered.isEmpty
-          ? const Center(
-              child: Text(
-                'No industries match your search.',
-                style: TextStyle(color: Colors.grey),
-              ),
-            )
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: _filtered.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final pb = _filtered[index];
-                final color = _colorForIndustry(pb.industryName);
-                final icon = _iconForIndustry(pb.industryName);
-                return _IndustryCard(
-                  playbook: pb,
-                  color: color,
-                  icon: icon,
-                  onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
-                );
-              },
-            ),
     );
   }
 }

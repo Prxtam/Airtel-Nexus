@@ -55,13 +55,19 @@ class DashboardScreen extends ConsumerWidget {
               _buildUpcomingMeetings(context, meetingsAsync),
               const Gap(AppSpacing.xxl),
 
-              // 5. Recent Customers Section
+              // 5. Pending Tasks Section
+              _buildSectionHeader('Pending Tasks', () => context.push('/tasks')),
+              const Gap(AppSpacing.md),
+              _buildPendingTasks(context, tasksAsync),
+              const Gap(AppSpacing.xxl),
+
+              // 6. Recent Customers Section
               _buildSectionHeader('Recent Customers', () => context.push('/customers')),
               const Gap(AppSpacing.md),
               _buildRecentCustomers(context, customersAsync),
               const Gap(AppSpacing.xxl),
 
-              // 6. Key Metrics Row
+              // 7. Key Metrics Row
               const Text('Performance This Month', style: AppTypography.sectionTitle),
               const Gap(AppSpacing.md),
               _buildMonthlyAnalyticsGrid(context, ref, customersAsync, meetingsAsync, tasksAsync),
@@ -169,36 +175,6 @@ class DashboardScreen extends ConsumerWidget {
                 }),
               ],
             ),
-            const Gap(AppSpacing.xl),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Text(
-                    'Stay on top of your enterprise relationships.',
-                    style: AppTypography.bodyText.copyWith(color: Colors.white70, fontSize: 13, height: 1.4),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => context.push('/activities'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(0, 0),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('View Activities', style: AppTypography.bodyText.copyWith(color: Colors.white, fontWeight: FontWeight.w600)),
-                      const Gap(AppSpacing.sm),
-                      const Icon(Icons.arrow_forward, size: 16),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
@@ -264,6 +240,34 @@ class DashboardScreen extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (_, __) => const Center(child: Text('Error loading meetings')),
+    );
+  }
+
+  Widget _buildPendingTasks(BuildContext context, AsyncValue<dynamic> tasksAsync) {
+    return tasksAsync.when(
+      data: (list) {
+        final pending = List<Task>.from(list).where((t) => t.status == TaskStatus.pending).toList()
+          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        
+        if (pending.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Text("No pending tasks", style: AppTypography.bodyText.copyWith(color: Colors.grey)),
+            ),
+          );
+        }
+
+        return ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: pending.length > 3 ? 3 : pending.length,
+          separatorBuilder: (_, __) => const Gap(AppSpacing.sm),
+          itemBuilder: (context, index) => _ModernTaskTile(task: pending[index]),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => const Center(child: Text('Error loading tasks')),
     );
   }
 
@@ -564,6 +568,46 @@ class _ModernCustomerTile extends StatelessWidget {
         title: Text(customer.name, style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600)),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: () => context.push('/customers/${customer.id}'),
+      ),
+    );
+  }
+}
+
+class _ModernTaskTile extends StatelessWidget {
+  final Task task;
+  const _ModernTaskTile({required this.task});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: AppElevation.flat,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.orange.shade50,
+            borderRadius: BorderRadius.circular(AppRadius.sm),
+          ),
+          child: Icon(Icons.assignment, color: Colors.orange.shade800),
+        ),
+        title: Text(task.title, style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600)),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: Text(
+            task.description ?? 'No description',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+          ),
+        ),
+        trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+        onTap: () => context.push('/tasks/${task.id}'),
       ),
     );
   }

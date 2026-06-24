@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 
 class AiCoachPlaceholderScreen extends StatelessWidget {
   const AiCoachPlaceholderScreen({super.key});
@@ -9,10 +10,9 @@ class AiCoachPlaceholderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('AI Sales Coach'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: const AirtelHeader(
+        title: 'AI Sales Coach',
+        automaticallyImplyLeading: true,
       ),
       body: Center(
         child: Padding(

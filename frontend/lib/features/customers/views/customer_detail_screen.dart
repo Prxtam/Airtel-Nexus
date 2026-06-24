@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/customers/models/customer.dart';
@@ -23,12 +24,9 @@ class CustomerDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          customerAsync.maybeWhen(data: (c) => c.name, orElse: () => 'Customer'),
-        ),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: AirtelHeader(
+        title: customerAsync.maybeWhen(data: (c) => c.name, orElse: () => 'Customer'),
+        automaticallyImplyLeading: true,
       ),
       body: customerAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -187,7 +185,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
     );
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -200,7 +198,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                 borderRadius: BorderRadius.circular(AppRadius.lg),
                 side: BorderSide(color: Colors.grey.shade200)),
             child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.xl),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -210,17 +208,17 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                       Row(
                         children: [
                           CircleAvatar(
-                            radius: 32,
+                            radius: 26,
                             backgroundColor:
                                 AppConstants.primaryColor.withValues(alpha: 0.1),
                             child: Text(
                               widget.customer.name.isNotEmpty
                                   ? widget.customer.name[0].toUpperCase()
                                   : '?',
-                              style: AppTypography.pageTitle.copyWith(
-                                color: AppConstants.primaryColor,
-                                fontSize: 28,
-                              ),
+                                style: AppTypography.pageTitle.copyWith(
+                                  color: AppConstants.primaryColor,
+                                  fontSize: 24,
+                                ),
                             ),
                           ),
                           const Gap(AppSpacing.lg),
@@ -326,11 +324,11 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
             ),
           ),
 
-          const Gap(AppSpacing.xxl),
+          const Gap(AppSpacing.xl),
 
           // Overview Section
           Text('Overview', style: AppTypography.sectionTitle),
-          const Gap(AppSpacing.md),
+          const Gap(AppSpacing.sm),
           Card(
             elevation: AppElevation.flat,
             color: Colors.white,
@@ -340,7 +338,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
               side: BorderSide(color: Colors.grey.shade200),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.xl),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -351,7 +349,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
             ),
           ),
 
-          const Gap(AppSpacing.xxl),
+          const Gap(AppSpacing.xl),
 
           // Meetings Section
           Row(
@@ -366,7 +364,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                 ),
             ],
           ),
-          const Gap(AppSpacing.md),
+          const Gap(AppSpacing.sm),
           if (customerMeetings.isEmpty)
             _buildEmptyState(Icons.event_outlined, 'No meetings yet.', () => context.push('/meetings/create'))
           else
@@ -392,7 +390,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
               ),
             ),
 
-          const Gap(AppSpacing.xxl),
+          const Gap(AppSpacing.xl),
 
           // Tasks Section
           Row(
@@ -407,7 +405,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                 ),
             ],
           ),
-          const Gap(AppSpacing.md),
+          const Gap(AppSpacing.sm),
           if (customerTasks.isEmpty)
             _buildEmptyState(Icons.check_circle_outline, 'No pending tasks.', () => context.push('/tasks/create'))
           else
@@ -440,8 +438,7 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
               ),
             ),
 
-          const Gap(AppSpacing.xxl),
-          const Gap(AppSpacing.xxl),
+          const Gap(AppSpacing.xl),
 
           // Delete Button (Small and Less Aggressive)
           Center(
@@ -485,27 +482,20 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
         borderRadius: BorderRadius.circular(AppRadius.md),
         side: BorderSide(color: Colors.grey.shade200),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
-        child: Center(
-          child: Column(
-            children: [
-              Icon(icon, color: Colors.grey, size: 32),
-              const Gap(AppSpacing.sm),
-              Text(
-                message,
-                style: const TextStyle(color: Colors.grey),
-              ),
-              if (onAction != null) ...[
-                const Gap(AppSpacing.md),
-                TextButton(
-                  onPressed: onAction,
-                  child: const Text('Create New'),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.grey),
+        title: Text(message, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+        trailing: onAction != null
+            ? TextButton(
+                onPressed: onAction,
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-              ]
-            ],
-          ),
-        ),
+                child: const Text('Create New'),
+              )
+            : null,
       ),
     );
   }

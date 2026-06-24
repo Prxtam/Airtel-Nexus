@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/app_empty_widget.dart';
 import 'package:frontend/core/widgets/app_error_widget.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/customers/models/customer.dart';
@@ -26,10 +27,10 @@ class CustomerListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Customers'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: AirtelHeader(
+        title: 'Customers',
+        subtitle: 'Manage your enterprise relationships',
+        automaticallyImplyLeading: false,
         actions: [
           if (!hasNoCustomersAtAll)
             PopupMenuButton<CustomerSort>(
@@ -47,8 +48,12 @@ class CustomerListScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/customers/create'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: AppConstants.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
+        ),
         child: const Icon(Icons.add),
       ),
       body: Column(

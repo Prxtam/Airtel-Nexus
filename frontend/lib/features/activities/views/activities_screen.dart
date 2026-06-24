@@ -4,6 +4,7 @@ import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/meetings/views/meeting_list_screen.dart';
 import 'package:frontend/features/tasks/views/task_list_screen.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 
 class ActivitiesScreen extends ConsumerStatefulWidget {
   const ActivitiesScreen({super.key});
@@ -36,9 +37,13 @@ class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen> with Single
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
+      appBar: const AirtelHeader(
+        title: 'Activities',
+        subtitle: 'Track meetings and tasks',
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         children: [
-          _buildHeader(context),
           Container(
             color: Colors.white,
             child: TabBar(
@@ -68,37 +73,4 @@ class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen> with Single
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.fromLTRB(AppSpacing.lg, MediaQuery.of(context).padding.top + AppSpacing.lg, AppSpacing.lg, AppSpacing.xl),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppConstants.primaryColor, Color(0xFFC00000)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Activities',
-                style: AppTypography.pageTitle.copyWith(color: Colors.white),
-              ),
-              const SizedBox(), // Removed legacy dropdown
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Track meetings and tasks',
-            style: AppTypography.bodyText.copyWith(color: Colors.white70),
-          ),
-        ],
-      ),
-    );
-  }
 }

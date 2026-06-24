@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/industry_intelligence.dart';
 import 'package:frontend/features/airtel_iq/services/industry_playbook_adapter.dart';
 import 'package:frontend/features/airtel_iq/services/product_alias_resolver.dart';
@@ -80,60 +81,8 @@ class PlaybookDetailScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           // Header
-          SliverAppBar(
-            expandedHeight: 160,
-            pinned: true,
-            backgroundColor: color,
-            foregroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [color, color.withValues(alpha: 0.75)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 80, 20, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(emoji, style: const TextStyle(fontSize: 28)),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            playbook.industryName,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              height: 1.2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (playbook.overview != null) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        playbook.overview!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
+          AirtelSliverHeader(
+            title: '${playbook.industryName} Playbook',
           ),
 
           SliverPadding(

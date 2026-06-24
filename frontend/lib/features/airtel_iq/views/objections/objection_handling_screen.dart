@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/core/constants/app_constants.dart';
+import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 import 'package:frontend/features/airtel_iq/services/objection_coach_engine.dart';
 
@@ -104,10 +105,9 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Objection Coach'),
-        backgroundColor: AppConstants.primaryColor,
-        foregroundColor: Colors.white,
+      appBar: const AirtelHeader(
+        title: 'Objection Coach',
+        automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
         child: Column(
