@@ -37,13 +37,7 @@ class AiCoachDashboardScreen extends StatelessWidget {
               icon: Icons.lightbulb_outline,
               route: '/airtel-iq/ai-coach/insights',
             ),
-            _buildActionCard(
-              context: context,
-              title: 'Follow-Up Generator',
-              subtitle: 'Executive summaries and customer emails',
-              icon: Icons.mark_email_read_outlined,
-              route: '/airtel-iq/ai-coach/follow-ups',
-            ),
+
             _buildActionCard(
               context: context,
               title: 'Objection Coach',

@@ -17,7 +17,6 @@ import 'package:frontend/features/airtel_iq/views/objections/objection_handling_
 import 'package:frontend/features/airtel_iq/views/ai_coach/ai_coach_dashboard_screen.dart';
 import 'package:frontend/features/airtel_iq/views/ai_coach/meeting_prep_screen.dart';
 import 'package:frontend/features/airtel_iq/views/ai_coach/opportunity_insights_screen.dart';
-import 'package:frontend/features/airtel_iq/views/ai_coach/follow_up_generator_screen.dart';
 import 'package:frontend/features/airtel_iq/views/ai_coach/ask_airtel_iq_screen.dart';
 
 import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
@@ -184,10 +183,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 path: 'insights',
                 builder: (context, state) => const OpportunityInsightsScreen(),
               ),
-              GoRoute(
-                path: 'follow-ups',
-                builder: (context, state) => const FollowUpGeneratorScreen(),
-              ),
+
               GoRoute(
                 path: 'ask',
                 builder: (context, state) => const AskAirtelIqScreen(),
