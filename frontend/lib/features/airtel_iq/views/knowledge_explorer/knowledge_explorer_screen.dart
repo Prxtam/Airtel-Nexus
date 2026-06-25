@@ -7,6 +7,7 @@ import 'package:frontend/features/airtel_iq/knowledge/industry_intelligence.dart
 import 'package:frontend/features/airtel_iq/knowledge/knowledge_models.dart';
 import 'package:frontend/features/airtel_iq/knowledge/knowledge_hub_resources.dart';
 import 'package:frontend/features/airtel_iq/services/product_alias_resolver.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 
 // ─── Search result model ──────────────────────────────────────────────────────
 
@@ -316,55 +317,18 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
+      appBar: AirtelSearchHeader(
+        title: 'Airtel Knowledge Hub',
+        subtitle: 'Centralized Airtel reference encyclopedia',
+        hintText: 'Search products, industries, terms...',
+        onChanged: (v) => setState(() => _query = v),
+        automaticallyImplyLeading: true,
+      ),
       body: CustomScrollView(
         slivers: [
-          // ── Header ──────────────────────────────────────────────────────
-          const AirtelSliverHeader(
-            title: 'Airtel Knowledge Hub',
-          ),
-
-          // ── Search bar ──────────────────────────────────────────────────
           SliverToBoxAdapter(
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-              child: TextField(
-                controller: _search,
-                onChanged: (v) => setState(() => _query = v),
-                decoration: InputDecoration(
-                  hintText: 'Search products, industries, terms...',
-                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                  suffixIcon: _query.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.close, color: Colors.grey),
-                          onPressed: () => setState(() {
-                            _search.clear();
-                            _query = '';
-                          }),
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: Colors.grey.shade50,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: AppConstants.primaryColor,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            child: SizedBox(height: AirtelHeaderConstants.searchBodyTopPadding),
           ),
-
           // ─── SEARCH RESULTS MODE ─────────────────────────────────────────
           if (isSearching) ...[
             if (searchResults.isEmpty)

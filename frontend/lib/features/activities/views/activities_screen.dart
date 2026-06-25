@@ -41,6 +41,7 @@ class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen> with Single
         title: 'Activities',
         subtitle: 'Track meetings and tasks',
         automaticallyImplyLeading: false,
+        variant: HeaderVariant.large,
       ),
       body: Column(
         children: [

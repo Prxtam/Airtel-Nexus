@@ -106,6 +106,7 @@ class _TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
       appBar: const AirtelHeader(
         title: 'Create Task',
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.compact,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.xl),

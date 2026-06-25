@@ -20,6 +20,7 @@ class KnowledgeDetailScreen extends StatelessWidget {
       appBar: const AirtelHeader(
         title: 'Article',
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.medium,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.lg),

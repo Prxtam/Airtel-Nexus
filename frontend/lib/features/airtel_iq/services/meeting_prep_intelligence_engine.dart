@@ -781,7 +781,6 @@ class MeetingPrepIntelligenceEngine {
         return b.matchCount.compareTo(a.matchCount);
       }
       return (a.item).name.compareTo((b.item).name);
-          return 0;
     });
 
 

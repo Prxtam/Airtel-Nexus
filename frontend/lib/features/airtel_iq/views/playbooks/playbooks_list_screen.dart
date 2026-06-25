@@ -5,8 +5,6 @@ import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/industry_intelligence.dart';
 import 'package:frontend/features/airtel_iq/services/industry_playbook_adapter.dart';
-import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
-
 class PlaybooksListScreen extends StatefulWidget {
   const PlaybooksListScreen({super.key});
 
@@ -72,19 +70,16 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: const AirtelHeader(
+      appBar: AirtelSearchHeader(
         title: 'Industry Playbooks',
+        subtitle: 'Industry-specific sales guidance',
+        hintText: 'Search industries...',
+        onChanged: _onSearch,
         automaticallyImplyLeading: true,
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: AirtelIqSearchBar(
-              hintText: 'Search industry or solution...',
-              onChanged: _onSearch,
-            ),
-          ),
+          const SizedBox(height: AirtelHeaderConstants.searchBodyTopPadding),
           Expanded(
             child: _filtered.isEmpty
                     ? const Center(

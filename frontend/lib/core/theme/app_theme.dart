@@ -66,6 +66,24 @@ class AppTypography {
   );
 }
 
+class AirtelHeaderConstants {
+  static const double largeHeroHeightWithSubtitle = 130.0;
+  static const double largeHeroHeightNoSubtitle = 108.0;
+  static const double largeHeroHeightWithSearch = 148.0;
+  static const double mediumHeaderHeight = 92.0;
+
+  static const double titleLargeSize = 22.0;
+  static const double titleMediumSize = 20.0;
+  static const double titleCompactSize = 18.0;
+
+  static const double subtitleSize = 13.0;
+
+  static const double searchBarHeight = 48.0;
+  static const double searchBarOverlap = 24.0;
+  static const double searchBodyTopPadding = 36.0;
+  static const double searchBarRadius = 14.0;
+}
+
 class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(

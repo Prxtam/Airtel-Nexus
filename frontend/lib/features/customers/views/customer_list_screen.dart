@@ -27,24 +27,12 @@ class CustomerListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: AirtelHeader(
+      appBar: AirtelSearchHeader(
         title: 'Customers',
         subtitle: 'Manage your enterprise relationships',
+        hintText: 'Search customers...',
+        onChanged: (val) => ref.read(customerSearchProvider.notifier).state = val,
         automaticallyImplyLeading: true,
-        actions: [
-          if (!hasNoCustomersAtAll)
-            PopupMenuButton<CustomerSort>(
-              icon: const Icon(Icons.filter_list, color: Colors.white),
-              initialValue: currentSort,
-              onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
-              itemBuilder: (context) => [
-                const PopupMenuItem(value: CustomerSort.nameAsc, child: Text('Name (A-Z)')),
-                const PopupMenuItem(value: CustomerSort.nameDesc, child: Text('Name (Z-A)')),
-                const PopupMenuItem(value: CustomerSort.newestFirst, child: Text('Newest First')),
-                const PopupMenuItem(value: CustomerSort.oldestFirst, child: Text('Oldest First')),
-              ],
-            ),
-        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/customers/create'),
@@ -76,28 +64,36 @@ class CustomerListScreen extends ConsumerWidget {
                 }
 
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, AppSpacing.sm),
-                      child: TextField(
-                        onChanged: (val) => ref.read(customerSearchProvider.notifier).state = val,
-                        decoration: InputDecoration(
-                          hintText: 'Search customers...',
-                          prefixIcon: const Icon(Icons.search),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppRadius.md),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppRadius.md),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 0),
+                    const SizedBox(height: AirtelHeaderConstants.searchBodyTopPadding),
+                    if (!hasNoCustomersAtAll)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${customers.length} Customers', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.grey.shade700)),
+                            PopupMenuButton<CustomerSort>(
+                              initialValue: currentSort,
+                              onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
+                              itemBuilder: (context) => [
+                                const PopupMenuItem(value: CustomerSort.nameAsc, child: Text('Name (A-Z)')),
+                                const PopupMenuItem(value: CustomerSort.nameDesc, child: Text('Name (Z-A)')),
+                                const PopupMenuItem(value: CustomerSort.newestFirst, child: Text('Newest First')),
+                                const PopupMenuItem(value: CustomerSort.oldestFirst, child: Text('Oldest First')),
+                              ],
+                              child: Row(
+                                children: [
+                                  Icon(Icons.sort, color: AppConstants.primaryColor, size: 20),
+                                  const SizedBox(width: 4),
+                                  Text('Sort', style: TextStyle(color: AppConstants.primaryColor, fontWeight: FontWeight.w600)),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
                     Expanded(
                       child: _buildList(context, ref, customers),
                     ),

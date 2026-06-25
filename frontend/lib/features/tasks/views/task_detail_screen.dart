@@ -22,6 +22,7 @@ class TaskDetailScreen extends ConsumerWidget {
       appBar: AirtelHeader(
         title: taskAsync.maybeWhen(data: (t) => t.title, orElse: () => 'Task'),
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.medium,
       ),
       body: taskAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

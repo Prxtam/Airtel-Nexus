@@ -34,8 +34,9 @@ class ProfileScreen extends ConsumerWidget {
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: const AirtelHeader(
         title: 'My Profile',
-        subtitle: 'Manage your account',
+        subtitle: 'Manage your account details',
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.large,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.xl),

@@ -4,7 +4,6 @@ import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
-import 'package:frontend/features/airtel_iq/widgets/airtel_iq_search_bar.dart';
 
 class ProductsListScreen extends StatefulWidget {
   const ProductsListScreen({super.key});
@@ -14,7 +13,6 @@ class ProductsListScreen extends StatefulWidget {
 }
 
 class _ProductsListScreenState extends State<ProductsListScreen> {
-  late Map<String, EnrichedProduct> _filteredProducts;
   final List<String> _categories = [
     'All Products',
     'Mobility',
@@ -23,13 +21,11 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     'Cloud',
     'Security'
   ];
-  final String _selectedCategory = 'All Products';
   String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _filteredProducts = Map.from(productEnrichmentData);
   }
 
   IconData _getIconForCategory(String category) {
@@ -43,24 +39,6 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     return Icons.business_outlined;
   }
 
-  void _applyFilters() {
-    setState(() {
-      _filteredProducts = Map.fromEntries(
-        productEnrichmentData.entries.where((entry) {
-          final product = entry.value;
-          final matchesSearch = _searchQuery.isEmpty || 
-                 product.productName.toLowerCase().contains(_searchQuery) ||
-                 product.primaryUseCase.toLowerCase().contains(_searchQuery) ||
-                 product.category.toLowerCase().contains(_searchQuery);
-                 
-          final matchesCategory = _selectedCategory == 'All Products' || 
-                 product.category.toLowerCase().contains(_selectedCategory.toLowerCase());
-                 
-          return matchesSearch && matchesCategory;
-        }),
-      );
-    });
-  }
 
   void _onSearchChanged(String query) {
     setState(() {
@@ -74,19 +52,16 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
       length: _categories.length,
       child: Scaffold(
         backgroundColor: AppConstants.scaffoldBackgroundColor,
-        appBar: const AirtelHeader(
+        appBar: AirtelSearchHeader(
           title: 'Airtel Products',
+          subtitle: 'Enterprise solutions and service portfolio',
+          hintText: 'Search Airtel products...',
+          onChanged: _onSearchChanged,
           automaticallyImplyLeading: true,
         ),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: AirtelIqSearchBar(
-                hintText: 'Search products by name or category...',
-                onChanged: _onSearchChanged,
-              ),
-            ),
+            const SizedBox(height: AirtelHeaderConstants.searchBodyTopPadding),
             // Slidable Category Tabs
             TabBar(
               isScrollable: true,

@@ -115,6 +115,7 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
       appBar: const AirtelHeader(
         title: 'Schedule Meeting',
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.compact,
       ),
       body: customersAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

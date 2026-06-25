@@ -27,6 +27,7 @@ class CustomerDetailScreen extends ConsumerWidget {
       appBar: AirtelHeader(
         title: customerAsync.maybeWhen(data: (c) => c.name, orElse: () => 'Customer'),
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.medium,
       ),
       body: customerAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

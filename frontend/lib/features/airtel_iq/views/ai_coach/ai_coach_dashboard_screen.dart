@@ -15,7 +15,9 @@ class AiCoachDashboardScreen extends StatelessWidget {
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: const AirtelHeader(
         title: 'Sales Coach',
+        subtitle: 'AI-powered sales enablement',
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.large,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xl),

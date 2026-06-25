@@ -55,6 +55,7 @@ class _NoteCreateScreenState extends ConsumerState<NoteCreateScreen> {
       appBar: const AirtelHeader(
         title: 'Add Note',
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.compact,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),

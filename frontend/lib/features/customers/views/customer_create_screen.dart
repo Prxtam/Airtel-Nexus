@@ -66,6 +66,7 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
       appBar: const AirtelHeader(
         title: 'Add Customer',
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.compact,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.xl),

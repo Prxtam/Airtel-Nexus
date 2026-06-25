@@ -28,6 +28,7 @@ class MeetingDetailScreen extends ConsumerWidget {
           orElse: () => 'Meeting',
         ),
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.medium,
       ),
       body: meetingAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

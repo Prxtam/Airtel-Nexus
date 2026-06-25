@@ -16,6 +16,7 @@ class KnowledgeScreen extends StatelessWidget {
         title: 'Airtel Assist',
         subtitle: 'Sales intelligence for Account Managers',
         automaticallyImplyLeading: false,
+        variant: HeaderVariant.large,
       ),
       body: Column(
         children: [

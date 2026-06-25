@@ -29,6 +29,7 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AirtelHeader(
         title: product.productName,
         automaticallyImplyLeading: true,
+        variant: HeaderVariant.medium,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.lg),

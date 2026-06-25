@@ -37,25 +37,6 @@ class PlaybookDetailScreen extends StatelessWidget {
     return AppConstants.primaryColor;
   }
 
-  String _emojiFor(String name) {
-    if (name.contains('Banking')) return '🏦';
-    if (name.contains('Manufacturing')) return '🏭';
-    if (name.contains('Retail')) return '🛍️';
-    if (name.contains('Healthcare')) return '🏥';
-    if (name.contains('IT')) return '💻';
-    if (name.contains('Logistics')) return '🚚';
-    if (name.contains('Government')) return '🏛️';
-    if (name.contains('E-Commerce')) return '📦';
-    if (name.contains('Education')) return '🎓';
-    if (name.contains('Hospitality')) return '🏨';
-    if (name.contains('Energy')) return '⚡';
-    if (name.contains('Automotive')) return '🚗';
-    if (name.contains('Media')) return '🎬';
-    if (name.contains('Travel')) return '✈️';
-    if (name.contains('Telecom')) return '📡';
-    return '🏢';
-  }
-
   void _copyToClipboard(BuildContext context, String text) {
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
@@ -74,7 +55,6 @@ class PlaybookDetailScreen extends StatelessWidget {
     );
     final playbook = IndustryPlaybook.fromIndustry(industry);
     final color = _colorFor(playbook.industryName);
-    final emoji = _emojiFor(playbook.industryName);
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
@@ -83,6 +63,7 @@ class PlaybookDetailScreen extends StatelessWidget {
           // Header
           AirtelSliverHeader(
             title: '${playbook.industryName} Playbook',
+            variant: HeaderVariant.medium,
           ),
 
           SliverPadding(

@@ -17,6 +17,8 @@ class AboutAirtelScreen extends StatelessWidget {
           // ── Header ────────────────────────────────────────────────────────
           const AirtelSliverHeader(
             title: 'About Airtel',
+            subtitle: 'Learn everything about the company',
+            variant: HeaderVariant.large,
           ),
 
           // ── Body ─────────────────────────────────────────────────────────
