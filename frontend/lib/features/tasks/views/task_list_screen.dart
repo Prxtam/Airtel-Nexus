@@ -9,8 +9,6 @@ import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/tasks/models/task.dart';
 import 'package:frontend/features/tasks/providers/task_provider.dart';
-import 'package:frontend/features/tasks/models/task.dart';
-import 'package:frontend/features/tasks/providers/task_provider.dart';
 import 'package:frontend/features/tasks/providers/task_filter_provider.dart';
 import 'package:gap/gap.dart';
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/mock_data/airtel_iq_mock_data.dart';

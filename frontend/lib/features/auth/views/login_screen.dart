@@ -23,8 +23,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   final List<String> _roles = [
     'Account Manager',
-    'Zonal Sales Manager',
-    'Circle Business Head',
   ];
 
   @override

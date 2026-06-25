@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
-import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/core/utils/date_formatter.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';
@@ -12,7 +11,6 @@ import 'package:frontend/features/auth/models/user.dart';
 import 'package:frontend/features/meetings/models/meeting.dart';
 import 'package:frontend/features/customers/models/customer.dart';
 import 'package:frontend/features/tasks/models/task.dart';
-import 'package:frontend/features/tasks/providers/task_filter_provider.dart';
 import 'package:frontend/features/meetings/providers/meeting_filter_provider.dart';
 import 'package:frontend/core/widgets/app_drawer.dart';
 import 'package:frontend/core/theme/app_theme.dart';
@@ -435,6 +433,7 @@ class _HeroStatItem extends StatelessWidget {
 
   const _HeroStatItem(this.count, this.label, {this.onTap});
 
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
@@ -460,6 +459,7 @@ class _ServiceShortcutCard extends StatelessWidget {
 
   const _ServiceShortcutCard({required this.icon, required this.label, required this.onTap});
 
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
@@ -506,6 +506,7 @@ class _ModernMeetingTile extends StatelessWidget {
   final Meeting meeting;
   const _ModernMeetingTile({required this.meeting});
 
+  @override
   Widget build(BuildContext context) {
     return Card(
       elevation: AppElevation.flat,
@@ -547,6 +548,7 @@ class _ModernCustomerTile extends StatelessWidget {
   final Customer customer;
   const _ModernCustomerTile({required this.customer});
 
+  @override
   Widget build(BuildContext context) {
     return Card(
       elevation: AppElevation.flat,

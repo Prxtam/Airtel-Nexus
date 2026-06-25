@@ -51,13 +51,7 @@ class AiCoachDashboardScreen extends StatelessWidget {
               icon: Icons.shield_outlined,
               route: '/airtel-iq/objections',
             ),
-            _buildActionCard(
-              context: context,
-              title: 'Ask Airtel IQ',
-              subtitle: 'Enterprise knowledge search',
-              icon: Icons.search,
-              route: '/airtel-iq/ai-coach/ask',
-            ),
+
             const Gap(AppSpacing.xxl),
           ],
         ),

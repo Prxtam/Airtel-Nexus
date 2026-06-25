@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
-import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
 import 'package:frontend/features/airtel_iq/knowledge/industry_intelligence.dart';
@@ -267,41 +266,26 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
   // ─── Industry color helpers (shared with playbook screens) ────────────────
 
   Color _industryColor(String name) {
-    if (name.contains('Banking')) return const Color(0xFF1E3A5F);
-    if (name.contains('Manufacturing')) return const Color(0xFF374151);
-    if (name.contains('Retail')) return const Color(0xFF7C3AED);
-    if (name.contains('Healthcare')) return const Color(0xFF0F766E);
-    if (name.contains('IT')) return const Color(0xFF1D4ED8);
-    if (name.contains('Logistics')) return const Color(0xFFB45309);
-    if (name.contains('Government')) return const Color(0xFF1A5276);
-    if (name.contains('E-Commerce')) return const Color(0xFFC2185B);
-    if (name.contains('Education')) return const Color(0xFF0D6E3F);
-    if (name.contains('Hospitality')) return const Color(0xFF92400E);
-    if (name.contains('Energy')) return const Color(0xFF6D4C41);
-    if (name.contains('Automotive')) return const Color(0xFF37474F);
-    if (name.contains('Media')) return const Color(0xFF4527A0);
-    if (name.contains('Travel')) return const Color(0xFF006064);
-    if (name.contains('Telecom')) return const Color(0xFF880E4F);
     return AppConstants.primaryColor;
   }
 
-  String _industryEmoji(String name) {
-    if (name.contains('Banking')) return '🏦';
-    if (name.contains('Manufacturing')) return '🏭';
-    if (name.contains('Retail')) return '🛍️';
-    if (name.contains('Healthcare')) return '🏥';
-    if (name.contains('IT')) return '💻';
-    if (name.contains('Logistics')) return '🚚';
-    if (name.contains('Government')) return '🏛️';
-    if (name.contains('E-Commerce')) return '📦';
-    if (name.contains('Education')) return '🎓';
-    if (name.contains('Hospitality')) return '🏨';
-    if (name.contains('Energy')) return '⚡';
-    if (name.contains('Automotive')) return '🚗';
-    if (name.contains('Media')) return '🎬';
-    if (name.contains('Travel')) return '✈️';
-    if (name.contains('Telecom')) return '📡';
-    return '🏢';
+  IconData _iconForIndustry(String name) {
+    if (name.contains('Banking')) return Icons.account_balance_outlined;
+    if (name.contains('Manufacturing')) return Icons.precision_manufacturing_outlined;
+    if (name.contains('Retail')) return Icons.storefront_outlined;
+    if (name.contains('Healthcare')) return Icons.local_hospital_outlined;
+    if (name.contains('IT')) return Icons.computer_outlined;
+    if (name.contains('Logistics')) return Icons.local_shipping_outlined;
+    if (name.contains('Government')) return Icons.gavel_outlined;
+    if (name.contains('E-Commerce')) return Icons.shopping_bag_outlined;
+    if (name.contains('Education')) return Icons.school_outlined;
+    if (name.contains('Hospitality')) return Icons.hotel_outlined;
+    if (name.contains('Energy')) return Icons.bolt_outlined;
+    if (name.contains('Automotive')) return Icons.directions_car_outlined;
+    if (name.contains('Media')) return Icons.movie_outlined;
+    if (name.contains('Travel')) return Icons.flight_outlined;
+    if (name.contains('Telecom')) return Icons.cell_tower_outlined;
+    return Icons.business_outlined;
   }
 
   Color _categoryColor(String cat) {
@@ -535,7 +519,7 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
                     child: _IndustryGatewayCard(
                       industry: ind,
                       color: _industryColor(ind.industryName),
-                      emoji: _industryEmoji(ind.industryName),
+                      icon: _iconForIndustry(ind.industryName),
                       onTap: () => _showIndustrySheet(ctx, ind),
                       onOpen: () => _openIndustry(ctx, ind),
                     ),
@@ -951,14 +935,14 @@ class _ProductGatewayCard extends StatelessWidget {
 class _IndustryGatewayCard extends StatelessWidget {
   final IndustryIntelligence industry;
   final Color color;
-  final String emoji;
+  final IconData icon;
   final VoidCallback onTap;
   final VoidCallback onOpen;
 
   const _IndustryGatewayCard({
     required this.industry,
     required this.color,
-    required this.emoji,
+    required this.icon,
     required this.onTap,
     required this.onOpen,
   });
@@ -987,7 +971,7 @@ class _IndustryGatewayCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
-                  child: Text(emoji, style: const TextStyle(fontSize: 22)),
+                  child: Icon(icon, color: color, size: 24),
                 ),
               ),
               const SizedBox(width: 12),

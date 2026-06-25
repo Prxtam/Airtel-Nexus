@@ -19,31 +19,6 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
   late List<IndustryPlaybook> _filtered;
   final TextEditingController _search = TextEditingController();
 
-  static const List<(String, Color)> _industryColors = [
-    ('Banking', Color(0xFF1E3A5F)),
-    ('Manufacturing', Color(0xFF374151)),
-    ('Retail', Color(0xFF7C3AED)),
-    ('Healthcare', Color(0xFF0F766E)),
-    ('IT', Color(0xFF1D4ED8)),
-    ('Logistics', Color(0xFFB45309)),
-    ('Government', Color(0xFF1A5276)),
-    ('E-Commerce', Color(0xFFC2185B)),
-    ('Education', Color(0xFF0D6E3F)),
-    ('Hospitality', Color(0xFF92400E)),
-    ('Energy', Color(0xFF6D4C41)),
-    ('Automotive', Color(0xFF37474F)),
-    ('Media', Color(0xFF4527A0)),
-    ('Travel', Color(0xFF006064)),
-    ('Telecom', Color(0xFF880E4F)),
-  ];
-
-  Color _colorForIndustry(String name) {
-    for (final (keyword, color) in _industryColors) {
-      if (name.contains(keyword)) return color;
-    }
-    return AppConstants.primaryColor;
-  }
-
   IconData _iconForIndustry(String name) {
     if (name.contains('Banking')) return Icons.account_balance_outlined;
     if (name.contains('Manufacturing')) return Icons.precision_manufacturing_outlined;

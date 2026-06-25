@@ -23,7 +23,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     'Cloud',
     'Security'
   ];
-  String _selectedCategory = 'All Products';
+  final String _selectedCategory = 'All Products';
   String _searchQuery = '';
 
   @override

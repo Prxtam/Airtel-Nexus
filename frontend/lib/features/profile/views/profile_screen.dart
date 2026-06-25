@@ -19,8 +19,6 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   String _formatRoleForInput(String internalRole) {
-    if (internalRole == 'zonal_sales_manager') return 'Zonal Sales Manager';
-    if (internalRole == 'circle_business_head') return 'Circle Business Head';
     return 'Account Manager';
   }
 
@@ -37,7 +35,7 @@ class ProfileScreen extends ConsumerWidget {
       appBar: const AirtelHeader(
         title: 'My Profile',
         subtitle: 'Manage your account',
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.xl),
@@ -244,7 +242,7 @@ class ProfileScreen extends ConsumerWidget {
               const Gap(AppSpacing.md),
               DropdownButtonFormField<String>(
                 initialValue: roleValue,
-                items: ['Account Manager', 'Zonal Sales Manager', 'Circle Business Head'].map((role) {
+                items: ['Account Manager'].map((role) {
                   return DropdownMenuItem(value: role, child: Text(role));
                 }).toList(),
                 onChanged: (val) {

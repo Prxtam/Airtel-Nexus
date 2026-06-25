@@ -30,9 +30,9 @@ class KnowledgeScreen extends StatelessWidget {
                 children: [
                   _buildKnowledgeCategory(
                     context: context,
-                    icon: Icons.smart_toy_outlined,
-                    title: 'Sales Coach',
-                    subtitle: 'Intelligent meeting prep & pitch analysis',
+                    icon: Icons.shopping_bag_outlined,
+                    title: 'Airtel Products',
+                    subtitle: 'Enterprise solutions and service details',
                     color: AppConstants.primaryColor,
                   ),
                   const SizedBox(height: 12),
@@ -41,16 +41,15 @@ class KnowledgeScreen extends StatelessWidget {
                     icon: Icons.menu_book_outlined,
                     title: 'Industry Playbooks',
                     subtitle: 'Quick-reference for every industry',
-                    color: Colors.green,
+                    color: AppConstants.primaryColor,
                   ),
-                  const SizedBox(height: 32),
-
+                  const SizedBox(height: 12),
                   _buildKnowledgeCategory(
                     context: context,
-                    icon: Icons.shopping_bag_outlined,
-                    title: 'Airtel Products',
-                    subtitle: 'Enterprise solutions and service details',
-                    color: Colors.purple,
+                    icon: Icons.smart_toy_outlined,
+                    title: 'Sales Coach',
+                    subtitle: 'Intelligent meeting prep & pitch analysis',
+                    color: AppConstants.primaryColor,
                   ),
                   const SizedBox(height: 12),
                   _buildKnowledgeCategory(
@@ -58,7 +57,7 @@ class KnowledgeScreen extends StatelessWidget {
                     icon: Icons.hub_outlined,
                     title: 'Knowledge Hub',
                     subtitle: 'Airtel reference encyclopedia',
-                    color: Colors.teal,
+                    color: AppConstants.primaryColor,
                   ),
                   const SizedBox(height: 12),
                   _buildKnowledgeCategory(
@@ -66,7 +65,7 @@ class KnowledgeScreen extends StatelessWidget {
                     icon: Icons.info_outline,
                     title: 'About Airtel',
                     subtitle: 'Company information and updates',
-                    color: Colors.blue,
+                    color: AppConstants.primaryColor,
                   ),
                   const SizedBox(height: 24),
                 ],

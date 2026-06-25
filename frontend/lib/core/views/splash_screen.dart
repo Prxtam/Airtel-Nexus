@@ -6,7 +6,7 @@ import 'package:frontend/features/auth/providers/auth_provider.dart';
 import 'package:gap/gap.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
@@ -81,10 +81,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     height: 60,
                   ),
                   const Gap(8),
-                  const Text(
+                  Text(
                     'airtel',
                     style: TextStyle(
-                      fontFamily: 'Roboto',
+                      fontFamily: GoogleFonts.ubuntu().fontFamily,
                       fontSize: 32,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,

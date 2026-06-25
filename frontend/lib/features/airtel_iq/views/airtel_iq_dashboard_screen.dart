@@ -27,66 +27,52 @@ class AirtelIqDashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: AppSpacing.md,
-              mainAxisSpacing: AppSpacing.md,
-              childAspectRatio: 0.85,
-              children: [
-                AirtelIqFeatureCard(
-                  title: 'Sales Coach',
-                  subtitle: 'Meeting prep & pitch suggestions',
-                  icon: Icons.smart_toy_outlined,
-                  iconColor: AppConstants.primaryColor,
-                  isFeatured: true,
-                  onTap: () => context.push('/airtel-iq/ai-coach'),
-                ),
-                AirtelIqFeatureCard(
-                  title: 'Objection Handling',
-                  subtitle: 'Overcome pricing and tech concerns',
-                  icon: Icons.shield_outlined,
-                  iconColor: const Color(0xFFC00000), // Airtel Red
-                  isFeatured: true,
-                  onTap: () => context.push('/airtel-iq/objections'),
-                ),
-                AirtelIqFeatureCard(
-                  title: 'Knowledge Hub',
-                  subtitle: 'Airtel reference encyclopedia',
-                  icon: Icons.hub_outlined,
-                  iconColor: Colors.teal,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const KnowledgeExplorerScreen(),
-                      ),
-                    );
-                  },
-                ),
-                AirtelIqFeatureCard(
-                  title: 'Airtel Products',
-                  subtitle: 'Enterprise solutions details',
-                  icon: Icons.shopping_bag_outlined,
-                  iconColor: Colors.purple,
-                  onTap: () => context.push('/airtel-iq/products'),
-                ),
-                AirtelIqFeatureCard(
-                  title: 'Industry Playbooks',
-                  subtitle: 'Quick-reference for every industry',
-                  icon: Icons.assignment_outlined,
-                  iconColor: Colors.green,
-                  onTap: () => context.push('/airtel-iq/playbooks'),
-                ),
-                AirtelIqFeatureCard(
-                  title: 'About Airtel',
-                  subtitle: 'Company information and updates',
-                  icon: Icons.info_outline,
-                  iconColor: Colors.blueGrey,
-                  onTap: () => context.push('/airtel-iq/about'),
-                ),
-              ],
+            AirtelIqFeatureCard(
+              title: 'Airtel Products',
+              subtitle: 'Enterprise solutions and service details',
+              icon: Icons.shopping_bag_outlined,
+              iconColor: AppConstants.primaryColor,
+              onTap: () => context.push('/airtel-iq/products'),
+            ),
+            const Gap(AppSpacing.md),
+            AirtelIqFeatureCard(
+              title: 'Industry Playbooks',
+              subtitle: 'Quick-reference for every industry',
+              icon: Icons.menu_book_outlined,
+              iconColor: AppConstants.primaryColor,
+              onTap: () => context.push('/airtel-iq/playbooks'),
+            ),
+            const Gap(AppSpacing.md),
+            AirtelIqFeatureCard(
+              title: 'Sales Coach',
+              subtitle: 'Intelligent meeting prep & pitch analysis',
+              icon: Icons.smart_toy_outlined,
+              iconColor: AppConstants.primaryColor,
+              isFeatured: false,
+              onTap: () => context.push('/airtel-iq/ai-coach'),
+            ),
+            const Gap(AppSpacing.md),
+            AirtelIqFeatureCard(
+              title: 'Knowledge Hub',
+              subtitle: 'Airtel reference encyclopedia',
+              icon: Icons.hub_outlined,
+              iconColor: AppConstants.primaryColor,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const KnowledgeExplorerScreen(),
+                  ),
+                );
+              },
+            ),
+            const Gap(AppSpacing.md),
+            AirtelIqFeatureCard(
+              title: 'About Airtel',
+              subtitle: 'Company information and updates',
+              icon: Icons.info_outline,
+              iconColor: AppConstants.primaryColor,
+              onTap: () => context.push('/airtel-iq/about'),
             ),
             const Gap(AppSpacing.xxl),
           ],

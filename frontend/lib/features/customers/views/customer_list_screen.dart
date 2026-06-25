@@ -30,7 +30,7 @@ class CustomerListScreen extends ConsumerWidget {
       appBar: AirtelHeader(
         title: 'Customers',
         subtitle: 'Manage your enterprise relationships',
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         actions: [
           if (!hasNoCustomersAtAll)
             PopupMenuButton<CustomerSort>(

@@ -16,10 +16,7 @@ class AuthRepository {
   }) async {
     final userBox = HiveService.userBox;
     
-    // Map display role to internal role
     String internalRole = 'account_manager';
-    if (role == 'Zonal Sales Manager') internalRole = 'zonal_sales_manager';
-    if (role == 'Circle Business Head') internalRole = 'circle_business_head';
 
     final user = User(
       id: const Uuid().v4(),

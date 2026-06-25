@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
-import 'package:frontend/core/widgets/app_error_widget.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/customers/providers/customer_provider.dart';

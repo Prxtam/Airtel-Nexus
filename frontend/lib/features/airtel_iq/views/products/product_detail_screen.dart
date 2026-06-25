@@ -137,20 +137,6 @@ class ProductDetailScreen extends StatelessWidget {
                 const SizedBox(height: 24),
               ],
 
-              if (product.whenNotToPitch.isNotEmpty) ...[
-                _buildSectionTitle(
-                  '⚠️ When NOT To Pitch This',
-                  color: Colors.red.shade700,
-                ),
-                ...product.whenNotToPitch.map(
-                  (q) => _buildBulletPoint(
-                    q,
-                    Colors.red.shade700,
-                    icon: Icons.close,
-                  ),
-                ),
-                const SizedBox(height: 32),
-              ],
             ],
           ),
         ),
@@ -393,21 +379,13 @@ class ProductDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Text('🚀', style: TextStyle(fontSize: 16)),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      entry.key,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ),
-                ],
+              Text(
+                entry.key,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
               ),
               const SizedBox(height: 12),
               ...entry.value.map(
