@@ -44,7 +44,11 @@ class CustomerRepository {
     return newCustomer;
   }
 
-  Future<Customer> updateCustomer(String id, String name, {String? industry}) async {
+  Future<Customer> updateCustomer(
+    String id,
+    String name, {
+    String? industry,
+  }) async {
     final box = HiveService.customersBox;
     final existingCustomer = box.get(id);
 

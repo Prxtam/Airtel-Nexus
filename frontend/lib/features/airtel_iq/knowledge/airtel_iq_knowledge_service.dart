@@ -39,7 +39,7 @@ class AirtelIqKnowledgeService {
   IndustryIntelligence? getIndustryByName(String name) {
     try {
       return industryIntelligenceRepo.firstWhere(
-        (i) => i.industryName.toLowerCase() == name.toLowerCase()
+        (i) => i.industryName.toLowerCase() == name.toLowerCase(),
       );
     } catch (_) {
       return null;
@@ -50,7 +50,7 @@ class AirtelIqKnowledgeService {
   MeetingMethodology? getMethodologyByMeetingType(String meetingType) {
     try {
       return salesMethodologyRepo.firstWhere(
-        (m) => m.meetingType.toLowerCase() == meetingType.toLowerCase()
+        (m) => m.meetingType.toLowerCase() == meetingType.toLowerCase(),
       );
     } catch (_) {
       return null;

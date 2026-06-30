@@ -4,16 +4,21 @@ import 'package:hive/hive.dart';
 part 'task.g.dart';
 
 @HiveType(typeId: 4)
-enum TaskStatus { 
-  @HiveField(0) pending, 
-  @HiveField(1) completed 
+enum TaskStatus {
+  @HiveField(0)
+  pending,
+  @HiveField(1)
+  completed,
 }
 
 @HiveType(typeId: 5)
-enum TaskPriority { 
-  @HiveField(0) low, 
-  @HiveField(1) medium, 
-  @HiveField(2) high 
+enum TaskPriority {
+  @HiveField(0)
+  low,
+  @HiveField(1)
+  medium,
+  @HiveField(2)
+  high,
 }
 
 @HiveType(typeId: 3)

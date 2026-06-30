@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 
-enum HeaderVariant {
-  large,
-  medium,
-  compact,
-}
+enum HeaderVariant { large, medium, compact }
 
 class AirtelHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -42,15 +38,22 @@ class AirtelHeader extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (leading != null) leading!
-            else if (automaticallyImplyLeading && Navigator.of(context).canPop())
+            if (leading != null)
+              leading!
+            else if (automaticallyImplyLeading &&
+                Navigator.of(context).canPop())
               IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
                 onPressed: () => Navigator.of(context).pop(),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
               ),
-            if ((leading != null) || (automaticallyImplyLeading && Navigator.of(context).canPop()))
+            if ((leading != null) ||
+                (automaticallyImplyLeading && Navigator.of(context).canPop()))
               const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -89,10 +92,7 @@ class AirtelHeader extends StatelessWidget implements PreferredSizeWidget {
       color: AppConstants.primaryColor,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          content,
-          if (bottom != null) bottom!,
-        ],
+        children: [content, if (bottom != null) bottom!],
       ),
     );
   }
@@ -133,13 +133,18 @@ class AirtelHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize {
-    final double safeAreaTop = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single).padding.top;
+    final double safeAreaTop = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.single,
+    ).padding.top;
     final double height = _getHeight();
-    return Size.fromHeight(safeAreaTop + height + (bottom?.preferredSize.height ?? 0.0));
+    return Size.fromHeight(
+      safeAreaTop + height + (bottom?.preferredSize.height ?? 0.0),
+    );
   }
 }
 
-class AirtelSearchHeader extends StatelessWidget implements PreferredSizeWidget {
+class AirtelSearchHeader extends StatelessWidget
+    implements PreferredSizeWidget {
   final String title;
   final String? subtitle;
   final String hintText;
@@ -162,10 +167,11 @@ class AirtelSearchHeader extends StatelessWidget implements PreferredSizeWidget 
   @override
   Widget build(BuildContext context) {
     final double safeAreaTop = MediaQuery.of(context).padding.top;
-    final double redHeight = subtitle != null 
-        ? AirtelHeaderConstants.largeHeroHeightWithSubtitle 
+    final double redHeight = subtitle != null
+        ? AirtelHeaderConstants.largeHeroHeightWithSubtitle
         : AirtelHeaderConstants.largeHeroHeightNoSubtitle;
-    final double totalHeight = redHeight + AirtelHeaderConstants.searchBarOverlap;
+    final double totalHeight =
+        redHeight + AirtelHeaderConstants.searchBarOverlap;
 
     return Container(
       height: safeAreaTop + totalHeight,
@@ -178,11 +184,9 @@ class AirtelSearchHeader extends StatelessWidget implements PreferredSizeWidget 
             left: 0,
             right: 0,
             height: safeAreaTop + redHeight,
-            child: Container(
-              color: AppConstants.primaryColor,
-            ),
+            child: Container(color: AppConstants.primaryColor),
           ),
-          
+
           // Header Content
           Positioned(
             top: safeAreaTop,
@@ -194,15 +198,23 @@ class AirtelSearchHeader extends StatelessWidget implements PreferredSizeWidget 
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (leading != null) leading!
-                  else if (automaticallyImplyLeading && Navigator.of(context).canPop())
+                  if (leading != null)
+                    leading!
+                  else if (automaticallyImplyLeading &&
+                      Navigator.of(context).canPop())
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                       onPressed: () => Navigator.of(context).pop(),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
-                  if ((leading != null) || (automaticallyImplyLeading && Navigator.of(context).canPop()))
+                  if ((leading != null) ||
+                      (automaticallyImplyLeading &&
+                          Navigator.of(context).canPop()))
                     const SizedBox(width: 16),
                   Expanded(
                     child: Column(
@@ -246,7 +258,9 @@ class AirtelSearchHeader extends StatelessWidget implements PreferredSizeWidget 
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(AirtelHeaderConstants.searchBarRadius),
+                borderRadius: BorderRadius.circular(
+                  AirtelHeaderConstants.searchBarRadius,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.10),
@@ -259,18 +273,27 @@ class AirtelSearchHeader extends StatelessWidget implements PreferredSizeWidget 
                 onChanged: onChanged,
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 15),
+                  hintStyle: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 15,
+                  ),
                   prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AirtelHeaderConstants.searchBarRadius),
+                    borderRadius: BorderRadius.circular(
+                      AirtelHeaderConstants.searchBarRadius,
+                    ),
                     borderSide: BorderSide.none,
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AirtelHeaderConstants.searchBarRadius),
+                    borderRadius: BorderRadius.circular(
+                      AirtelHeaderConstants.searchBarRadius,
+                    ),
                     borderSide: BorderSide.none,
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AirtelHeaderConstants.searchBarRadius),
+                    borderRadius: BorderRadius.circular(
+                      AirtelHeaderConstants.searchBarRadius,
+                    ),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
@@ -287,11 +310,15 @@ class AirtelSearchHeader extends StatelessWidget implements PreferredSizeWidget 
 
   @override
   Size get preferredSize {
-    final double safeAreaTop = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single).padding.top;
-    final double redHeight = subtitle != null 
-        ? AirtelHeaderConstants.largeHeroHeightWithSubtitle 
+    final double safeAreaTop = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.single,
+    ).padding.top;
+    final double redHeight = subtitle != null
+        ? AirtelHeaderConstants.largeHeroHeightWithSubtitle
         : AirtelHeaderConstants.largeHeroHeightNoSubtitle;
-    return Size.fromHeight(safeAreaTop + redHeight + AirtelHeaderConstants.searchBarOverlap);
+    return Size.fromHeight(
+      safeAreaTop + redHeight + AirtelHeaderConstants.searchBarOverlap,
+    );
   }
 }
 
@@ -304,7 +331,7 @@ class AirtelSliverHeader extends StatelessWidget {
   final bool floating;
   final PreferredSizeWidget? bottom;
   final HeaderVariant variant;
-  
+
   const AirtelSliverHeader({
     super.key,
     required this.title,
@@ -319,8 +346,14 @@ class AirtelSliverHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double titleSize = variant == HeaderVariant.large ? AirtelHeaderConstants.titleLargeSize : (variant == HeaderVariant.medium ? AirtelHeaderConstants.titleMediumSize : AirtelHeaderConstants.titleCompactSize);
-    final FontWeight titleWeight = variant == HeaderVariant.compact ? FontWeight.w600 : FontWeight.w700;
+    final double titleSize = variant == HeaderVariant.large
+        ? AirtelHeaderConstants.titleLargeSize
+        : (variant == HeaderVariant.medium
+              ? AirtelHeaderConstants.titleMediumSize
+              : AirtelHeaderConstants.titleCompactSize);
+    final FontWeight titleWeight = variant == HeaderVariant.compact
+        ? FontWeight.w600
+        : FontWeight.w700;
 
     return SliverAppBar(
       backgroundColor: AppConstants.primaryColor,
@@ -329,15 +362,27 @@ class AirtelSliverHeader extends StatelessWidget {
       centerTitle: false,
       pinned: pinned,
       floating: floating,
-      leading: leading ?? 
-          (Navigator.of(context).canPop() 
+      leading:
+          leading ??
+          (Navigator.of(context).canPop()
               ? IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                   onPressed: () => Navigator.of(context).pop(),
                 )
               : null),
-      automaticallyImplyLeading: false, // Turn off default back button since we handle it manually
-      toolbarHeight: variant == HeaderVariant.large ? (subtitle != null ? AirtelHeaderConstants.largeHeroHeightWithSubtitle : AirtelHeaderConstants.largeHeroHeightNoSubtitle) : (variant == HeaderVariant.medium ? AirtelHeaderConstants.mediumHeaderHeight : kToolbarHeight),
+      automaticallyImplyLeading:
+          false, // Turn off default back button since we handle it manually
+      toolbarHeight: variant == HeaderVariant.large
+          ? (subtitle != null
+                ? AirtelHeaderConstants.largeHeroHeightWithSubtitle
+                : AirtelHeaderConstants.largeHeroHeightNoSubtitle)
+          : (variant == HeaderVariant.medium
+                ? AirtelHeaderConstants.mediumHeaderHeight
+                : kToolbarHeight),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,

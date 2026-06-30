@@ -16,14 +16,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _nameController = TextEditingController();
   final _employeeIdController = TextEditingController();
   final _circleController = TextEditingController();
-  
+
   String? _selectedRole;
   bool _isLoading = false;
   String? _errorMessage;
 
-  final List<String> _roles = [
-    'Account Manager',
-  ];
+  final List<String> _roles = ['Account Manager'];
 
   @override
   void dispose() {
@@ -48,12 +46,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     try {
-      await ref.read(authProvider.notifier).loginLocally(
-        fullName: name,
-        role: _selectedRole!,
-        employeeId: _employeeIdController.text.trim().isNotEmpty ? _employeeIdController.text.trim() : null,
-        circle: _circleController.text.trim().isNotEmpty ? _circleController.text.trim() : null,
-      );
+      await ref
+          .read(authProvider.notifier)
+          .loginLocally(
+            fullName: name,
+            role: _selectedRole!,
+            employeeId: _employeeIdController.text.trim().isNotEmpty
+                ? _employeeIdController.text.trim()
+                : null,
+            circle: _circleController.text.trim().isNotEmpty
+                ? _circleController.text.trim()
+                : null,
+          );
       // GoRouter will automatically redirect via redirect logic based on auth state
     } catch (e) {
       setState(() {
@@ -83,7 +87,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 'assets/images/airtel_logo.svg',
                 width: 60,
                 height: 60,
-                colorFilter: const ColorFilter.mode(AppConstants.primaryColor, BlendMode.srcIn),
+                colorFilter: const ColorFilter.mode(
+                  AppConstants.primaryColor,
+                  BlendMode.srcIn,
+                ),
               ),
               const Gap(16),
               const Text(
@@ -98,13 +105,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const Text(
                 'Empowering Enterprise Relationships',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppConstants.textColor,
-                ),
+                style: TextStyle(fontSize: 14, color: AppConstants.textColor),
               ),
               const Gap(48),
-              
+
               // Employee Name (Required)
               TextField(
                 controller: _nameController,
@@ -116,7 +120,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 textCapitalization: TextCapitalization.words,
               ),
               const Gap(16),
-              
+
               // Role Dropdown (Required)
               DropdownButtonFormField<String>(
                 initialValue: _selectedRole,
@@ -126,10 +130,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   prefixIcon: Icon(Icons.badge),
                 ),
                 items: _roles.map((role) {
-                  return DropdownMenuItem(
-                    value: role,
-                    child: Text(role),
-                  );
+                  return DropdownMenuItem(value: role, child: Text(role));
                 }).toList(),
                 onChanged: (val) {
                   setState(() {
@@ -170,7 +171,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const Gap(16),
               ],
-              
+
               Center(
                 child: SizedBox(
                   width: 200,
@@ -185,7 +186,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ? const SizedBox(
                             height: 24,
                             width: 24,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
                           )
                         : const Text('Login', style: TextStyle(fontSize: 16)),
                   ),

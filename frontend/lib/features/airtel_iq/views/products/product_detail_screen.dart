@@ -33,113 +33,110 @@ class ProductDetailScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.lg),
-        child: SelectionArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildQuickGlanceHero(product),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildQuickGlanceHero(product),
+            const SizedBox(height: 24),
+
+            _buildSectionTitle('What is this product?'),
+            _buildTextContent(product.whatItIs),
+            const SizedBox(height: 24),
+
+            if (product.officialFeaturesAndBenefits.isNotEmpty) ...[
+              _buildSectionTitle('🚀 Features & Benefits'),
+              _buildOfficialFeatures(product),
               const SizedBox(height: 24),
+            ],
 
-              _buildSectionTitle('What is this product?'),
-              _buildTextContent(product.whatItIs),
+            if (product.businessOutcomes.isNotEmpty) ...[
+              _buildSectionTitle('🎯 Business Value'),
+              ...product.businessOutcomes.map(
+                (b) => _buildBulletPoint(b, Colors.black87),
+              ),
               const SizedBox(height: 24),
+            ],
 
-              if (product.officialFeaturesAndBenefits.isNotEmpty) ...[
-                _buildSectionTitle('🚀 Features & Benefits'),
-                _buildOfficialFeatures(product),
-                const SizedBox(height: 24),
-              ],
+            _buildSectionTitle('💡 When should I pitch this?'),
+            _buildTextContent(product.whenToPitch),
+            const SizedBox(height: 24),
 
-              if (product.businessOutcomes.isNotEmpty) ...[
-                _buildSectionTitle('🎯 Business Value'),
-                ...product.businessOutcomes.map(
-                  (b) => _buildBulletPoint(b, Colors.black87),
-                ),
-                const SizedBox(height: 24),
-              ],
+            _buildCollapsibleSection(
+              '🧠 How to position it',
+              _buildTextContent(product.positioningStatement),
+            ),
 
-              _buildSectionTitle('💡 When should I pitch this?'),
-              _buildTextContent(product.whenToPitch),
-              const SizedBox(height: 24),
-
+            if (product.customerSignals.isNotEmpty)
               _buildCollapsibleSection(
-                '🧠 How to position it',
-                _buildTextContent(product.positioningStatement),
+                '📡 Customer Signals',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: product.customerSignals
+                      .map((s) => _buildBulletPoint(s, Colors.black87))
+                      .toList(),
+                ),
               ),
 
-              if (product.customerSignals.isNotEmpty)
-                _buildCollapsibleSection(
-                  '📡 Customer Signals',
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: product.customerSignals
-                        .map((s) => _buildBulletPoint(s, Colors.black87))
-                        .toList(),
-                  ),
+            if (product.discoveryHooks.isNotEmpty)
+              _buildCollapsibleSection(
+                '❓ Discovery Questions',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: product.discoveryHooks
+                      .map((q) => _buildBulletPoint(q, Colors.black87))
+                      .toList(),
                 ),
+              ),
 
-              if (product.discoveryHooks.isNotEmpty)
-                _buildCollapsibleSection(
-                  '❓ Discovery Questions',
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: product.discoveryHooks
-                        .map((q) => _buildBulletPoint(q, Colors.black87))
-                        .toList(),
-                  ),
+            if (product.commonObjections.isNotEmpty)
+              _buildCollapsibleSection(
+                '🛡️ Common Objections',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: product.commonObjections
+                      .map((obj) => _buildObjectionAccordion(obj))
+                      .toList(),
                 ),
+              ),
 
-              if (product.commonObjections.isNotEmpty)
-                _buildCollapsibleSection(
-                  '🛡️ Common Objections',
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: product.commonObjections
-                        .map((obj) => _buildObjectionAccordion(obj))
-                        .toList(),
-                  ),
-                ),
+            const SizedBox(height: 12),
 
-              const SizedBox(height: 12),
-
-              if (product.crossSellProducts.isNotEmpty) ...[
-                _buildSectionTitle('🤝 Cross-Sell Opportunities'),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: product.crossSellProducts.map((c) {
-                    final targetId = _getProductIdByName(c);
-                    return ActionChip(
-                      label: Text(
-                        c,
-                        style: TextStyle(
-                          color: Colors.blue.shade800,
-                          fontWeight: FontWeight.bold,
-                        ),
+            if (product.crossSellProducts.isNotEmpty) ...[
+              _buildSectionTitle('🤝 Cross-Sell Opportunities'),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: product.crossSellProducts.map((c) {
+                  final targetId = _getProductIdByName(c);
+                  return ActionChip(
+                    label: Text(
+                      c,
+                      style: TextStyle(
+                        color: Colors.blue.shade800,
+                        fontWeight: FontWeight.bold,
                       ),
-                      backgroundColor: Colors.blue.shade50,
-                      side: BorderSide(color: Colors.blue.shade200),
-                      onPressed: targetId.isNotEmpty
-                          ? () {
-                              context.push('/airtel-iq/products/$targetId');
-                            }
-                          : null,
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 24),
-              ],
-
-              if (product.fiveThingsToRemember.isNotEmpty) ...[
-                _buildSectionTitle('🧠 5 Things To Remember'),
-                ...product.fiveThingsToRemember.map(
-                  (item) => _buildBulletPoint(item, Colors.purple.shade700),
-                ),
-                const SizedBox(height: 24),
-              ],
-
+                    ),
+                    backgroundColor: Colors.blue.shade50,
+                    side: BorderSide(color: Colors.blue.shade200),
+                    onPressed: targetId.isNotEmpty
+                        ? () {
+                            context.push('/airtel-iq/products/$targetId');
+                          }
+                        : null,
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 24),
             ],
-          ),
+
+            if (product.fiveThingsToRemember.isNotEmpty) ...[
+              _buildSectionTitle('🧠 5 Things To Remember'),
+              ...product.fiveThingsToRemember.map(
+                (item) => _buildBulletPoint(item, Colors.purple.shade700),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ],
         ),
       ),
     );

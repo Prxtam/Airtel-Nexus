@@ -51,12 +51,10 @@ class MeetingDetailScreen extends ConsumerWidget {
 class _MeetingDetailBody extends ConsumerStatefulWidget {
   final Meeting meeting;
   final String meetingId;
-  const _MeetingDetailBody(
-      {required this.meeting, required this.meetingId});
+  const _MeetingDetailBody({required this.meeting, required this.meetingId});
 
   @override
-  ConsumerState<_MeetingDetailBody> createState() =>
-      _MeetingDetailBodyState();
+  ConsumerState<_MeetingDetailBody> createState() => _MeetingDetailBodyState();
 }
 
 class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
@@ -70,8 +68,7 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
   @override
   void initState() {
     super.initState();
-    _titleController =
-        TextEditingController(text: widget.meeting.title ?? '');
+    _titleController = TextEditingController(text: widget.meeting.title ?? '');
     _editMeetingAt = widget.meeting.meetingAt;
   }
 
@@ -91,7 +88,8 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: const ColorScheme.light(
-              primary: AppConstants.primaryColor),
+            primary: AppConstants.primaryColor,
+          ),
         ),
         child: child!,
       ),
@@ -103,15 +101,21 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: const ColorScheme.light(
-              primary: AppConstants.primaryColor),
+            primary: AppConstants.primaryColor,
+          ),
         ),
         child: child!,
       ),
     );
     if (!mounted) return;
     setState(() {
-      _editMeetingAt = DateTime(date.year, date.month, date.day,
-          time?.hour ?? local.hour, time?.minute ?? local.minute);
+      _editMeetingAt = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time?.hour ?? local.hour,
+        time?.minute ?? local.minute,
+      );
     });
   }
 
@@ -122,7 +126,9 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
     });
     try {
       final title = _titleController.text.trim();
-      await ref.read(meetingDetailProvider(widget.meetingId).notifier).update(
+      await ref
+          .read(meetingDetailProvider(widget.meetingId).notifier)
+          .update(
             title: title.isEmpty ? null : title,
             meetingAt: _editMeetingAt,
           );
@@ -135,7 +141,11 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
     }
   }
 
-  Future<void> _confirmStatusChange(MeetingStatus targetStatus, String title, String content) async {
+  Future<void> _confirmStatusChange(
+    MeetingStatus targetStatus,
+    String title,
+    String content,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -150,7 +160,9 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(foregroundColor: AppConstants.primaryColor),
+            style: TextButton.styleFrom(
+              foregroundColor: AppConstants.primaryColor,
+            ),
             child: const Text('Confirm'),
           ),
         ],
@@ -161,11 +173,15 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
 
     setState(() => _isSaving = true);
     try {
-      await ref.read(meetingDetailProvider(widget.meetingId).notifier).update(status: targetStatus);
+      await ref
+          .read(meetingDetailProvider(widget.meetingId).notifier)
+          .update(status: targetStatus);
       ref.invalidate(meetingListProvider);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -178,14 +194,19 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
-        title: const Text('Delete Meeting', style: TextStyle(color: Colors.black)),
+        title: const Text(
+          'Delete Meeting',
+          style: TextStyle(color: Colors.black),
+        ),
         content: const Text(
-            'This will permanently delete the meeting and all its notes. This action cannot be undone.',
-            style: TextStyle(color: Colors.grey)),
+          'This will permanently delete the meeting and all its notes. This action cannot be undone.',
+          style: TextStyle(color: Colors.grey),
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
@@ -204,10 +225,12 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
       if (mounted) context.pop();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(e.toString().replaceAll('Exception: ', '')),
-          backgroundColor: Colors.red,
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _isDeleting = false);
@@ -217,7 +240,7 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
   @override
   Widget build(BuildContext context) {
     final meeting = widget.meeting;
-    
+
     String statusText;
     Color statusColor;
     IconData statusIcon;
@@ -250,8 +273,9 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
             elevation: 2,
             color: Colors.white,
             surfaceTintColor: Colors.transparent,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -262,10 +286,7 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                       CircleAvatar(
                         backgroundColor: statusColor.withValues(alpha: 0.12),
                         radius: 26,
-                        child: Icon(
-                          statusIcon,
-                          color: statusColor,
-                        ),
+                        child: Icon(statusIcon, color: statusColor),
                       ),
                       const Gap(16),
                       Expanded(
@@ -275,7 +296,9 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                             Text(
                               meeting.title ?? 'Untitled Meeting',
                               style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const Gap(4),
                             Text(
@@ -289,14 +312,31 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                             // Metadata Row
                             Consumer(
                               builder: (context, ref, child) {
-                                final customerAsync = ref.watch(customerDetailProvider(meeting.customerId));
-                                final customerName = customerAsync.valueOrNull?.name ?? 'Loading...';
+                                final customerAsync = ref.watch(
+                                  customerDetailProvider(meeting.customerId),
+                                );
+                                final customerName =
+                                    customerAsync.valueOrNull?.name ??
+                                    'Loading...';
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Customer: $customerName', style: const TextStyle(color: Colors.black87, fontSize: 13)),
+                                    Text(
+                                      'Customer: $customerName',
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 13,
+                                      ),
+                                    ),
                                     const Gap(2),
-                                    Text('Status: $statusText', style: TextStyle(color: statusColor, fontSize: 13, fontWeight: FontWeight.w500)),
+                                    Text(
+                                      'Status: $statusText',
+                                      style: TextStyle(
+                                        color: statusColor,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ],
                                 );
                               },
@@ -312,25 +352,32 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                         ),
                     ],
                   ),
-                  
+
                   if (meeting.status == MeetingStatus.awaitingConfirmation) ...[
                     const Gap(16),
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton.icon(
-                        onPressed: _isSaving ? null : () => _confirmStatusChange(
-                          MeetingStatus.conducted,
-                          'Mark as Conducted',
-                          'Are you sure you want to mark this meeting as conducted?'
-                        ),
+                        onPressed: _isSaving
+                            ? null
+                            : () => _confirmStatusChange(
+                                MeetingStatus.conducted,
+                                'Mark as Conducted',
+                                'Are you sure you want to mark this meeting as conducted?',
+                              ),
                         icon: const Icon(Icons.check_circle_outline, size: 20),
-                        label: const Text('Mark as Conducted', style: TextStyle(fontWeight: FontWeight.w600)),
+                        label: const Text(
+                          'Mark as Conducted',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: AppConstants.primaryColor,
                           side: BorderSide(color: Colors.grey.shade300),
                           padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
                       ),
                     ),
@@ -341,19 +388,26 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton.icon(
-                        onPressed: _isSaving ? null : () => _confirmStatusChange(
-                          MeetingStatus.scheduled,
-                          'Unmark Conducted',
-                          'Are you sure you want to revert this meeting to awaiting confirmation?'
-                        ),
+                        onPressed: _isSaving
+                            ? null
+                            : () => _confirmStatusChange(
+                                MeetingStatus.scheduled,
+                                'Unmark Conducted',
+                                'Are you sure you want to revert this meeting to awaiting confirmation?',
+                              ),
                         icon: const Icon(Icons.undo, size: 20),
-                        label: const Text('Unmark Conducted', style: TextStyle(fontWeight: FontWeight.w600)),
+                        label: const Text(
+                          'Unmark Conducted',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.grey.shade700,
                           side: BorderSide(color: Colors.grey.shade300),
                           padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
                       ),
                     ),
@@ -363,8 +417,10 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                     const Gap(20),
                     const Divider(),
                     const Gap(12),
-                    const Text('Edit Meeting',
-                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    const Text(
+                      'Edit Meeting',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
                     const Gap(12),
                     TextField(
                       controller: _titleController,
@@ -378,19 +434,25 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                     OutlinedButton.icon(
                       onPressed: _pickDateTime,
                       icon: const Icon(Icons.calendar_today),
-                      label: Text(_editMeetingAt == null
-                          ? 'Select date and time'
-                          : AppDateFormatter.format(_editMeetingAt!)),
+                      label: Text(
+                        _editMeetingAt == null
+                            ? 'Select date and time'
+                            : AppDateFormatter.format(_editMeetingAt!),
+                      ),
                       style: OutlinedButton.styleFrom(
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 16),
+                          vertical: 14,
+                          horizontal: 16,
+                        ),
                       ),
                     ),
                     if (_editError != null) ...[
                       const Gap(8),
-                      Text(_editError!,
-                          style: const TextStyle(color: Colors.red)),
+                      Text(
+                        _editError!,
+                        style: const TextStyle(color: Colors.red),
+                      ),
                     ],
                     const Gap(12),
                     Row(
@@ -422,7 +484,9 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                                   height: 18,
                                   width: 18,
                                   child: CircularProgressIndicator(
-                                      color: Colors.white, strokeWidth: 2),
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : const Text('Save'),
                         ),
@@ -434,30 +498,42 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
             ),
           ),
 
-
-
           const Gap(24),
 
           // Notes Section Header
-          Consumer(builder: (context, ref, child) {
-            final notesAsync = ref.watch(meetingNoteListProvider(widget.meetingId));
-            final hasNotes = notesAsync.maybeWhen(data: (list) => list.isNotEmpty, orElse: () => false);
-            
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Meeting Notes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                if (hasNotes)
-                  TextButton.icon(
-                    onPressed: () => context.push('/meetings/${widget.meetingId}/notes/create'),
-                    icon: const Icon(Icons.add, size: 18),
-                    label: const Text('Add Note'),
-                    style: TextButton.styleFrom(foregroundColor: AppConstants.primaryColor),
+          Consumer(
+            builder: (context, ref, child) {
+              final notesAsync = ref.watch(
+                meetingNoteListProvider(widget.meetingId),
+              );
+              final hasNotes = notesAsync.maybeWhen(
+                data: (list) => list.isNotEmpty,
+                orElse: () => false,
+              );
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Meeting Notes',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-              ],
-            );
-          }),
-          
+                  if (hasNotes)
+                    TextButton.icon(
+                      onPressed: () => context.push(
+                        '/meetings/${widget.meetingId}/notes/create',
+                      ),
+                      icon: const Icon(Icons.add, size: 18),
+                      label: const Text('Add Note'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppConstants.primaryColor,
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+
           const Gap(12),
 
           _NotesSection(meetingId: widget.meetingId),
@@ -473,17 +549,33 @@ class _MeetingDetailBodyState extends ConsumerState<_MeetingDetailBody> {
                   ? const SizedBox(
                       height: 16,
                       width: 16,
-                      child: CircularProgressIndicator(color: Colors.red, strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                        color: Colors.red,
+                        strokeWidth: 2,
+                      ),
                     )
-                  : const Icon(Icons.delete_outline, color: Colors.red, size: 18),
+                  : const Icon(
+                      Icons.delete_outline,
+                      color: Colors.red,
+                      size: 18,
+                    ),
               label: Text(
                 _isDeleting ? 'Deleting...' : 'Delete Meeting',
-                style: const TextStyle(color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red, width: 0.5),
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -507,8 +599,7 @@ class _NotesSection extends ConsumerWidget {
     final notesAsync = ref.watch(meetingNoteListProvider(meetingId));
 
     return notesAsync.when(
-      loading: () =>
-          const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => AppErrorWidget(
         message: e.toString(),
         onRetry: () =>
@@ -527,22 +618,42 @@ class _NotesSection extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('📝 No notes added yet',
-                    style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 14)),
+                const Text(
+                  '📝 No notes added yet',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
                 const Gap(4),
-                const Text('Add notes after the meeting to keep track of discussions and action items.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey, fontSize: 12, height: 1.4)),
+                const Text(
+                  'Add notes after the meeting to keep track of discussions and action items.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                    height: 1.4,
+                  ),
+                ),
                 const Gap(12),
                 OutlinedButton(
-                  onPressed: () => context.push('/meetings/$meetingId/notes/create'),
+                  onPressed: () =>
+                      context.push('/meetings/$meetingId/notes/create'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppConstants.primaryColor,
-                    side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.3)),
+                    side: BorderSide(
+                      color: AppConstants.primaryColor.withValues(alpha: 0.3),
+                    ),
                     minimumSize: const Size(0, 36),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  child: const Text('Add Note', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                  child: const Text(
+                    'Add Note',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ],
             ),
@@ -570,17 +681,23 @@ class _NoteTile extends StatelessWidget {
       elevation: 0,
       color: Colors.white,
       margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(color: Colors.grey.shade200)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
       child: ListTile(
         leading: const Icon(Icons.note, color: Colors.purple),
-        title: Text(note.noteText, maxLines: 2, overflow: TextOverflow.ellipsis),
+        title: Text(
+          note.noteText,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         subtitle: Text(
           AppDateFormatter.format(note.createdAt),
           style: const TextStyle(fontSize: 11, color: Colors.grey),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-        onTap: () => context
-            .push('/meetings/$meetingId/notes/${note.id}'),
+        onTap: () => context.push('/meetings/$meetingId/notes/${note.id}'),
       ),
     );
   }

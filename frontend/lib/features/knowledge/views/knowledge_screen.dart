@@ -76,7 +76,6 @@ class KnowledgeScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildKnowledgeCategory({
     required BuildContext context,
     required IconData icon,

@@ -10,7 +10,7 @@ class OwnerBadge extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authProvider).user;
-    
+
     if (user == null) return const SizedBox.shrink();
 
     return Container(

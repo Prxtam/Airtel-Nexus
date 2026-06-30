@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class AirtelIqSectionHeader extends StatelessWidget {
   final String title;
 
-  const AirtelIqSectionHeader({
-    super.key,
-    required this.title,
-  });
+  const AirtelIqSectionHeader({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

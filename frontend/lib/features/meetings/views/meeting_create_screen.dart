@@ -41,7 +41,8 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: const ColorScheme.light(
-              primary: AppConstants.primaryColor),
+            primary: AppConstants.primaryColor,
+          ),
         ),
         child: child!,
       ),
@@ -54,7 +55,8 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: const ColorScheme.light(
-              primary: AppConstants.primaryColor),
+            primary: AppConstants.primaryColor,
+          ),
         ),
         child: child!,
       ),
@@ -89,7 +91,9 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
     });
 
     try {
-      await ref.read(meetingListProvider.notifier).createMeeting(
+      await ref
+          .read(meetingListProvider.notifier)
+          .createMeeting(
             customerId: _selectedCustomer!.id,
             title: _titleController.text.trim().isEmpty
                 ? null
@@ -146,8 +150,7 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.people_outline,
-                size: 64, color: Colors.grey.shade400),
+            Icon(Icons.people_outline, size: 64, color: Colors.grey.shade400),
             const Gap(16),
             const Text(
               'No customers yet',
@@ -168,7 +171,9 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
                 backgroundColor: AppConstants.primaryColor,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 24, vertical: 14),
+                  horizontal: 24,
+                  vertical: 14,
+                ),
               ),
             ),
           ],
@@ -185,15 +190,14 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Meeting Information',
-              style: AppTypography.sectionTitle,
-            ),
+            Text('Meeting Information', style: AppTypography.sectionTitle),
             const Gap(AppSpacing.lg),
 
             // Customer Dropdown
-            const Text('Customer *',
-                style: TextStyle(fontWeight: FontWeight.w600)),
+            const Text(
+              'Customer *',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
             const Gap(8),
             DropdownButtonFormField<Customer>(
               initialValue: _selectedCustomer,
@@ -203,15 +207,15 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
                 hintText: 'Select a customer',
               ),
               items: customers
-                  .map((c) => DropdownMenuItem(
-                        value: c,
-                        child: Text(c.name,
-                            overflow: TextOverflow.ellipsis),
-                      ))
+                  .map(
+                    (c) => DropdownMenuItem(
+                      value: c,
+                      child: Text(c.name, overflow: TextOverflow.ellipsis),
+                    ),
+                  )
                   .toList(),
               onChanged: (c) => setState(() => _selectedCustomer = c),
-              validator: (v) =>
-                  v == null ? 'Please select a customer' : null,
+              validator: (v) => v == null ? 'Please select a customer' : null,
             ),
             const Gap(16),
 
@@ -235,8 +239,10 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
             const Gap(16),
 
             // Date & Time
-            const Text('Date & Time *',
-                style: TextStyle(fontWeight: FontWeight.w600)),
+            const Text(
+              'Date & Time *',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
             const Gap(8),
             OutlinedButton.icon(
               onPressed: _pickDateTime,
@@ -248,7 +254,9 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
               ),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
-                    vertical: 14, horizontal: 16),
+                  vertical: 14,
+                  horizontal: 16,
+                ),
                 alignment: Alignment.centerLeft,
               ),
             ),
@@ -264,12 +272,17 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.error_outline,
-                        color: Colors.red, size: 20),
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 20,
+                    ),
                     const Gap(8),
                     Expanded(
-                      child: Text(_errorMessage!,
-                          style: const TextStyle(color: Colors.red)),
+                      child: Text(
+                        _errorMessage!,
+                        style: const TextStyle(color: Colors.red),
+                      ),
                     ),
                   ],
                 ),
@@ -284,20 +297,33 @@ class _MeetingCreateScreenState extends ConsumerState<MeetingCreateScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: AppConstants.primaryColor,
-                  side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
+                  side: BorderSide(
+                    color: AppConstants.primaryColor.withValues(alpha: 0.5),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xxl,
+                    vertical: AppSpacing.md,
+                  ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md)),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                  ),
                 ),
                 child: _isLoading
                     ? const SizedBox(
                         height: 20,
                         width: 20,
                         child: CircularProgressIndicator(
-                            color: AppConstants.primaryColor, strokeWidth: 2),
+                          color: AppConstants.primaryColor,
+                          strokeWidth: 2,
+                        ),
                       )
-                    : const Text('Schedule Meeting',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    : const Text(
+                        'Schedule Meeting',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
           ],

@@ -4,7 +4,8 @@ class ProductEnablementRepository {
   static const List<ProductEnablement> enablements = [
     ProductEnablement(
       productName: 'Airtel Public Cloud',
-      positionItAs: 'Position Airtel Public Cloud as a compliance-first cloud strategy rather than a replacement for AWS or Azure. Emphasize data sovereignty, regulatory alignment, and reducing complexity for regulated workloads.',
+      positionItAs:
+          'Position Airtel Public Cloud as a compliance-first cloud strategy rather than a replacement for AWS or Azure. Emphasize data sovereignty, regulatory alignment, and reducing complexity for regulated workloads.',
       questionsToAsk: [
         'Where are your regulated workloads currently hosted?',
         'Are data residency requirements slowing down your cloud adoption?',
@@ -22,7 +23,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Colocation (Nxtra)',
-      positionItAs: 'Position Nxtra as the foundational infrastructure layer that helps enterprises reduce infrastructure ownership burdens while improving resilience and compliance. Frame it as the bridge between legacy on-premise hardware and full cloud migration.',
+      positionItAs:
+          'Position Nxtra as the foundational infrastructure layer that helps enterprises reduce infrastructure ownership burdens while improving resilience and compliance. Frame it as the bridge between legacy on-premise hardware and full cloud migration.',
       questionsToAsk: [
         'How is your data center strategy adapting to rising energy costs and sustainability goals?',
         'When is your next major server or hardware refresh cycle?',
@@ -40,7 +42,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Secure Internet',
-      positionItAs: 'Position Secure Internet as a proactive enterprise shield. Rather than just selling bandwidth, emphasize that it consolidates internet access and advanced threat protection into a single, managed SLA at the network edge.',
+      positionItAs:
+          'Position Secure Internet as a proactive enterprise shield. Rather than just selling bandwidth, emphasize that it consolidates internet access and advanced threat protection into a single, managed SLA at the network edge.',
       questionsToAsk: [
         'How confident are you in your current edge security as your workforce becomes more distributed?',
         'Are you managing separate vendors for your firewall, threat protection, and internet leased lines?',
@@ -51,14 +54,12 @@ class ProductEnablementRepository {
         'Proactively block threats before they reach the corporate network.',
         'Reduce IT administrative burden regarding firewall maintenance.',
       ],
-      crossSellOpportunities: [
-        'Airtel SD-WAN',
-        'Airtel VPN/MPLS',
-      ],
+      crossSellOpportunities: ['Airtel SD-WAN', 'Airtel VPN/MPLS'],
     ),
     ProductEnablement(
       productName: 'Airtel SD-WAN',
-      positionItAs: 'Position SD-WAN as an intelligent traffic router that ensures critical cloud applications never suffer from poor branch connectivity. Emphasize the shift from expensive rigid MPLS links to agile, cost-effective hybrid networks.',
+      positionItAs:
+          'Position SD-WAN as an intelligent traffic router that ensures critical cloud applications never suffer from poor branch connectivity. Emphasize the shift from expensive rigid MPLS links to agile, cost-effective hybrid networks.',
       questionsToAsk: [
         'How are you currently managing the performance of cloud applications across your remote branches?',
         'Are rising MPLS bandwidth costs forcing you to compromise on branch network performance?',
@@ -69,14 +70,12 @@ class ProductEnablementRepository {
         'Dramatically improve the performance of cloud and SaaS applications.',
         'Accelerate branch expansion with simpler and more consistent provisioning.',
       ],
-      crossSellOpportunities: [
-        'Airtel Secure Internet',
-        'Airtel Public Cloud',
-      ],
+      crossSellOpportunities: ['Airtel Secure Internet', 'Airtel Public Cloud'],
     ),
     ProductEnablement(
       productName: 'Airtel VPN/MPLS',
-      positionItAs: 'Position VPN/MPLS as the uncompromising, private backbone for mission-critical inter-branch data. It is the gold standard for highly controlled communication and strict data privacy requirements.',
+      positionItAs:
+          'Position VPN/MPLS as the uncompromising, private backbone for mission-critical inter-branch data. It is the gold standard for highly controlled communication and strict data privacy requirements.',
       questionsToAsk: [
         'For your core operational traffic, how do you guarantee predictable communication?',
         'Are you experiencing latency issues when replicating data between your primary and disaster recovery sites?',
@@ -94,7 +93,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel IoT Connectivity',
-      positionItAs: 'Position IoT Connectivity not as SIM cards, but as a unified platform that brings real-time visibility to distributed physical assets and turns blind spots into actionable operational data.',
+      positionItAs:
+          'Position IoT Connectivity not as SIM cards, but as a unified platform that brings real-time visibility to distributed physical assets and turns blind spots into actionable operational data.',
       questionsToAsk: [
         'How much operational downtime are you experiencing because you lack real-time visibility into your physical assets?',
         'Are you currently managing multiple regional telecom vendors to track your national fleet?',
@@ -112,7 +112,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Precise Positioning',
-      positionItAs: 'Position Precise Positioning as an enabler for high-value operational use cases. Highlight that standard GPS can be insufficient for modern robotics, drone delivery, and precise asset tracking.',
+      positionItAs:
+          'Position Precise Positioning as an enabler for high-value operational use cases. Highlight that standard GPS can be insufficient for modern robotics, drone delivery, and precise asset tracking.',
       questionsToAsk: [
         'Where is standard GPS inaccuracy currently costing your operations the most?',
         'How are you currently navigating autonomous vehicles or AGVs within your large facilities?',
@@ -130,7 +131,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel IQ Business Connect',
-      positionItAs: 'Position IQ Business Connect as an intelligent omnichannel layer. It unifies customer engagement across voice, SMS, and WhatsApp without requiring a complete overhaul of the existing CRM or PBX.',
+      positionItAs:
+          'Position IQ Business Connect as an intelligent omnichannel layer. It unifies customer engagement across voice, SMS, and WhatsApp without requiring a complete overhaul of the existing CRM or PBX.',
       questionsToAsk: [
         'What percentage of your customer communications are currently siloed across different vendor platforms?',
         'Are your agents struggling with context switching between voice calls and WhatsApp messages?',
@@ -141,14 +143,12 @@ class ProductEnablementRepository {
         'Improve support efficiency and agent productivity.',
         'Ensure all customer communications are compliant and recorded.',
       ],
-      crossSellOpportunities: [
-        'Airtel Corporate Postpaid',
-        'Airtel SD-WAN',
-      ],
+      crossSellOpportunities: ['Airtel Corporate Postpaid', 'Airtel SD-WAN'],
     ),
     ProductEnablement(
       productName: 'Airtel Corporate Postpaid',
-      positionItAs: 'Position Corporate Postpaid as a centralized enterprise mobility solution. Focus on how it simplifies provisioning, enforces corporate security, and eliminates the administrative headache of employee reimbursements.',
+      positionItAs:
+          'Position Corporate Postpaid as a centralized enterprise mobility solution. Focus on how it simplifies provisioning, enforces corporate security, and eliminates the administrative headache of employee reimbursements.',
       questionsToAsk: [
         'How much administrative overhead is your team spending managing individual employee telecom reimbursements?',
         'How do you enforce corporate data security policies on employee-owned mobile connections?',
@@ -166,7 +166,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel 5G for Enterprise',
-      positionItAs: 'Position Private 5G as the high-bandwidth foundation for next-generation digital transformation. It replaces unreliable Wi-Fi in harsh environments and supports more advanced industrial use cases.',
+      positionItAs:
+          'Position Private 5G as the high-bandwidth foundation for next-generation digital transformation. It replaces unreliable Wi-Fi in harsh environments and supports more advanced industrial use cases.',
       questionsToAsk: [
         'Which of your digital initiatives are currently bottlenecked by existing Wi-Fi or wired constraints?',
         'Are you experiencing connectivity dropouts with moving assets like AGVs or robotic arms?',
@@ -184,7 +185,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel SIP Trunking',
-      positionItAs: 'Position SIP Trunking as a practical upgrade for enterprises that want to modernize voice infrastructure without replacing everything at once. Focus on better scalability, simpler management, and cleaner integration with existing PBX environments.',
+      positionItAs:
+          'Position SIP Trunking as a practical upgrade for enterprises that want to modernize voice infrastructure without replacing everything at once. Focus on better scalability, simpler management, and cleaner integration with existing PBX environments.',
       questionsToAsk: [
         'How are you handling call capacity changes during peak periods today?',
         'What parts of your voice stack still depend on legacy PRI or ISDN infrastructure?',
@@ -203,7 +205,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Contact Center as a Service',
-      positionItAs: 'Position CCaaS as a way to simplify customer support operations while giving agents a more flexible working model. Emphasize that it is useful when the business wants to reduce on-premises complexity and improve service consistency.',
+      positionItAs:
+          'Position CCaaS as a way to simplify customer support operations while giving agents a more flexible working model. Emphasize that it is useful when the business wants to reduce on-premises complexity and improve service consistency.',
       questionsToAsk: [
         'How are your agents handling voice, chat, and email work today?',
         'Which parts of your contact center are hardest to scale during busy periods?',
@@ -222,7 +225,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Managed Wi-Fi',
-      positionItAs: 'Position Managed Wi-Fi as an easier way to provide consistent wireless access across offices, campuses, stores, or guest environments. Focus on experience, operational simplicity, and centralized management.',
+      positionItAs:
+          'Position Managed Wi-Fi as an easier way to provide consistent wireless access across offices, campuses, stores, or guest environments. Focus on experience, operational simplicity, and centralized management.',
       questionsToAsk: [
         'Where are users still experiencing poor wireless coverage or inconsistent performance?',
         'How much internal effort goes into keeping access points and guest networks running today?',
@@ -241,7 +245,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel CPaaS',
-      positionItAs: 'Position CPaaS as a developer-friendly messaging and voice layer for customer communication workflows. Keep the conversation focused on integration simplicity, channel reach, and operational control.',
+      positionItAs:
+          'Position CPaaS as a developer-friendly messaging and voice layer for customer communication workflows. Keep the conversation focused on integration simplicity, channel reach, and operational control.',
       questionsToAsk: [
         'Which customer journeys still depend on manual communication today?',
         'Do your teams need SMS, voice, and WhatsApp from a single platform?',
@@ -260,7 +265,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Leased Line (ILL)',
-      positionItAs: 'Position Leased Line as dedicated business connectivity for teams that need predictable performance and stronger control than shared internet access. Focus on reliability, symmetry, and business continuity.',
+      positionItAs:
+          'Position Leased Line as dedicated business connectivity for teams that need predictable performance and stronger control than shared internet access. Focus on reliability, symmetry, and business continuity.',
       questionsToAsk: [
         'Which applications are most sensitive to latency or fluctuating bandwidth?',
         'Do you need more predictable performance for cloud applications or backups?',
@@ -279,7 +285,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Global Voice',
-      positionItAs: 'Position Global Voice as a way to simplify international calling and inbound reach for distributed businesses. Keep the discussion on coverage, call quality, and operational simplicity.',
+      positionItAs:
+          'Position Global Voice as a way to simplify international calling and inbound reach for distributed businesses. Keep the discussion on coverage, call quality, and operational simplicity.',
       questionsToAsk: [
         'How do your teams manage international calling today?',
         'Do you need local presence numbers in more than one market?',
@@ -298,7 +305,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Office Internet',
-      positionItAs: 'Position Office Internet as a practical business connectivity option for smaller offices that want an easier experience than consumer broadband. Focus on reliability, security add-ons, and simpler billing.',
+      positionItAs:
+          'Position Office Internet as a practical business connectivity option for smaller offices that want an easier experience than consumer broadband. Focus on reliability, security add-ons, and simpler billing.',
       questionsToAsk: [
         'How many users share the connection at each office today?',
         'Do you need a static IP or any office-level security add-ons?',
@@ -317,7 +325,8 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel WhatsApp Business',
-      positionItAs: 'Position WhatsApp Business as a customer communication channel for updates, service, and engagement where customers already spend time. Focus on opt-in communication, faster response handling, and less manual follow-up.',
+      positionItAs:
+          'Position WhatsApp Business as a customer communication channel for updates, service, and engagement where customers already spend time. Focus on opt-in communication, faster response handling, and less manual follow-up.',
       questionsToAsk: [
         'Which customer updates still depend on email or outbound calls today?',
         'Do your teams need a better way to handle repetitive service conversations?',
@@ -336,21 +345,22 @@ class ProductEnablementRepository {
     ),
     ProductEnablement(
       productName: 'Airtel Work From Anywhere Solutions',
-      positionItAs: 'Position Work From Anywhere Solutions as a practical way to keep distributed staff productive and secure without relying on ad hoc home internet arrangements. Focus on connectivity consistency, supportability, and security enforcement.',
+      positionItAs:
+          'Position Work From Anywhere Solutions as a practical way to keep distributed staff productive and secure without relying on ad hoc home internet arrangements. Focus on connectivity consistency, supportability, and security enforcement.',
       questionsToAsk: [
         'How are you supporting remote employees who need reliable work connectivity today?',
         'What security controls do you need when staff work away from the office?',
-        'How much time is spent managing reimbursements or troubleshooting employee home internet issues?'
+        'How much time is spent managing reimbursements or troubleshooting employee home internet issues?',
       ],
       businessValue: [
         'Give remote employees a more consistent work connectivity experience.',
         'Help IT teams enforce security and support standards more easily.',
-        'Reduce the operational overhead of ad hoc remote work support models.'
+        'Reduce the operational overhead of ad hoc remote work support models.',
       ],
       crossSellOpportunities: [
         'Airtel Corporate Postpaid',
         'Airtel Contact Center as a Service',
-        'Airtel Secure Internet'
+        'Airtel Secure Internet',
       ],
     ),
   ];

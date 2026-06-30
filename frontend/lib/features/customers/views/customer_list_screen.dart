@@ -31,7 +31,8 @@ class CustomerListScreen extends ConsumerWidget {
         title: 'Customers',
         subtitle: 'Manage your enterprise relationships',
         hintText: 'Search customers...',
-        onChanged: (val) => ref.read(customerSearchProvider.notifier).state = val,
+        onChanged: (val) =>
+            ref.read(customerSearchProvider.notifier).state = val,
         automaticallyImplyLeading: true,
       ),
       floatingActionButton: FloatingActionButton(
@@ -40,7 +41,9 @@ class CustomerListScreen extends ConsumerWidget {
         foregroundColor: AppConstants.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
+          side: BorderSide(
+            color: AppConstants.primaryColor.withValues(alpha: 0.5),
+          ),
         ),
         child: const Icon(Icons.add),
       ),
@@ -51,13 +54,15 @@ class CustomerListScreen extends ConsumerWidget {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => AppErrorWidget(
                 message: e.toString(),
-                onRetry: () => ref.read(customerListProvider.notifier).refresh(),
+                onRetry: () =>
+                    ref.read(customerListProvider.notifier).refresh(),
               ),
               data: (customers) {
                 if (hasNoCustomersAtAll) {
                   return AppEmptyWidget(
                     icon: Icons.people_outline,
-                    message: 'No customers yet.\nTap + to add your first customer.',
+                    message:
+                        'No customers yet.\nTap + to add your first customer.',
                     actionLabel: 'Add Customer',
                     onAction: () => context.push('/customers/create'),
                   );
@@ -66,37 +71,72 @@ class CustomerListScreen extends ConsumerWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: AirtelHeaderConstants.searchBodyTopPadding),
+                    const SizedBox(
+                      height: AirtelHeaderConstants.searchBodyTopPadding,
+                    ),
                     if (!hasNoCustomersAtAll)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.lg,
+                          vertical: 8.0,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('${customers.length} Customers', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.grey.shade700)),
+                            Text(
+                              '${customers.length} Customers',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
                             PopupMenuButton<CustomerSort>(
                               initialValue: currentSort,
-                              onSelected: (sort) => ref.read(customerSortProvider.notifier).state = sort,
+                              onSelected: (sort) =>
+                                  ref
+                                          .read(customerSortProvider.notifier)
+                                          .state =
+                                      sort,
                               itemBuilder: (context) => [
-                                const PopupMenuItem(value: CustomerSort.nameAsc, child: Text('Name (A-Z)')),
-                                const PopupMenuItem(value: CustomerSort.nameDesc, child: Text('Name (Z-A)')),
-                                const PopupMenuItem(value: CustomerSort.newestFirst, child: Text('Newest First')),
-                                const PopupMenuItem(value: CustomerSort.oldestFirst, child: Text('Oldest First')),
+                                const PopupMenuItem(
+                                  value: CustomerSort.nameAsc,
+                                  child: Text('Name (A-Z)'),
+                                ),
+                                const PopupMenuItem(
+                                  value: CustomerSort.nameDesc,
+                                  child: Text('Name (Z-A)'),
+                                ),
+                                const PopupMenuItem(
+                                  value: CustomerSort.newestFirst,
+                                  child: Text('Newest First'),
+                                ),
+                                const PopupMenuItem(
+                                  value: CustomerSort.oldestFirst,
+                                  child: Text('Oldest First'),
+                                ),
                               ],
                               child: Row(
                                 children: [
-                                  Icon(Icons.sort, color: AppConstants.primaryColor, size: 20),
+                                  Icon(
+                                    Icons.sort,
+                                    color: AppConstants.primaryColor,
+                                    size: 20,
+                                  ),
                                   const SizedBox(width: 4),
-                                  Text('Sort', style: TextStyle(color: AppConstants.primaryColor, fontWeight: FontWeight.w600)),
+                                  Text(
+                                    'Sort',
+                                    style: TextStyle(
+                                      color: AppConstants.primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    Expanded(
-                      child: _buildList(context, ref, customers),
-                    ),
+                    Expanded(child: _buildList(context, ref, customers)),
                   ],
                 );
               },
@@ -107,8 +147,11 @@ class CustomerListScreen extends ConsumerWidget {
     );
   }
 
-
-  Widget _buildList(BuildContext context, WidgetRef ref, List<Customer> customers) {
+  Widget _buildList(
+    BuildContext context,
+    WidgetRef ref,
+    List<Customer> customers,
+  ) {
     if (customers.isEmpty) {
       return const Center(
         child: Text(
@@ -122,7 +165,12 @@ class CustomerListScreen extends ConsumerWidget {
       color: AppConstants.primaryColor,
       onRefresh: () => ref.read(customerListProvider.notifier).refresh(),
       child: ListView.separated(
-        padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, 88),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.sm,
+          AppSpacing.lg,
+          88,
+        ),
         itemCount: customers.length,
         separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
         itemBuilder: (context, index) {
@@ -148,7 +196,10 @@ class _CustomerTile extends StatelessWidget {
         side: BorderSide(color: Colors.grey.shade200),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 4),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: 4,
+        ),
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -157,20 +208,30 @@ class _CustomerTile extends StatelessWidget {
           ),
           child: Icon(Icons.business, color: Colors.blue.shade700, size: 20),
         ),
-        title: Text(customer.name, style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600)),
+        title: Text(
+          customer.name,
+          style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600),
+        ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                customer.industry?.isNotEmpty == true ? customer.industry! : 'Industry not specified',
-                style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+                customer.industry?.isNotEmpty == true
+                    ? customer.industry!
+                    : 'Industry not specified',
+                style: AppTypography.caption.copyWith(
+                  color: Colors.grey.shade600,
+                ),
               ),
               const SizedBox(height: 2),
               Text(
                 'Created • ${_formatDateShort(customer.createdAt)}',
-                style: AppTypography.caption.copyWith(color: Colors.grey.shade400, fontSize: 11),
+                style: AppTypography.caption.copyWith(
+                  color: Colors.grey.shade400,
+                  fontSize: 11,
+                ),
               ),
             ],
           ),

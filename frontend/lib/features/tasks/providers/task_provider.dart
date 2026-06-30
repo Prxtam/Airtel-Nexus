@@ -87,12 +87,10 @@ class TaskListNotifier extends StateNotifier<AsyncValue<List<Task>>> {
 }
 
 final taskListProvider =
-    StateNotifierProvider<TaskListNotifier, AsyncValue<List<Task>>>(
-  (ref) {
-    final repository = ref.watch(taskRepositoryProvider);
-    return TaskListNotifier(repository);
-  },
-);
+    StateNotifierProvider<TaskListNotifier, AsyncValue<List<Task>>>((ref) {
+      final repository = ref.watch(taskRepositoryProvider);
+      return TaskListNotifier(repository);
+    });
 
 // ---------------------------------------------------------------------------
 // Task Detail Provider (family — keyed by task ID)
@@ -103,7 +101,7 @@ class TaskDetailNotifier extends StateNotifier<AsyncValue<Task>> {
   final String taskId;
 
   TaskDetailNotifier(this._repository, this.taskId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     load();
   }
 
@@ -136,10 +134,11 @@ class TaskDetailNotifier extends StateNotifier<AsyncValue<Task>> {
   }
 }
 
-final taskDetailProvider = StateNotifierProvider.family<
-    TaskDetailNotifier, AsyncValue<Task>, String>(
-  (ref, taskId) {
-    final repository = ref.watch(taskRepositoryProvider);
-    return TaskDetailNotifier(repository, taskId);
-  },
-);
+final taskDetailProvider =
+    StateNotifierProvider.family<TaskDetailNotifier, AsyncValue<Task>, String>((
+      ref,
+      taskId,
+    ) {
+      final repository = ref.watch(taskRepositoryProvider);
+      return TaskDetailNotifier(repository, taskId);
+    });

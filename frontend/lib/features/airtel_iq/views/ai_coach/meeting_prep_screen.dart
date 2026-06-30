@@ -175,14 +175,16 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     return _selectedCustomer != null && _selectedMeeting != null;
   }
 
-
   String _inferMeetingType(Meeting meeting) {
     final title = (meeting.title ?? '').toLowerCase();
     if (title.contains('proposal')) return 'Proposal Meeting';
-    if (title.contains('renewal') && title.contains('negot')) return 'Renewal Negotiation';
+    if (title.contains('renewal') && title.contains('negot'))
+      return 'Renewal Negotiation';
     if (title.contains('renewal')) return 'Renewal Meeting';
-    if (title.contains('qbr') || title.contains('quarterly')) return 'Quarterly Business Review';
-    if (title.contains('technical') || title.contains('workshop')) return 'Technical Workshop';
+    if (title.contains('qbr') || title.contains('quarterly'))
+      return 'Quarterly Business Review';
+    if (title.contains('technical') || title.contains('workshop'))
+      return 'Technical Workshop';
     if (title.contains('demo')) return 'Solution Demonstration';
     if (title.contains('executive')) return 'Executive Alignment Meeting';
     if (title.contains('upsell')) return 'Upsell Review';
@@ -215,8 +217,9 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
         final effectiveMeetingType =
             _enrichMeetingType ?? _inferMeetingType(_selectedMeeting!);
         final allMeetings = ref.read(meetingListProvider).value ?? [];
-        final previousCount =
-            allMeetings.where((m) => m.customerId == _selectedCustomer!.id).length;
+        final previousCount = allMeetings
+            .where((m) => m.customerId == _selectedCustomer!.id)
+            .length;
 
         input = MeetingPrepV3Input(
           industry: _enrichIndustry,
@@ -242,8 +245,9 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
       }
     }
   }
@@ -297,9 +301,9 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     sb.writeln(r.nextBestAction);
 
     Clipboard.setData(ClipboardData(text: sb.toString().trimRight()));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Copied to clipboard')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
   }
 
   // ── Build ─────────────────────────────────────────────────────────────────
@@ -332,7 +336,8 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                 disabledBackgroundColor: Colors.grey.shade300,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               child: const Text(
                 'Generate Preparation Brief',
@@ -342,7 +347,8 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             const SizedBox(height: 32),
             if (_isLoading)
               const AiLoadingIndicator(
-                  message: 'Analysing context and generating brief...')
+                message: 'Analysing context and generating brief...',
+              )
             else if (_result != null)
               _buildV3Results(),
           ],
@@ -355,13 +361,15 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
     return SegmentedButton<_PrepMode>(
       segments: const [
         ButtonSegment(
-            value: _PrepMode.scenario,
-            label: Text('Scenario Mode'),
-            icon: Icon(Icons.psychology_outlined)),
+          value: _PrepMode.scenario,
+          label: Text('Scenario Mode'),
+          icon: Icon(Icons.psychology_outlined),
+        ),
         ButtonSegment(
-            value: _PrepMode.history,
-            label: Text('Customer History'),
-            icon: Icon(Icons.history)),
+          value: _PrepMode.history,
+          label: Text('Customer History'),
+          icon: Icon(Icons.history),
+        ),
       ],
       selected: {_prepMode},
       onSelectionChanged: (s) => setState(() {
@@ -441,7 +449,8 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
           existingProducts: _existingProducts,
           notesController: _notesController,
           expanded: _showExtraContext,
-          onToggle: () => setState(() => _showExtraContext = !_showExtraContext),
+          onToggle: () =>
+              setState(() => _showExtraContext = !_showExtraContext),
           onProductToggle: (name) => setState(() {
             _existingProducts.contains(name)
                 ? _existingProducts.remove(name)
@@ -487,7 +496,9 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    expanded ? 'Hide extra context' : 'Add more context (optional)',
+                    expanded
+                        ? 'Hide extra context'
+                        : 'Add more context (optional)',
                     style: TextStyle(
                       color: AppConstants.primaryColor,
                       fontWeight: FontWeight.w600,
@@ -495,9 +506,14 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                     ),
                   ),
                   const Spacer(),
-                  if (!expanded && (existingProducts.isNotEmpty || notesController.text.isNotEmpty))
+                  if (!expanded &&
+                      (existingProducts.isNotEmpty ||
+                          notesController.text.isNotEmpty))
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: AppConstants.primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -505,7 +521,9 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                       child: Text(
                         'context added',
                         style: TextStyle(
-                            fontSize: 11, color: AppConstants.primaryColor),
+                          fontSize: 11,
+                          color: AppConstants.primaryColor,
+                        ),
                       ),
                     ),
                 ],
@@ -535,7 +553,10 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                   // Product chip grid
                   Builder(
                     builder: (context) {
-                      final allProductNames = AirtelIqKnowledgeService().getAllProducts().map((p) => p.name).toList();
+                      final allProductNames = AirtelIqKnowledgeService()
+                          .getAllProducts()
+                          .map((p) => p.name)
+                          .toList();
                       return Wrap(
                         spacing: 8,
                         runSpacing: 8,
@@ -544,11 +565,16 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                           // Shorten display name for chips
                           final label = name.replaceAll('Airtel ', '');
                           return FilterChip(
-                            label: Text(label,
+                            label: Text(
+                              label,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: selected ? Colors.white : Colors.grey.shade700,
-                                fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                                color: selected
+                                    ? Colors.white
+                                    : Colors.grey.shade700,
+                                fontWeight: selected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
                               ),
                             ),
                             selected: selected,
@@ -565,7 +591,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                           );
                         }).toList(),
                       );
-                    }
+                    },
                   ),
                   const SizedBox(height: 16),
 
@@ -588,13 +614,18 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                       hintText:
                           'e.g. branch outages, evaluating SD-WAN alternatives, MPLS renewal coming up',
                       hintStyle: TextStyle(
-                          fontSize: 12, color: Colors.grey.shade400),
+                        fontSize: 12,
+                        color: Colors.grey.shade400,
+                      ),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 12),
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
                     ),
                   ),
                 ],
@@ -616,44 +647,64 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
         ? 'Pain Points — specific to ${industry.split(' ').first} sector (optional, max 3)'
         : 'Pain Points (select industry first for targeted options)';
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade400),
+      ),
+      child: ExpansionTile(
+        title: Text(
           label,
           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
         ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: items.map((name) {
-            final isSelected = selected.contains(name);
-            final isDisabled = !isSelected && selected.length >= 3;
-            return FilterChip(
-              label: Text(name,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: isSelected 
-                      ? Colors.white 
-                      : (isDisabled ? Colors.grey.shade400 : Colors.grey.shade700),
-                  )),
-              selected: isSelected,
-              onSelected: isDisabled ? null : (_) => onToggle(name),
-              selectedColor: AppConstants.primaryColor,
-              checkmarkColor: Colors.white,
-              backgroundColor: Colors.white,
-              disabledColor: Colors.grey.shade100,
-              side: BorderSide(
-                color: isSelected
-                    ? AppConstants.primaryColor
-                    : (isDisabled ? Colors.grey.shade200 : Colors.grey.shade300),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-            );
-          }).toList(),
-        ),
-      ],
+        collapsedIconColor: Colors.grey.shade600,
+        iconColor: AppConstants.primaryColor,
+        shape: const Border(), // removes divider lines
+        childrenPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: items.map((name) {
+                final isSelected = selected.contains(name);
+                final isDisabled = !isSelected && selected.length >= 3;
+                return FilterChip(
+                  label: Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isSelected
+                          ? Colors.white
+                          : (isDisabled
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade700),
+                    ),
+                  ),
+                  selected: isSelected,
+                  onSelected: isDisabled ? null : (_) => onToggle(name),
+                  selectedColor: AppConstants.primaryColor,
+                  checkmarkColor: Colors.white,
+                  backgroundColor: Colors.white,
+                  disabledColor: Colors.grey.shade100,
+                  side: BorderSide(
+                    color: isSelected
+                        ? AppConstants.primaryColor
+                        : (isDisabled
+                              ? Colors.grey.shade200
+                              : Colors.grey.shade300),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -677,8 +728,10 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
       ),
       initialValue: displayValue,
       isExpanded: true,
@@ -703,10 +756,10 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
       data: (customers) {
         final customerMeetings =
             (_selectedCustomer != null && meetingsAsync.value != null)
-                ? meetingsAsync.value!
-                    .where((m) => m.customerId == _selectedCustomer!.id)
-                    .toList()
-                : <Meeting>[];
+            ? meetingsAsync.value!
+                  .where((m) => m.customerId == _selectedCustomer!.id)
+                  .toList()
+            : <Meeting>[];
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -718,15 +771,17 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 14),
+                  horizontal: 16,
+                  vertical: 14,
+                ),
               ),
               initialValue: _selectedCustomer,
               isExpanded: true,
               items: customers
-                  .map((c) =>
-                      DropdownMenuItem(value: c, child: Text(c.name)))
+                  .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
                   .toList(),
               onChanged: (v) => setState(() {
                 _selectedCustomer = v;
@@ -743,23 +798,29 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 14),
+                  horizontal: 16,
+                  vertical: 14,
+                ),
               ),
               initialValue: _selectedMeeting,
               isExpanded: true,
               items: customerMeetings
-                  .map((m) => DropdownMenuItem(
+                  .map(
+                    (m) => DropdownMenuItem(
                       value: m,
-                      child: Text(m.title ?? 'Untitled Meeting')))
+                      child: Text(m.title ?? 'Untitled Meeting'),
+                    ),
+                  )
                   .toList(),
               onChanged: _selectedCustomer == null
                   ? null
                   : (v) => setState(() {
-                        _selectedMeeting = v;
-                        _result = null;
-                      }),
+                      _selectedMeeting = v;
+                      _result = null;
+                    }),
             ),
             const SizedBox(height: 24),
 
@@ -796,16 +857,14 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
               ),
               const SizedBox(width: 8),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: Colors.blue.shade100,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'optional — improves intelligence',
-                  style: TextStyle(
-                      fontSize: 11, color: Colors.blue.shade700),
+                  style: TextStyle(fontSize: 11, color: Colors.blue.shade700),
                 ),
               ),
             ],
@@ -813,8 +872,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
           const SizedBox(height: 4),
           Text(
             'Without industry context, preparation is based on meeting methodology defaults.',
-            style:
-                TextStyle(fontSize: 12, color: Colors.blue.shade600),
+            style: TextStyle(fontSize: 12, color: Colors.blue.shade600),
           ),
           const SizedBox(height: 16),
           _buildDropdown(
@@ -871,7 +929,8 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             existingProducts: _enrichExistingProducts,
             notesController: _enrichNotesController,
             expanded: _showExtraContext,
-            onToggle: () => setState(() => _showExtraContext = !_showExtraContext),
+            onToggle: () =>
+                setState(() => _showExtraContext = !_showExtraContext),
             onProductToggle: (name) => setState(() {
               _enrichExistingProducts.contains(name)
                   ? _enrichExistingProducts.remove(name)
@@ -902,8 +961,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             const Expanded(
               child: Text(
                 'Meeting Brief',
-                style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             TextButton.icon(
@@ -911,8 +969,10 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
               label: const Text('Copy Brief'),
               style: TextButton.styleFrom(
                 foregroundColor: AppConstants.primaryColor,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
               ),
               onPressed: _copyBriefToClipboard,
             ),
@@ -923,8 +983,7 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
         if (r.isMethodologyOnlyMode) ...[
           const SizedBox(height: 8),
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.amber.shade50,
               borderRadius: BorderRadius.circular(8),
@@ -932,15 +991,20 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
             ),
             child: Row(
               children: [
-                Icon(Icons.info_outline,
-                    color: Colors.amber.shade700, size: 16),
+                Icon(
+                  Icons.info_outline,
+                  color: Colors.amber.shade700,
+                  size: 16,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Brief based on meeting methodology defaults. '
                     'Add industry in Enrich Context for full intelligence.',
                     style: TextStyle(
-                        fontSize: 12, color: Colors.amber.shade800),
+                      fontSize: 12,
+                      color: Colors.amber.shade800,
+                    ),
                   ),
                 ),
               ],
@@ -950,30 +1014,63 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
 
         const SizedBox(height: 16),
 
-        SelectionArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Context Summary
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Context Summary
+            _V3Card(
+              title: 'Context Summary',
+              icon: Icons.article_outlined,
+              iconColor: Colors.blue,
+              child: Text(
+                r.contextSummary,
+                style: TextStyle(color: Colors.grey.shade800, height: 1.55),
+              ),
+            ),
+
+            // Top Challenges (always rendered first regardless of mode)
+            _V3Card(
+              title: 'Top Likely Challenges',
+              icon: Icons.radar,
+              iconColor: Colors.deepOrange,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: r.topChallenges
+                    .asMap()
+                    .entries
+                    .map((e) => _numberedRow(e.key + 1, e.value))
+                    .toList(),
+              ),
+            ),
+
+            // Phase 1: objectionsDominant — Objections rendered BEFORE questions
+            // when meeting type is negotiation/objection-heavy (e.g. Renewal Negotiation)
+            if (r.objectionsDominant && r.topObjections.isNotEmpty)
               _V3Card(
-                title: 'Context Summary',
-                icon: Icons.article_outlined,
-                iconColor: Colors.blue,
-                child: Text(
-                  r.contextSummary,
-                  style: TextStyle(
-                      color: Colors.grey.shade800, height: 1.55),
+                title: 'Handle These Objections First',
+                icon: Icons.shield_outlined,
+                iconColor: Colors.red,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: r.topObjections
+                      .asMap()
+                      .entries
+                      .map(
+                        (e) => _ObjectionRow(index: e.key + 1, item: e.value),
+                      )
+                      .toList(),
                 ),
               ),
 
-              // Top Challenges (always rendered first regardless of mode)
+            // Discovery Questions
+            if (r.discoveryQuestions.isNotEmpty)
               _V3Card(
-                title: 'Top Likely Challenges',
-                icon: Icons.radar,
-                iconColor: Colors.deepOrange,
+                title: 'Discovery Questions',
+                icon: Icons.search,
+                iconColor: Colors.purple,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: r.topChallenges
+                  children: r.discoveryQuestions
                       .asMap()
                       .entries
                       .map((e) => _numberedRow(e.key + 1, e.value))
@@ -981,143 +1078,114 @@ class _MeetingPrepScreenState extends ConsumerState<MeetingPrepScreen> {
                 ),
               ),
 
-              // Phase 1: objectionsDominant — Objections rendered BEFORE questions
-              // when meeting type is negotiation/objection-heavy (e.g. Renewal Negotiation)
-              if (r.objectionsDominant && r.topObjections.isNotEmpty)
-                _V3Card(
-                  title: 'Handle These Objections First',
-                  icon: Icons.shield_outlined,
-                  iconColor: Colors.red,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: r.topObjections
-                        .asMap()
-                        .entries
-                        .map((e) => _ObjectionRow(
-                            index: e.key + 1, item: e.value))
-                        .toList(),
-                  ),
-                ),
+            // Primary Recommendation
+            _PrimaryProductCard(
+              product: r.primaryRecommendation,
+              enablement: MeetingPrepEnablementService()
+                  .getEnablementForProduct(r.primaryRecommendation.productName),
+            ),
 
-              // Discovery Questions
-              if (r.discoveryQuestions.isNotEmpty)
-                _V3Card(
-                  title: 'Discovery Questions',
-                  icon: Icons.search,
-                  iconColor: Colors.purple,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: r.discoveryQuestions
-                        .asMap()
-                        .entries
-                        .map((e) => _numberedRow(e.key + 1, e.value))
-                        .toList(),
-                  ),
+            // Supporting Recommendations
+            if (r.supportingRecs.isNotEmpty)
+              _V3Card(
+                title: 'Supporting Recommendations',
+                icon: Icons.add_circle_outline,
+                iconColor: Colors.teal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: r.supportingRecs
+                      .asMap()
+                      .entries
+                      .map(
+                        (e) => _SupportingProductRow(
+                          product: e.value,
+                          enablement: MeetingPrepEnablementService()
+                              .getEnablementForProduct(e.value.productName),
+                        ),
+                      )
+                      .toList(),
                 ),
-
-              // Primary Recommendation
-              _PrimaryProductCard(
-                product: r.primaryRecommendation,
-                enablement: MeetingPrepEnablementService().getEnablementForProduct(r.primaryRecommendation.productName),
               ),
 
-              // Supporting Recommendations
-              if (r.supportingRecs.isNotEmpty)
-                _V3Card(
-                  title: 'Supporting Recommendations',
-                  icon: Icons.add_circle_outline,
-                  iconColor: Colors.teal,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: r.supportingRecs
-                        .asMap()
-                          .entries
-                          .map((e) => _SupportingProductRow(
-                                product: e.value,
-                                enablement: MeetingPrepEnablementService().getEnablementForProduct(e.value.productName),
-                              ))
-                          .toList(),
-                  ),
+            // Phase 1: Expansion Opportunities — Renewal, Upsell, QBR only
+            if (r.expansionOpportunities != null &&
+                r.expansionOpportunities!.isNotEmpty)
+              _V3Card(
+                title: 'Expansion Opportunities',
+                icon: Icons.trending_up,
+                iconColor: Colors.green.shade700,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: r.expansionOpportunities!
+                      .asMap()
+                      .entries
+                      .map((e) => _numberedRow(e.key + 1, e.value))
+                      .toList(),
                 ),
+              ),
 
-              // Phase 1: Expansion Opportunities — Renewal, Upsell, QBR only
-              if (r.expansionOpportunities != null &&
-                  r.expansionOpportunities!.isNotEmpty)
-                _V3Card(
-                  title: 'Expansion Opportunities',
-                  icon: Icons.trending_up,
-                  iconColor: Colors.green.shade700,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: r.expansionOpportunities!
-                        .asMap()
-                        .entries
-                        .map((e) => _numberedRow(e.key + 1, e.value))
-                        .toList(),
-                  ),
+            // Objections (standard position — not dominant mode)
+            if (!r.objectionsDominant && r.topObjections.isNotEmpty)
+              _V3Card(
+                title: 'Likely Objections',
+                icon: Icons.shield_outlined,
+                iconColor: Colors.red,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: r.topObjections
+                      .asMap()
+                      .entries
+                      .map(
+                        (e) => _ObjectionRow(index: e.key + 1, item: e.value),
+                      )
+                      .toList(),
                 ),
+              ),
 
-              // Objections (standard position — not dominant mode)
-              if (!r.objectionsDominant && r.topObjections.isNotEmpty)
-                _V3Card(
-                  title: 'Likely Objections',
-                  icon: Icons.shield_outlined,
-                  iconColor: Colors.red,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: r.topObjections
-                        .asMap()
-                        .entries
-                        .map((e) => _ObjectionRow(
-                            index: e.key + 1, item: e.value))
-                        .toList(),
-                  ),
-                ),
+            // Meeting Strategy
+            _MeetingStrategyCard(strategy: r.meetingStrategy),
 
-              // Meeting Strategy
-              _MeetingStrategyCard(strategy: r.meetingStrategy),
-
-              // Next Best Action
-              _NextBestActionCard(action: r.nextBestAction),
-            ],
-          ),
+            // Next Best Action
+            _NextBestActionCard(action: r.nextBestAction),
+          ],
         ),
       ],
     );
   }
 
   Widget _numberedRow(int n, String text) => Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 24,
-              height: 24,
-              margin: const EdgeInsets.only(right: 10, top: 1),
-              decoration: BoxDecoration(
-                color: AppConstants.primaryColor.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  '$n',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: AppConstants.primaryColor,
-                  ),
-                ),
+    padding: const EdgeInsets.only(bottom: 10.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          margin: const EdgeInsets.only(right: 10, top: 1),
+          decoration: BoxDecoration(
+            color: AppConstants.primaryColor.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              '$n',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: AppConstants.primaryColor,
               ),
             ),
-            Expanded(
-              child: Text(text,
-                  style: TextStyle(
-                      color: Colors.grey.shade800, height: 1.4)),
-            ),
-          ],
+          ),
         ),
-      );
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.grey.shade800, height: 1.4),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1165,9 +1233,10 @@ class _V3Card extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.black87),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.black87,
+                  ),
                 ),
               ],
             ),
@@ -1210,14 +1279,19 @@ class _PrimaryProductCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.stars_rounded, color: AppConstants.primaryColor, size: 20),
+              Icon(
+                Icons.stars_rounded,
+                color: AppConstants.primaryColor,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Text(
                 'Primary Recommendation',
                 style: TextStyle(
-                    color: AppConstants.primaryColor,
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold),
+                  color: AppConstants.primaryColor,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -1225,9 +1299,10 @@ class _PrimaryProductCard extends StatelessWidget {
           Text(
             product.productName,
             style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
+              color: Colors.black87,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           Container(
@@ -1240,10 +1315,14 @@ class _PrimaryProductCard extends StatelessWidget {
             child: Text(
               product.selectionReason,
               style: TextStyle(
-                  color: Colors.grey.shade800, fontSize: 14, height: 1.5),
+                color: Colors.grey.shade800,
+                fontSize: 14,
+                height: 1.5,
+              ),
             ),
           ),
-          if (enablement != null) _AmCopilotCard(enablement: enablement!, isDark: false),
+          if (enablement != null)
+            _AmCopilotCard(enablement: enablement!, isDark: false),
         ],
       ),
     );
@@ -1265,19 +1344,22 @@ class _SupportingProductRow extends StatelessWidget {
           Text(
             product.productName,
             style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: Colors.black87),
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: Colors.black87,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             product.selectionReason,
             style: TextStyle(
-                color: Colors.grey.shade700,
-                fontSize: 13,
-                height: 1.4),
+              color: Colors.grey.shade700,
+              fontSize: 13,
+              height: 1.4,
+            ),
           ),
-          if (enablement != null) _AmCopilotCard(enablement: enablement!, isDark: false),
+          if (enablement != null)
+            _AmCopilotCard(enablement: enablement!, isDark: false),
         ],
       ),
     );
@@ -1312,9 +1394,10 @@ class _ObjectionRow extends StatelessWidget {
                   child: Text(
                     '$index',
                     style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red.shade700),
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red.shade700,
+                    ),
                   ),
                 ),
               ),
@@ -1322,9 +1405,10 @@ class _ObjectionRow extends StatelessWidget {
                 child: Text(
                   item.objection,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                      fontSize: 13),
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                    fontSize: 13,
+                  ),
                 ),
               ),
             ],
@@ -1347,9 +1431,10 @@ class _ObjectionRow extends StatelessWidget {
                   child: Text(
                     item.response,
                     style: TextStyle(
-                        color: Colors.green.shade900,
-                        fontSize: 13,
-                        height: 1.4),
+                      color: Colors.green.shade900,
+                      fontSize: 13,
+                      height: 1.4,
+                    ),
                   ),
                 ),
               ],
@@ -1387,16 +1472,20 @@ class _MeetingStrategyCard extends StatelessWidget {
                     color: Colors.indigo.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child:
-                      const Icon(Icons.map_outlined, color: Colors.indigo, size: 18),
+                  child: const Icon(
+                    Icons.map_outlined,
+                    color: Colors.indigo,
+                    size: 18,
+                  ),
                 ),
                 const SizedBox(width: 10),
                 const Text(
                   'Meeting Strategy',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.black87),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.black87,
+                  ),
                 ),
               ],
             ),
@@ -1407,22 +1496,26 @@ class _MeetingStrategyCard extends StatelessWidget {
             child: Column(
               children: [
                 _StrategyRow(
-                    label: 'Lead With',
-                    text: strategy.leadWith,
-                    color: Colors.green),
+                  label: 'Lead With',
+                  text: strategy.leadWith,
+                  color: Colors.green,
+                ),
                 _StrategyRow(
-                    label: 'Avoid',
-                    text: strategy.avoid,
-                    color: Colors.red),
+                  label: 'Avoid',
+                  text: strategy.avoid,
+                  color: Colors.red,
+                ),
                 _StrategyRow(
-                    label: 'Validate',
-                    text: strategy.validate,
-                    color: Colors.orange),
+                  label: 'Validate',
+                  text: strategy.validate,
+                  color: Colors.orange,
+                ),
                 _StrategyRow(
-                    label: 'Close With',
-                    text: strategy.closeWith,
-                    color: Colors.blue,
-                    isLast: true),
+                  label: 'Close With',
+                  text: strategy.closeWith,
+                  color: Colors.blue,
+                  isLast: true,
+                ),
               ],
             ),
           ),
@@ -1454,8 +1547,7 @@ class _StrategyRow extends StatelessWidget {
         children: [
           Container(
             width: 80,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6),
@@ -1464,9 +1556,10 @@ class _StrategyRow extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: color),
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -1475,9 +1568,10 @@ class _StrategyRow extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                  color: Colors.grey.shade800,
-                  height: 1.4,
-                  fontSize: 13),
+                color: Colors.grey.shade800,
+                height: 1.4,
+                fontSize: 13,
+              ),
             ),
           ),
         ],
@@ -1503,8 +1597,11 @@ class _NextBestActionCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.arrow_circle_right,
-              color: Colors.amber.shade700, size: 22),
+          Icon(
+            Icons.arrow_circle_right,
+            color: Colors.amber.shade700,
+            size: 22,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -1513,17 +1610,19 @@ class _NextBestActionCard extends StatelessWidget {
                 Text(
                   'Next Best Action',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      color: Colors.amber.shade800),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: Colors.amber.shade800,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   action,
                   style: TextStyle(
-                      color: Colors.amber.shade900,
-                      height: 1.4,
-                      fontWeight: FontWeight.w600),
+                    color: Colors.amber.shade900,
+                    height: 1.4,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -1545,10 +1644,14 @@ class _AmCopilotCard extends StatefulWidget {
 class _AmCopilotCardState extends State<_AmCopilotCard> {
   @override
   Widget build(BuildContext context) {
-    final bgColor = widget.isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.shade50;
+    final bgColor = widget.isDark
+        ? Colors.white.withValues(alpha: 0.1)
+        : Colors.grey.shade50;
     final textColor = widget.isDark ? Colors.white : Colors.grey.shade900;
     final titleColor = widget.isDark ? Colors.white : AppConstants.primaryColor;
-    final dividerColor = widget.isDark ? Colors.white.withValues(alpha: 0.2) : Colors.grey.shade300;
+    final dividerColor = widget.isDark
+        ? Colors.white.withValues(alpha: 0.2)
+        : Colors.grey.shade300;
 
     return Container(
       margin: const EdgeInsets.only(top: 12),
@@ -1558,7 +1661,14 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
         border: widget.isDark ? null : Border.all(color: Colors.grey.shade200),
       ),
       child: ExpansionTile(
-        title: Text('▶ How to Pitch This', style: TextStyle(fontWeight: FontWeight.bold, color: titleColor, fontSize: 13)),
+        title: Text(
+          '▶ How to Pitch This',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: titleColor,
+            fontSize: 13,
+          ),
+        ),
         iconColor: titleColor,
         collapsedIconColor: titleColor,
         childrenPadding: const EdgeInsets.all(16),
@@ -1568,15 +1678,25 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: widget.isDark ? Colors.blue.withValues(alpha: 0.1) : Colors.blue.shade50,
-              border: Border(left: BorderSide(color: Colors.blue.shade400, width: 4)),
+              color: widget.isDark
+                  ? Colors.blue.withValues(alpha: 0.1)
+                  : Colors.blue.shade50,
+              border: Border(
+                left: BorderSide(color: Colors.blue.shade400, width: 4),
+              ),
             ),
-            child: _textContent('"${widget.enablement.openingHook}"', textColor, isItalic: true),
+            child: _textContent(
+              '"${widget.enablement.openingHook}"',
+              textColor,
+              isItalic: true,
+            ),
           ),
           Divider(height: 24, color: dividerColor),
 
           _sectionTitle('🎯 Business Value', titleColor),
-          ...widget.enablement.businessOutcomes.map((b) => _bulletPoint(b, textColor)),
+          ...widget.enablement.businessOutcomes.map(
+            (b) => _bulletPoint(b, textColor),
+          ),
           Divider(height: 24, color: dividerColor),
 
           _sectionTitle('🧠 Position It As', titleColor),
@@ -1584,16 +1704,27 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
           Divider(height: 24, color: dividerColor),
 
           _sectionTitle('❓ Discovery Questions', titleColor),
-          ...widget.enablement.discoveryHooks.map((q) => _bulletPoint(q, textColor)),
+          ...widget.enablement.discoveryHooks.map(
+            (q) => _bulletPoint(q, textColor),
+          ),
           Divider(height: 24, color: dividerColor),
 
           _sectionTitle('🤝 Cross-Sell Opportunities', titleColor),
-          ...widget.enablement.crossSellProducts.map((c) => _bulletPoint(c, textColor)),
-          
+          ...widget.enablement.crossSellProducts.map(
+            (c) => _bulletPoint(c, textColor),
+          ),
+
           if (widget.enablement.whenNotToPitch.isNotEmpty) ...[
             Divider(height: 24, color: dividerColor),
             _sectionTitle('⚠️ When NOT To Pitch This', Colors.red.shade400),
-            ...widget.enablement.whenNotToPitch.map((q) => _bulletPoint(q, textColor, iconColor: Colors.red.shade400, icon: Icons.close)),
+            ...widget.enablement.whenNotToPitch.map(
+              (q) => _bulletPoint(
+                q,
+                textColor,
+                iconColor: Colors.red.shade400,
+                icon: Icons.close,
+              ),
+            ),
           ],
         ],
       ),
@@ -1626,7 +1757,12 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
     );
   }
 
-  Widget _bulletPoint(String content, Color color, {Color? iconColor, IconData? icon}) {
+  Widget _bulletPoint(
+    String content,
+    Color color, {
+    Color? iconColor,
+    IconData? icon,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
@@ -1638,15 +1774,18 @@ class _AmCopilotCardState extends State<_AmCopilotCard> {
               child: Icon(icon, size: 14, color: iconColor ?? color),
             )
           else
-            Text('• ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: iconColor ?? color)),
+            Text(
+              '• ',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: iconColor ?? color,
+              ),
+            ),
           Expanded(
             child: Text(
               content,
-              style: TextStyle(
-                fontSize: 13,
-                height: 1.4,
-                color: color,
-              ),
+              style: TextStyle(fontSize: 13, height: 1.4, color: color),
             ),
           ),
         ],

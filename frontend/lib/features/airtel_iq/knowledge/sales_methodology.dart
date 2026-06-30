@@ -14,11 +14,7 @@ final List<MeetingMethodology> salesMethodologyRepo = [
       'Who are the key stakeholders involved in this transformation?',
       'What happens if we do nothing and maintain the status quo?',
     ],
-    focusAreas: [
-      'Business context',
-      'Pain points',
-      'Desired outcomes',
-    ],
+    focusAreas: ['Business context', 'Pain points', 'Desired outcomes'],
     risks: [
       'Talking about products too early',
       'Assuming pain points',
@@ -29,10 +25,7 @@ final List<MeetingMethodology> salesMethodologyRepo = [
       'Stakeholders identified',
       'Follow-up meeting scheduled',
     ],
-    nextBestActions: [
-      'Document findings',
-      'Draft initial value proposition',
-    ],
+    nextBestActions: ['Document findings', 'Draft initial value proposition'],
   ),
   const MeetingMethodology(
     id: 'meth_proposal',
@@ -81,26 +74,21 @@ final List<MeetingMethodology> salesMethodologyRepo = [
       'Growth opportunities',
       'Additional Airtel solutions',
     ],
-    risks: [
-      'Competitor presence',
-      'Pricing pressure',
-      'Unresolved concerns',
-    ],
+    risks: ['Competitor presence', 'Pricing pressure', 'Unresolved concerns'],
     successIndicators: [
       'Positive sentiment',
       'Renewal intent',
       'Upsell opportunity identified',
     ],
-    nextBestActions: [
-      'Send renewal contract',
-      'Address any escalated issues',
-    ],
+    nextBestActions: ['Send renewal contract', 'Address any escalated issues'],
   ),
   const MeetingMethodology(
     id: 'meth_exec_alignment',
     meetingType: 'Executive Alignment Meeting',
-    purpose: 'Ensure strategic alignment between Airtel leadership and customer executives.',
-    primaryGoal: 'Establish Airtel as a strategic business partner rather than a vendor.',
+    purpose:
+        'Ensure strategic alignment between Airtel leadership and customer executives.',
+    primaryGoal:
+        'Establish Airtel as a strategic business partner rather than a vendor.',
     keyQuestions: [
       'What are your top 3 strategic priorities for the next 18 months?',
       'How is digital transformation reshaping your competitive landscape?',
@@ -130,7 +118,8 @@ final List<MeetingMethodology> salesMethodologyRepo = [
   const MeetingMethodology(
     id: 'meth_tech_workshop',
     meetingType: 'Technical Workshop',
-    purpose: 'Deep dive into solution architecture, integration, and deployment.',
+    purpose:
+        'Deep dive into solution architecture, integration, and deployment.',
     primaryGoal: 'Validate technical feasibility and secure technical win.',
     keyQuestions: [
       'What does your current architecture diagram look like?',
@@ -163,7 +152,8 @@ final List<MeetingMethodology> salesMethodologyRepo = [
     id: 'meth_solution_demo',
     meetingType: 'Solution Demonstration',
     purpose: 'Showcase product capabilities mapped to customer pain points.',
-    primaryGoal: 'Prove the solution can deliver the promised business outcomes.',
+    primaryGoal:
+        'Prove the solution can deliver the promised business outcomes.',
     keyQuestions: [
       'Does this workflow address the challenge you mentioned earlier?',
       'How would your team use this feature day-to-day?',
@@ -185,16 +175,14 @@ final List<MeetingMethodology> salesMethodologyRepo = [
       'Engagement and questions during the demo',
       'Request for pricing or pilot',
     ],
-    nextBestActions: [
-      'Send tailored proposal',
-      'Discuss pilot/POC terms',
-    ],
+    nextBestActions: ['Send tailored proposal', 'Discuss pilot/POC terms'],
   ),
   const MeetingMethodology(
     id: 'meth_renewal_negotiation',
     meetingType: 'Renewal Negotiation',
     purpose: 'Finalize terms for contract renewal and secure signature.',
-    primaryGoal: 'Protect current revenue and finalize renewal without massive discounting.',
+    primaryGoal:
+        'Protect current revenue and finalize renewal without massive discounting.',
     keyQuestions: [
       'What is required to get this approved by procurement today?',
       'If we can meet this timeline, are you ready to sign?',
@@ -225,7 +213,8 @@ final List<MeetingMethodology> salesMethodologyRepo = [
     id: 'meth_upsell_review',
     meetingType: 'Upsell Review',
     purpose: 'Introduce new solutions to an existing happy customer.',
-    primaryGoal: 'Expand share of wallet by solving adjacent business problems.',
+    primaryGoal:
+        'Expand share of wallet by solving adjacent business problems.',
     keyQuestions: [
       'Now that we have solved X, how are you handling Y?',
       'Have you considered consolidating your vendors for this new initiative?',
@@ -255,7 +244,8 @@ final List<MeetingMethodology> salesMethodologyRepo = [
     id: 'meth_qbr',
     meetingType: 'Quarterly Business Review',
     purpose: 'Review performance, SLA adherence, and strategic alignment.',
-    primaryGoal: 'Demonstrate continuous value and identify new operational challenges.',
+    primaryGoal:
+        'Demonstrate continuous value and identify new operational challenges.',
     keyQuestions: [
       'How has our service performed against your expectations this quarter?',
       'What upcoming projects do you have in the next 3-6 months?',
@@ -286,7 +276,8 @@ final List<MeetingMethodology> salesMethodologyRepo = [
     id: 'meth_stakeholder_mapping',
     meetingType: 'Stakeholder Mapping Session',
     purpose: 'Identify and align with all key decision-makers and influencers.',
-    primaryGoal: 'Navigate the organizational structure to build a winning consensus.',
+    primaryGoal:
+        'Navigate the organizational structure to build a winning consensus.',
     keyQuestions: [
       'Who else needs to weigh in on this decision?',
       'What are the primary concerns of the CFO regarding this project?',

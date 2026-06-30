@@ -39,6 +39,7 @@ class HiveService {
   static Box<User> get userBox => Hive.box<User>(userBoxName);
   static Box<Customer> get customersBox => Hive.box<Customer>(customersBoxName);
   static Box<Meeting> get meetingsBox => Hive.box<Meeting>(meetingsBoxName);
-  static Box<MeetingNote> get meetingNotesBox => Hive.box<MeetingNote>(meetingNotesBoxName);
+  static Box<MeetingNote> get meetingNotesBox =>
+      Hive.box<MeetingNote>(meetingNotesBoxName);
   static Box<Task> get tasksBox => Hive.box<Task>(tasksBoxName);
 }

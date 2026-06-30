@@ -19,7 +19,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     'Connectivity',
     'Customer Engagement',
     'Cloud',
-    'Security'
+    'Security',
   ];
   String _searchQuery = '';
 
@@ -38,7 +38,6 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     if (cat.contains('unified')) return Icons.phone_in_talk_outlined;
     return Icons.business_outlined;
   }
-
 
   void _onSearchChanged(String query) {
     setState(() {
@@ -79,16 +78,26 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
               child: TabBarView(
                 children: _categories.map((category) {
                   // Filter products dynamically for this specific tab
-                  final tabProducts = productEnrichmentData.entries.where((entry) {
+                  final tabProducts = productEnrichmentData.entries.where((
+                    entry,
+                  ) {
                     final product = entry.value;
-                    final matchesSearch = _searchQuery.isEmpty || 
-                           product.productName.toLowerCase().contains(_searchQuery) ||
-                           product.primaryUseCase.toLowerCase().contains(_searchQuery) ||
-                           product.category.toLowerCase().contains(_searchQuery);
-                           
-                    final matchesCategory = category == 'All Products' || 
-                           product.category.toLowerCase().contains(category.toLowerCase());
-                           
+                    final matchesSearch =
+                        _searchQuery.isEmpty ||
+                        product.productName.toLowerCase().contains(
+                          _searchQuery,
+                        ) ||
+                        product.primaryUseCase.toLowerCase().contains(
+                          _searchQuery,
+                        ) ||
+                        product.category.toLowerCase().contains(_searchQuery);
+
+                    final matchesCategory =
+                        category == 'All Products' ||
+                        product.category.toLowerCase().contains(
+                          category.toLowerCase(),
+                        );
+
                     return matchesSearch && matchesCategory;
                   }).toList();
 
@@ -102,12 +111,15 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                   }
 
                   return ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
                     itemCount: tabProducts.length,
                     itemBuilder: (context, index) {
                       final productId = tabProducts[index].key;
                       final product = tabProducts[index].value;
-                      
+
                       return Container(
                         margin: const EdgeInsets.only(bottom: 12),
                         decoration: BoxDecoration(
@@ -116,10 +128,14 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                           border: Border.all(color: Colors.grey.shade200),
                         ),
                         child: InkWell(
-                          onTap: () => context.push('/airtel-iq/products/$productId'),
+                          onTap: () =>
+                              context.push('/airtel-iq/products/$productId'),
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -127,12 +143,14 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: AppConstants.primaryColor.withValues(alpha: 0.08),
+                                    color: AppConstants.primaryColor.withValues(
+                                      alpha: 0.08,
+                                    ),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
-                                    _getIconForCategory(product.category), 
-                                    color: AppConstants.primaryColor, 
+                                    _getIconForCategory(product.category),
+                                    color: AppConstants.primaryColor,
                                     size: 24,
                                   ),
                                 ),
@@ -140,21 +158,34 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                                 // Text Content
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         product.productName,
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
                                         product.category,
-                                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 13,
+                                        ),
                                       ),
                                       const SizedBox(height: 6),
                                       Text(
-                                        product.idealIndustries.take(3).join('  •  '),
-                                        style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                                        product.idealIndustries
+                                            .take(3)
+                                            .join('  •  '),
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 12,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -165,7 +196,11 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                                   alignment: Alignment.centerRight,
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 24.0),
-                                    child: Icon(Icons.chevron_right, color: Colors.grey.shade400, size: 20),
+                                    child: Icon(
+                                      Icons.chevron_right,
+                                      color: Colors.grey.shade400,
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
                               ],

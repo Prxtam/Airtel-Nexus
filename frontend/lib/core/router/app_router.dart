@@ -39,9 +39,15 @@ import 'package:frontend/features/meetings/views/meeting_list_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
-final _customersNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'customers');
-final _activitiesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'activities');
-final _knowledgeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'knowledge');
+final _customersNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'customers',
+);
+final _activitiesNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'activities',
+);
+final _knowledgeNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'knowledge',
+);
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
 
@@ -64,14 +70,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
 
       // ── App Shell Routes (Bottom Navigation) ──────────────
       StatefulShellRoute.indexedStack(
@@ -133,9 +133,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: ':id',
-                builder: (context, state) => ProductDetailScreen(
-                  productId: state.pathParameters['id']!,
-                ),
+                builder: (context, state) =>
+                    ProductDetailScreen(productId: state.pathParameters['id']!),
               ),
             ],
           ),
@@ -147,10 +146,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: 'about',
             builder: (context, state) => const AboutAirtelScreen(),
           ),
-          GoRoute(
-            path: 'faq',
-            builder: (context, state) => const FaqScreen(),
-          ),
+          GoRoute(path: 'faq', builder: (context, state) => const FaqScreen()),
           GoRoute(
             path: 'playbooks',
             builder: (context, state) => const PlaybooksListScreen(),

@@ -29,7 +29,7 @@ class _FaqScreenState extends State<FaqScreen> {
       } else {
         _faqs = AirtelIqMockData.faqs.where((faq) {
           return faq.question.toLowerCase().contains(query.toLowerCase()) ||
-                 faq.category.toLowerCase().contains(query.toLowerCase());
+              faq.category.toLowerCase().contains(query.toLowerCase());
         }).toList();
       }
     });
@@ -61,9 +61,13 @@ class _FaqScreenState extends State<FaqScreen> {
                     ),
                   )
                 : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
                     itemCount: _faqs.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final faq = _faqs[index];
                       return Card(
@@ -76,24 +80,38 @@ class _FaqScreenState extends State<FaqScreen> {
                         child: ExpansionTile(
                           title: Text(
                             faq.question,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 4.0),
                             child: Text(
                               faq.category,
-                              style: TextStyle(color: Colors.orange.shade700, fontWeight: FontWeight.w600, fontSize: 12),
+                              style: TextStyle(
+                                color: Colors.orange.shade700,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          childrenPadding: const EdgeInsets.fromLTRB(
+                            16,
+                            0,
+                            16,
+                            16,
+                          ),
                           expandedCrossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Divider(),
                             const SizedBox(height: 8),
-                            SelectionArea(
-                              child: Text(
-                                faq.answer,
-                                style: TextStyle(color: Colors.grey.shade700, height: 1.4, fontSize: 15),
+                            Text(
+                              faq.answer,
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                height: 1.4,
+                                fontSize: 15,
                               ),
                             ),
                           ],

@@ -23,17 +23,21 @@ class MeetingListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: hideAppBar ? null : const AirtelHeader(
-        title: 'Meetings',
-        automaticallyImplyLeading: true,
-      ),
+      appBar: hideAppBar
+          ? null
+          : const AirtelHeader(
+              title: 'Meetings',
+              automaticallyImplyLeading: true,
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/meetings/create'),
         backgroundColor: Colors.white,
         foregroundColor: AppConstants.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
+          side: BorderSide(
+            color: AppConstants.primaryColor.withValues(alpha: 0.5),
+          ),
         ),
         child: const Icon(Icons.add),
       ),
@@ -59,7 +63,10 @@ class MeetingListScreen extends ConsumerWidget {
   }
 
   Widget _buildList(
-      BuildContext context, WidgetRef ref, List<Meeting> meetings) {
+    BuildContext context,
+    WidgetRef ref,
+    List<Meeting> meetings,
+  ) {
     if (meetings.isEmpty) {
       final rawAsync = ref.read(meetingListProvider);
       final hasNoMeetingsAtAll = rawAsync.maybeWhen(
@@ -68,7 +75,7 @@ class MeetingListScreen extends ConsumerWidget {
       );
 
       if (hasNoMeetingsAtAll) {
-         return AppEmptyWidget(
+        return AppEmptyWidget(
           icon: Icons.event_outlined,
           message: 'No meetings yet.\nTap + to schedule your first meeting.',
           actionLabel: 'Schedule Meeting',
@@ -91,8 +98,7 @@ class MeetingListScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
         itemCount: meetings.length,
         separatorBuilder: (_, __) => const SizedBox(height: 8),
-        itemBuilder: (context, index) =>
-            _MeetingTile(meeting: meetings[index]),
+        itemBuilder: (context, index) => _MeetingTile(meeting: meetings[index]),
       ),
     );
   }
@@ -115,7 +121,8 @@ class _MeetingFilters extends ConsumerWidget {
         children: [
           // Search
           TextField(
-            onChanged: (val) => ref.read(meetingSearchProvider.notifier).state = val,
+            onChanged: (val) =>
+                ref.read(meetingSearchProvider.notifier).state = val,
             decoration: InputDecoration(
               hintText: 'Search meetings...',
               prefixIcon: const Icon(Icons.search),
@@ -129,24 +136,37 @@ class _MeetingFilters extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.grey.shade300),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 0,
+              ),
             ),
           ),
           const Gap(12),
-          
+
           Row(
             children: [
               // Time Filter
               Expanded(
                 child: SegmentedButton<MeetingTimeFilter>(
                   segments: const [
-                    ButtonSegment(value: MeetingTimeFilter.all, label: Text('All')),
-                    ButtonSegment(value: MeetingTimeFilter.upcoming, label: Text('Upcoming')),
-                    ButtonSegment(value: MeetingTimeFilter.past, label: Text('Past')),
+                    ButtonSegment(
+                      value: MeetingTimeFilter.all,
+                      label: Text('All'),
+                    ),
+                    ButtonSegment(
+                      value: MeetingTimeFilter.upcoming,
+                      label: Text('Upcoming'),
+                    ),
+                    ButtonSegment(
+                      value: MeetingTimeFilter.past,
+                      label: Text('Past'),
+                    ),
                   ],
                   selected: {currentTimeFilter},
                   onSelectionChanged: (set) {
-                    ref.read(meetingTimeFilterProvider.notifier).state = set.first;
+                    ref.read(meetingTimeFilterProvider.notifier).state =
+                        set.first;
                   },
                   style: SegmentedButton.styleFrom(
                     visualDensity: VisualDensity.compact,
@@ -173,7 +193,10 @@ class _MeetingFilters extends ConsumerWidget {
                     borderSide: BorderSide(color: Colors.grey.shade300),
                   ),
                   prefixIcon: const Icon(Icons.business, size: 20),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   isDense: true,
                 ),
                 hint: const Text('Filter by Customer'),
@@ -182,10 +205,12 @@ class _MeetingFilters extends ConsumerWidget {
                     value: null,
                     child: Text('All Customers'),
                   ),
-                  ...customers.map((c) => DropdownMenuItem(
-                        value: c.id,
-                        child: Text(c.name, overflow: TextOverflow.ellipsis),
-                      )),
+                  ...customers.map(
+                    (c) => DropdownMenuItem(
+                      value: c.id,
+                      child: Text(c.name, overflow: TextOverflow.ellipsis),
+                    ),
+                  ),
                 ],
                 onChanged: (val) {
                   ref.read(meetingCustomerFilterProvider.notifier).state = val;
@@ -239,10 +264,7 @@ class _MeetingTile extends StatelessWidget {
             color: statusColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            statusIcon,
-            color: statusColor,
-          ),
+          child: Icon(statusIcon, color: statusColor),
         ),
         title: Text(
           meeting.title ?? 'Untitled Meeting',
@@ -255,9 +277,7 @@ class _MeetingTile extends StatelessWidget {
             children: [
               Text(
                 _formatDateTime(meeting.meetingAt),
-                style: TextStyle(
-                    fontSize: 12,
-                    color: statusColor),
+                style: TextStyle(fontSize: 12, color: statusColor),
               ),
             ],
           ),

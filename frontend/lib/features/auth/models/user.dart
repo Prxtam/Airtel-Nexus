@@ -35,9 +35,9 @@ class User {
   bool get isCBH => roles.contains('circle_business_head');
   bool get isZSM => roles.contains('zonal_sales_manager');
   bool get isAM => roles.contains('account_manager');
-  
+
   bool get hasManagerAccess => isAdmin || isCBH || isZSM;
-  
+
   User copyWith({
     String? id,
     String? email,

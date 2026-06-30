@@ -37,12 +37,12 @@ class CustomerListNotifier extends StateNotifier<AsyncValue<List<Customer>>> {
 }
 
 final customerListProvider =
-    StateNotifierProvider<CustomerListNotifier, AsyncValue<List<Customer>>>(
-  (ref) {
-    final repository = ref.watch(customerRepositoryProvider);
-    return CustomerListNotifier(repository);
-  },
-);
+    StateNotifierProvider<CustomerListNotifier, AsyncValue<List<Customer>>>((
+      ref,
+    ) {
+      final repository = ref.watch(customerRepositoryProvider);
+      return CustomerListNotifier(repository);
+    });
 
 // ---------------------------------------------------------------------------
 // Customer Detail Provider (family — keyed by customer ID)
@@ -53,7 +53,7 @@ class CustomerDetailNotifier extends StateNotifier<AsyncValue<Customer>> {
   final String customerId;
 
   CustomerDetailNotifier(this._repository, this.customerId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     load();
   }
 
@@ -69,7 +69,11 @@ class CustomerDetailNotifier extends StateNotifier<AsyncValue<Customer>> {
 
   Future<void> update(String name, {String? industry}) async {
     try {
-      final updated = await _repository.updateCustomer(customerId, name, industry: industry);
+      final updated = await _repository.updateCustomer(
+        customerId,
+        name,
+        industry: industry,
+      );
       state = AsyncValue.data(updated);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
@@ -77,10 +81,12 @@ class CustomerDetailNotifier extends StateNotifier<AsyncValue<Customer>> {
   }
 }
 
-final customerDetailProvider = StateNotifierProvider.family<
-    CustomerDetailNotifier, AsyncValue<Customer>, String>(
-  (ref, customerId) {
-    final repository = ref.watch(customerRepositoryProvider);
-    return CustomerDetailNotifier(repository, customerId);
-  },
-);
+final customerDetailProvider =
+    StateNotifierProvider.family<
+      CustomerDetailNotifier,
+      AsyncValue<Customer>,
+      String
+    >((ref, customerId) {
+      final repository = ref.watch(customerRepositoryProvider);
+      return CustomerDetailNotifier(repository, customerId);
+    });

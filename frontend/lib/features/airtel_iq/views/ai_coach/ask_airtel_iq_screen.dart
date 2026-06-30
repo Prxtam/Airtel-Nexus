@@ -47,9 +47,7 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
               onChanged: _onSearchChanged,
             ),
           ),
-          Expanded(
-            child: _buildBody(),
-          ),
+          Expanded(child: _buildBody()),
         ],
       ),
     );
@@ -65,7 +63,11 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
             const SizedBox(height: 16),
             Text(
               'What are you looking for?',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey.shade600),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -78,7 +80,12 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
     }
 
     if (_searchQuery.length <= 2) {
-      return const Center(child: Text('Keep typing to search...', style: TextStyle(color: Colors.grey)));
+      return const Center(
+        child: Text(
+          'Keep typing to search...',
+          style: TextStyle(color: Colors.grey),
+        ),
+      );
     }
 
     if (_result != null && _result!.isEmpty) {
@@ -88,78 +95,104 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
           children: [
             Icon(Icons.search_off, size: 64, color: Colors.grey.shade400),
             const SizedBox(height: 16),
-            const Text('No relevant Airtel Assist knowledge found.', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              'No relevant Airtel Assist knowledge found.',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
       );
     }
 
-    return SelectionArea(
-      child: ListView(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        children: [
-          if (_result!.products.isNotEmpty) ...[
-            const Text('Products', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            ..._result!.products.map((p) => _buildResultCard(
-                  title: p.name,
-                  subtitle: p.shortDescription,
-                  icon: Icons.shopping_bag_outlined,
-                  iconColor: Colors.purple,
-                  onTap: () => context.push('/airtel-iq/products/${p.id}'),
-                )),
-            const SizedBox(height: 16),
-          ],
-          if (_result!.articles.isNotEmpty) ...[
-            const Text('Knowledge Articles', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            ..._result!.articles.map((a) => _buildResultCard(
-                  title: a.title,
-                  subtitle: a.summary,
-                  icon: Icons.menu_book,
-                  iconColor: Colors.blue,
-                  onTap: () => context.push('/airtel-iq/knowledge/${a.id}'),
-                )),
-            const SizedBox(height: 16),
-          ],
-          if (_result!.playbooks.isNotEmpty) ...[
-            const Text('Sales Playbooks', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            ..._result!.playbooks.map((pb) => _buildResultCard(
-                  title: pb.industry,
-                  subtitle: pb.overview,
-                  icon: Icons.assignment_outlined,
-                  iconColor: Colors.green,
-                  onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
-                )),
-            const SizedBox(height: 16),
-          ],
-          if (_result!.faqs.isNotEmpty) ...[
-            const Text('FAQs', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            ..._result!.faqs.map((f) => _buildResultCard(
-                  title: f.question,
-                  subtitle: f.answer,
-                  icon: Icons.question_answer_outlined,
-                  iconColor: Colors.orange,
-                  onTap: () => context.push('/airtel-iq/faq'),
-                )),
-            const SizedBox(height: 16),
-          ],
-          if (_result!.objections.isNotEmpty) ...[
-            const Text('Objections', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            ..._result!.objections.map((o) => _buildResultCard(
-                  title: o.objection,
-                  subtitle: o.recommendedResponse,
-                  icon: Icons.shield_outlined,
-                  iconColor: AppConstants.primaryColor,
-                  onTap: () => context.push('/airtel-iq/objections'),
-                )),
-            const SizedBox(height: 32),
-          ],
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      children: [
+        if (_result!.products.isNotEmpty) ...[
+          const Text(
+            'Products',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ..._result!.products.map(
+            (p) => _buildResultCard(
+              title: p.name,
+              subtitle: p.shortDescription,
+              icon: Icons.shopping_bag_outlined,
+              iconColor: Colors.purple,
+              onTap: () => context.push('/airtel-iq/products/${p.id}'),
+            ),
+          ),
+          const SizedBox(height: 16),
         ],
-      ),
+        if (_result!.articles.isNotEmpty) ...[
+          const Text(
+            'Knowledge Articles',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ..._result!.articles.map(
+            (a) => _buildResultCard(
+              title: a.title,
+              subtitle: a.summary,
+              icon: Icons.menu_book,
+              iconColor: Colors.blue,
+              onTap: () => context.push('/airtel-iq/knowledge/${a.id}'),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+        if (_result!.playbooks.isNotEmpty) ...[
+          const Text(
+            'Sales Playbooks',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ..._result!.playbooks.map(
+            (pb) => _buildResultCard(
+              title: pb.industry,
+              subtitle: pb.overview,
+              icon: Icons.assignment_outlined,
+              iconColor: Colors.green,
+              onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+        if (_result!.faqs.isNotEmpty) ...[
+          const Text(
+            'FAQs',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ..._result!.faqs.map(
+            (f) => _buildResultCard(
+              title: f.question,
+              subtitle: f.answer,
+              icon: Icons.question_answer_outlined,
+              iconColor: Colors.orange,
+              onTap: () => context.push('/airtel-iq/faq'),
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+        if (_result!.objections.isNotEmpty) ...[
+          const Text(
+            'Objections',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ..._result!.objections.map(
+            (o) => _buildResultCard(
+              title: o.objection,
+              subtitle: o.recommendedResponse,
+              icon: Icons.shield_outlined,
+              iconColor: AppConstants.primaryColor,
+              onTap: () => context.push('/airtel-iq/objections'),
+            ),
+          ),
+          const SizedBox(height: 32),
+        ],
+      ],
     );
   }
 
@@ -188,7 +221,10 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
           ),
           child: Icon(icon, color: iconColor, size: 20),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
         subtitle: Text(
           subtitle,
           maxLines: 2,

@@ -47,8 +47,7 @@ class PlaybookDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      body: SelectionArea(
-        child: CustomScrollView(
+      body: CustomScrollView(
         slivers: [
           // Header
           AirtelSliverHeader(
@@ -143,7 +142,6 @@ class PlaybookDetailScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
       ),
     );
   }

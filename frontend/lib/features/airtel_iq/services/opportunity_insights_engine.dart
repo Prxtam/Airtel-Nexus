@@ -330,8 +330,7 @@ class OpportunityInsightsEngine {
     // Only awarded if notes contain substantive content, not garbage text.
     // Garbage check: must contain at least one space (multi-word) AND >30 chars.
     final notesRaw = input.situationNotes?.trim() ?? '';
-    final notesHasSubstance =
-        notesRaw.length > 30 && notesRaw.contains(' ');
+    final notesHasSubstance = notesRaw.length > 30 && notesRaw.contains(' ');
     if (notesHasSubstance) {
       score += 10;
       drivers.add('Detailed account context provided');
@@ -358,13 +357,13 @@ class OpportunityInsightsEngine {
     //   BUT without active inputs (pain points / notes / existing),
     //   whitespace alone won't push past ~80 worst case.
     //   We apply a penalty to ensure industry-only stays at Medium.
-    final hasActiveInputs = input.painPoints.isNotEmpty ||
+    final hasActiveInputs =
+        input.painPoints.isNotEmpty ||
         notesHasSubstance ||
         input.existingProducts.isNotEmpty;
 
     // Industry-only accounts are capped at Medium (≤72) regardless of score.
-    final cappedScore =
-        (!hasActiveInputs && finalScore > 72) ? 72 : finalScore;
+    final cappedScore = (!hasActiveInputs && finalScore > 72) ? 72 : finalScore;
 
     String label;
     if (cappedScore <= 55) {
@@ -375,11 +374,7 @@ class OpportunityInsightsEngine {
       label = 'High Opportunity';
     }
 
-    return GrowthPotential(
-      score: cappedScore,
-      label: label,
-      drivers: drivers,
-    );
+    return GrowthPotential(score: cappedScore, label: label, drivers: drivers);
   }
 
   // ── Best Opportunities Ranking ─────────────────────────────────────────────
@@ -523,30 +518,39 @@ class OpportunityInsightsEngine {
 
   // Maps a product name to a broad category for driver generation
   String _inferProductCategory(String prodNameLower) {
-    if (prodNameLower.contains('cloud') || prodNameLower.contains('colocation') ||
+    if (prodNameLower.contains('cloud') ||
+        prodNameLower.contains('colocation') ||
         prodNameLower.contains('nxtra')) {
       return 'Cloud & Infrastructure';
     }
-    if (prodNameLower.contains('secure') || prodNameLower.contains('security')) {
+    if (prodNameLower.contains('secure') ||
+        prodNameLower.contains('security')) {
       return 'Security';
     }
-    if (prodNameLower.contains('sd-wan') || prodNameLower.contains('mpls') ||
-        prodNameLower.contains('vpn') || prodNameLower.contains('ill') ||
-        prodNameLower.contains('leased') || prodNameLower.contains('dedicated') ||
+    if (prodNameLower.contains('sd-wan') ||
+        prodNameLower.contains('mpls') ||
+        prodNameLower.contains('vpn') ||
+        prodNameLower.contains('ill') ||
+        prodNameLower.contains('leased') ||
+        prodNameLower.contains('dedicated') ||
         prodNameLower.contains('office internet')) {
       return 'Connectivity';
     }
-    if (prodNameLower.contains('iot') || prodNameLower.contains('positioning') ||
+    if (prodNameLower.contains('iot') ||
+        prodNameLower.contains('positioning') ||
         prodNameLower.contains('5g')) {
       return 'IoT & Advanced Connectivity';
     }
-    if (prodNameLower.contains('postpaid') || prodNameLower.contains('work from')) {
+    if (prodNameLower.contains('postpaid') ||
+        prodNameLower.contains('work from')) {
       return 'Mobility';
     }
-    if (prodNameLower.contains('cpaas') || prodNameLower.contains('whatsapp') ||
+    if (prodNameLower.contains('cpaas') ||
+        prodNameLower.contains('whatsapp') ||
         prodNameLower.contains('business connect') ||
         prodNameLower.contains('contact center') ||
-        prodNameLower.contains('sip') || prodNameLower.contains('global voice')) {
+        prodNameLower.contains('sip') ||
+        prodNameLower.contains('global voice')) {
       return 'Communication & Engagement';
     }
     if (prodNameLower.contains('wi-fi') || prodNameLower.contains('wifi')) {

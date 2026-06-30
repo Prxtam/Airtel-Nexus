@@ -13,7 +13,8 @@ class ActivitiesScreen extends ConsumerStatefulWidget {
   ConsumerState<ActivitiesScreen> createState() => _ActivitiesScreenState();
 }
 
-class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen> with SingleTickerProviderStateMixin {
+class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -53,7 +54,9 @@ class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen> with Single
               unselectedLabelColor: Colors.grey.shade600,
               indicatorColor: AppConstants.primaryColor,
               indicatorWeight: 3,
-              labelStyle: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w600),
+              labelStyle: AppTypography.bodyText.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
               tabs: const [
                 Tab(text: 'Meetings'),
                 Tab(text: 'Tasks'),
@@ -73,5 +76,4 @@ class _ActivitiesScreenState extends ConsumerState<ActivitiesScreen> with Single
       ),
     );
   }
-
 }

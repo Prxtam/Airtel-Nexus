@@ -54,7 +54,12 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
-        title: Text(isCurrentlyCompleted ? 'Do you want to mark this task as incomplete?' : 'Do you want to mark this task as complete?', style: const TextStyle(color: Colors.black, fontSize: 16)),
+        title: Text(
+          isCurrentlyCompleted
+              ? 'Do you want to mark this task as incomplete?'
+              : 'Do you want to mark this task as complete?',
+          style: const TextStyle(color: Colors.black, fontSize: 16),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -63,7 +68,9 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: isCurrentlyCompleted ? Colors.orange : Colors.green,
+              backgroundColor: isCurrentlyCompleted
+                  ? Colors.orange
+                  : Colors.green,
               foregroundColor: Colors.white,
             ),
             child: const Text('Confirm'),
@@ -108,7 +115,9 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
             elevation: 2,
             color: Colors.white,
             surfaceTintColor: Colors.transparent,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -127,11 +136,23 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
                   Consumer(
                     builder: (context, ref, child) {
                       if (task.customerId == null) {
-                        return const Text('Internal Task', style: TextStyle(color: Colors.black87, fontSize: 13));
+                        return const Text(
+                          'Internal Task',
+                          style: TextStyle(color: Colors.black87, fontSize: 13),
+                        );
                       }
-                      final customerAsync = ref.watch(customerDetailProvider(task.customerId!));
-                      final customerName = customerAsync.valueOrNull?.name ?? 'Loading...';
-                      return Text('Customer: $customerName', style: const TextStyle(color: Colors.black87, fontSize: 13));
+                      final customerAsync = ref.watch(
+                        customerDetailProvider(task.customerId!),
+                      );
+                      final customerName =
+                          customerAsync.valueOrNull?.name ?? 'Loading...';
+                      return Text(
+                        'Customer: $customerName',
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 13,
+                        ),
+                      );
                     },
                   ),
                   const Gap(12),
@@ -144,12 +165,19 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
                   ),
 
                   // Description
-                  if (task.description != null && task.description!.isNotEmpty) ...[
+                  if (task.description != null &&
+                      task.description!.isNotEmpty) ...[
                     const Gap(16),
                     const Divider(height: 1),
                     const Gap(12),
-                    Text(task.description!,
-                        style: const TextStyle(height: 1.4, color: Colors.black87, fontSize: 14)),
+                    Text(
+                      task.description!,
+                      style: const TextStyle(
+                        height: 1.4,
+                        color: Colors.black87,
+                        fontSize: 14,
+                      ),
+                    ),
                   ],
                 ],
               ),
@@ -163,28 +191,43 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
             elevation: 1,
             color: Colors.white,
             surfaceTintColor: Colors.transparent,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (task.dueAt != null) ...[
-                    const Text('DUE DATE', style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                    const Text(
+                      'DUE DATE',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
                     const Gap(4),
                     Text(
                       _formatDate(task.dueAt!),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: _isDueSoon(task.dueAt!) && !isCompleted ? Colors.orange : Colors.black87,
+                        color: _isDueSoon(task.dueAt!) && !isCompleted
+                            ? Colors.orange
+                            : Colors.black87,
                       ),
                     ),
                     const Gap(16),
                     const Divider(height: 1),
                     const Gap(16),
                   ],
-                  _InfoRow(label: 'Created', value: _formatDate(task.createdAt)),
+                  _InfoRow(
+                    label: 'Created',
+                    value: _formatDate(task.createdAt),
+                  ),
                   if (task.completedAt != null && isCompleted) ...[
                     const Gap(8),
                     _InfoRow(
@@ -212,12 +255,27 @@ class _TaskDetailBodyState extends ConsumerState<_TaskDetailBody> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : Icon(isCompleted ? Icons.undo : Icons.check, size: 16),
-              label: Text(_isToggling ? 'Updating...' : (isCompleted ? 'Mark as Incomplete' : 'Mark as Complete')),
+              label: Text(
+                _isToggling
+                    ? 'Updating...'
+                    : (isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'),
+              ),
               style: OutlinedButton.styleFrom(
-                foregroundColor: isCompleted ? Colors.grey.shade700 : AppConstants.primaryColor,
-                side: BorderSide(color: isCompleted ? Colors.grey.shade300 : AppConstants.primaryColor.withValues(alpha: 0.5)),
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                foregroundColor: isCompleted
+                    ? Colors.grey.shade700
+                    : AppConstants.primaryColor,
+                side: BorderSide(
+                  color: isCompleted
+                      ? Colors.grey.shade300
+                      : AppConstants.primaryColor.withValues(alpha: 0.5),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -250,8 +308,14 @@ class _PriorityChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
-      child: Text(label,
-          style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w600)),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }
@@ -272,8 +336,14 @@ class _StatusChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
-      child: Text(label,
-          style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w600)),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }
@@ -291,15 +361,20 @@ class _InfoRow extends StatelessWidget {
       children: [
         SizedBox(
           width: 100,
-          child: Text(label,
-              style: const TextStyle(color: Colors.grey, fontSize: 13)),
+          child: Text(
+            label,
+            style: const TextStyle(color: Colors.grey, fontSize: 13),
+          ),
         ),
         Expanded(
-          child: Text(value,
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 13,
-                  color: valueColor)),
+          child: Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 13,
+              color: valueColor,
+            ),
+          ),
         ),
       ],
     );

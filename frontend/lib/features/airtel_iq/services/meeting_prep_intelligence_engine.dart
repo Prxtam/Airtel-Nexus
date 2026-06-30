@@ -136,83 +136,198 @@ const List<_SemanticConcept> _semanticConcepts = [
   _SemanticConcept(
     name: 'Connectivity & Network Reliability',
     phrases: [
-      'outage', 'downtime', 'unstable network', 'network instability', 'disconnected',
-      'latency', 'packet loss', 'slow network', 'branch unavailable', 'connectivity issue',
-      'link failure', 'branch outage', 'dropping connection', 'poor connectivity',
-      'network goes down', 'site isolated', 'frequent disconnections',
+      'outage',
+      'downtime',
+      'unstable network',
+      'network instability',
+      'disconnected',
+      'latency',
+      'packet loss',
+      'slow network',
+      'branch unavailable',
+      'connectivity issue',
+      'link failure',
+      'branch outage',
+      'dropping connection',
+      'poor connectivity',
+      'network goes down',
+      'site isolated',
+      'frequent disconnections',
     ],
-    products: ['Airtel SD-WAN', 'Airtel VPN/MPLS', 'Airtel Leased Line', 'Airtel Office Internet'],
-    nba: 'Schedule a network assessment focused on branch uptime and failover readiness.',
+    products: [
+      'Airtel SD-WAN',
+      'Airtel VPN/MPLS',
+      'Airtel Leased Line',
+      'Airtel Office Internet',
+    ],
+    nba:
+        'Schedule a network assessment focused on branch uptime and failover readiness.',
   ),
   _SemanticConcept(
     name: 'Security & Compliance',
     phrases: [
-      'audit', 'compliance', 'regulation', 'governance', 'security breach',
-      'privacy', 'data protection', 'risk management', 'ransomware',
-      'cyber attack', 'hacked', 'data leak', 'unauthorized access',
-      'regulatory fine', 'security posture',
+      'audit',
+      'compliance',
+      'regulation',
+      'governance',
+      'security breach',
+      'privacy',
+      'data protection',
+      'risk management',
+      'ransomware',
+      'cyber attack',
+      'hacked',
+      'data leak',
+      'unauthorized access',
+      'regulatory fine',
+      'security posture',
     ],
-    products: ['Airtel Secure Internet', 'Airtel VPN/MPLS', 'Airtel Public Cloud', 'Airtel Colocation'],
+    products: [
+      'Airtel Secure Internet',
+      'Airtel VPN/MPLS',
+      'Airtel Public Cloud',
+      'Airtel Colocation',
+    ],
     nba: 'Review compliance and security controls with customer IT leadership.',
   ),
   _SemanticConcept(
     name: 'Mobility & Workforce',
     phrases: [
-      'roaming', 'field staff', 'remote employees', 'distributed workforce', 'travel',
-      'employee productivity', 'workforce management', 'work from home', 'wfh',
-      'remote access', 'hybrid work', 'byod', 'mobile workforce', 'field agents',
+      'roaming',
+      'field staff',
+      'remote employees',
+      'distributed workforce',
+      'travel',
+      'employee productivity',
+      'workforce management',
+      'work from home',
+      'wfh',
+      'remote access',
+      'hybrid work',
+      'byod',
+      'mobile workforce',
+      'field agents',
     ],
-    products: ['Airtel Corporate Postpaid', 'Airtel Work From Anywhere Solutions'],
+    products: [
+      'Airtel Corporate Postpaid',
+      'Airtel Work From Anywhere Solutions',
+    ],
     nba: 'Propose a unified mobility policy review for remote and field staff.',
   ),
   _SemanticConcept(
     name: 'Customer Engagement',
     phrases: [
-      'sms', 'whatsapp', 'notifications', 'campaigns', 'customer communication',
-      'engagement', 'messaging', 'otp failure', 'message delivery', 'reach customers',
-      'abandoned cart', 'delivery alerts', 'customer updates',
+      'sms',
+      'whatsapp',
+      'notifications',
+      'campaigns',
+      'customer communication',
+      'engagement',
+      'messaging',
+      'otp failure',
+      'message delivery',
+      'reach customers',
+      'abandoned cart',
+      'delivery alerts',
+      'customer updates',
     ],
-    products: ['Airtel CPaaS', 'Airtel WhatsApp Business', 'Airtel Contact Center as a Service'],
-    nba: 'Audit their current customer communication flows and OTP delivery success rates.',
+    products: [
+      'Airtel CPaaS',
+      'Airtel WhatsApp Business',
+      'Airtel Contact Center as a Service',
+    ],
+    nba:
+        'Audit their current customer communication flows and OTP delivery success rates.',
   ),
   _SemanticConcept(
     name: 'Cloud & Data Center',
     phrases: [
-      'migration', 'cloud', 'workload', 'hosting', 'disaster recovery',
-      'backup', 'colocation', 'compute', 'server end of life', 'hardware refresh',
-      'data center move', 'dr drill', 'on-prem', 'on premise', 'cloud migration risk',
+      'migration',
+      'cloud',
+      'workload',
+      'hosting',
+      'disaster recovery',
+      'backup',
+      'colocation',
+      'compute',
+      'server end of life',
+      'hardware refresh',
+      'data center move',
+      'dr drill',
+      'on-prem',
+      'on premise',
+      'cloud migration risk',
     ],
     products: ['Airtel Public Cloud', 'Airtel Colocation'],
-    nba: 'Discuss workload migration timeline and disaster recovery requirements.',
+    nba:
+        'Discuss workload migration timeline and disaster recovery requirements.',
   ),
   _SemanticConcept(
     name: 'Data Sovereignty & Hosting',
     phrases: [
-      'data residency', 'sovereignty', 'data localization', 'on-shore hosting',
-      'regulatory hosting', 'local data center', 'data compliance', 'data boundary'
+      'data residency',
+      'sovereignty',
+      'data localization',
+      'on-shore hosting',
+      'regulatory hosting',
+      'local data center',
+      'data compliance',
+      'data boundary',
     ],
     products: ['Airtel Colocation', 'Airtel Public Cloud'],
-    nba: 'Discuss local data residency compliance and schedule a data center tour or cloud architecture review.',
+    nba:
+        'Discuss local data residency compliance and schedule a data center tour or cloud architecture review.',
   ),
   _SemanticConcept(
     name: 'IoT & Asset Visibility',
     phrases: [
-      'tracking', 'sensors', 'telematics', 'fleet', 'shipment', 'logistics',
-      'visibility', 'monitoring', 'smart meter', 'asset loss', 'route deviation',
-      'supply chain visibility', 'equipment breakdown', 'predictive maintenance',
+      'tracking',
+      'sensors',
+      'telematics',
+      'fleet',
+      'shipment',
+      'logistics',
+      'visibility',
+      'monitoring',
+      'smart meter',
+      'asset loss',
+      'route deviation',
+      'supply chain visibility',
+      'equipment breakdown',
+      'predictive maintenance',
     ],
-    products: ['Airtel IoT Connectivity', 'Airtel Precise Positioning', 'Airtel 5G for Enterprise'],
-    nba: 'Validate asset tracking requirements and identify pilot deployment candidates.',
+    products: [
+      'Airtel IoT Connectivity',
+      'Airtel Precise Positioning',
+      'Airtel 5G for Enterprise',
+    ],
+    nba:
+        'Validate asset tracking requirements and identify pilot deployment candidates.',
   ),
   _SemanticConcept(
     name: 'Voice & Contact Center',
     phrases: [
-      'call center', 'voice quality', 'inbound calls', 'outbound calls', 'customer support',
-      'agent productivity', 'pbx', 'sip', 'toll free', 'dropped calls',
-      'helpdesk', 'ivr', 'call routing',
+      'call center',
+      'voice quality',
+      'inbound calls',
+      'outbound calls',
+      'customer support',
+      'agent productivity',
+      'pbx',
+      'sip',
+      'toll free',
+      'dropped calls',
+      'helpdesk',
+      'ivr',
+      'call routing',
     ],
-    products: ['Airtel Global Voice', 'Airtel SIP Trunking', 'Airtel Contact Center as a Service'],
-    nba: 'Map out their current inbound call routing and agent software integration.',
+    products: [
+      'Airtel Global Voice',
+      'Airtel SIP Trunking',
+      'Airtel Contact Center as a Service',
+    ],
+    nba:
+        'Map out their current inbound call routing and agent software integration.',
   ),
 ];
 
@@ -386,8 +501,9 @@ class MeetingPrepIntelligenceEngine {
         ? _knowledge.getMethodologyByMeetingType(input.meetingType!)
         : null;
 
-    final industry =
-        input.industry != null ? _knowledge.getIndustryByName(input.industry!) : null;
+    final industry = input.industry != null
+        ? _knowledge.getIndustryByName(input.industry!)
+        : null;
 
     if (industry == null) {
       return _generateMethodologyOnly(input, methodology);
@@ -404,12 +520,13 @@ class MeetingPrepIntelligenceEngine {
     MeetingMethodology? methodology,
   ) {
     final shape = _resolveShape(input.meetingType);
-    final customerPrefix =
-        input.customerName != null ? 'Meeting with ${input.customerName}. ' : '';
+    final customerPrefix = input.customerName != null
+        ? 'Meeting with ${input.customerName}. '
+        : '';
     final historyNote =
         (input.previousMeetingCount != null && input.previousMeetingCount! > 0)
-            ? '${input.previousMeetingCount} previous engagements on record. '
-            : '';
+        ? '${input.previousMeetingCount} previous engagements on record. '
+        : '';
 
     final meetingLabel = input.meetingType ?? 'this meeting';
 
@@ -471,7 +588,11 @@ class MeetingPrepIntelligenceEngine {
           : 'Agree on clear next steps and document findings before ending the meeting',
     );
 
-    final nba = _buildNextBestAction(input.meetingType, 'your sector', primary.productName);
+    final nba = _buildNextBestAction(
+      input.meetingType,
+      'your sector',
+      primary.productName,
+    );
 
     return MeetingPrepV3Result(
       contextSummary: contextSummary,
@@ -506,10 +627,20 @@ class MeetingPrepIntelligenceEngine {
     final matchedConcepts = _extractSemanticConcepts(input.situationNotes);
 
     // 1. Rank all products -- Signals 1 through 6 + Semantic Concepts + Signal 1.5
-    final rankedScoredProducts = _rankProducts(input, industry, methodology, painPoints, matchedConcepts);
+    final rankedScoredProducts = _rankProducts(
+      input,
+      industry,
+      methodology,
+      painPoints,
+      matchedConcepts,
+    );
 
     if (painPoints.isNotEmpty) {
-      const genericProducts = ['Airtel Corporate Postpaid', 'Airtel IQ Business Connect', 'Airtel Office Internet'];
+      const genericProducts = [
+        'Airtel Corporate Postpaid',
+        'Airtel IQ Business Connect',
+        'Airtel Office Internet',
+      ];
       rankedScoredProducts.sort((a, b) {
         final aGen = genericProducts.contains(a.item.name) ? 1 : 0;
         final bGen = genericProducts.contains(b.item.name) ? 1 : 0;
@@ -518,7 +649,9 @@ class MeetingPrepIntelligenceEngine {
       });
     }
 
-    final primaryScored = rankedScoredProducts.isNotEmpty ? rankedScoredProducts[0] : null;
+    final primaryScored = rankedScoredProducts.isNotEmpty
+        ? rankedScoredProducts[0]
+        : null;
     final primaryProduct = primaryScored?.item;
     final primaryScore = primaryScored?.score ?? 0;
 
@@ -530,7 +663,7 @@ class MeetingPrepIntelligenceEngine {
 
     final supportingSlice = <_Scored<ProductIntelligence>>[];
     final candidateSlice = <_Scored<ProductIntelligence>>[];
-    
+
     for (int i = 1; i < rankedScoredProducts.length; i++) {
       final sp = rankedScoredProducts[i];
       if (!uniqueProducts.contains(sp.item.name) && sp.score >= 40) {
@@ -545,10 +678,14 @@ class MeetingPrepIntelligenceEngine {
         bool solvesAny = false;
         for (final pp in painPoints) {
           final ppLower = pp.toLowerCase();
-          solvesAny = solvesAny || sp.item.painPointsSolved.any((p) {
-            final pLower = p.toLowerCase();
-            return pLower.contains(ppLower) || ppLower.contains(pLower) || _hasSignificantWordOverlap(ppLower, pLower);
-          });
+          solvesAny =
+              solvesAny ||
+              sp.item.painPointsSolved.any((p) {
+                final pLower = p.toLowerCase();
+                return pLower.contains(ppLower) ||
+                    ppLower.contains(pLower) ||
+                    _hasSignificantWordOverlap(ppLower, pLower);
+              });
         }
         if (solvesAny && !uniqueProducts.contains(sp.item.name)) {
           supportingSlice.add(sp);
@@ -559,7 +696,8 @@ class MeetingPrepIntelligenceEngine {
       // Priority 2: Industry Recommended Products
       for (final sp in candidateSlice) {
         if (supportingSlice.length >= shape.maxSupportingProducts) break;
-        if (industry.recommendedProducts.contains(sp.item.name) && !uniqueProducts.contains(sp.item.name)) {
+        if (industry.recommendedProducts.contains(sp.item.name) &&
+            !uniqueProducts.contains(sp.item.name)) {
           supportingSlice.add(sp);
           uniqueProducts.add(sp.item.name);
         }
@@ -582,16 +720,29 @@ class MeetingPrepIntelligenceEngine {
       }
     }
 
-    final secondaryScore = supportingSlice.isNotEmpty ? supportingSlice.first.score : 0;
+    final secondaryScore = supportingSlice.isNotEmpty
+        ? supportingSlice.first.score
+        : 0;
     final scoreGap = primaryScore - secondaryScore;
 
     // 2. Rank challenges (Signal 7: notes boost when no pain point)
-    final challenges = _rankChallenges(industry, methodology, painPoints, noteKeywords);
+    final challenges = _rankChallenges(
+      industry,
+      methodology,
+      painPoints,
+      noteKeywords,
+    );
 
     // 3. Select questions (count + tier weights from shape; Signal 7 when active)
     final questions = _selectQuestions(
-        industry, methodology, primaryProduct, painPoints, input.objective,
-        shape, noteKeywords);
+      industry,
+      methodology,
+      primaryProduct,
+      painPoints,
+      input.objective,
+      shape,
+      noteKeywords,
+    );
 
     // 4. Select objections (count + pool boost from shape; Signal 7 when active)
     final objections = _selectObjections(
@@ -606,27 +757,61 @@ class MeetingPrepIntelligenceEngine {
 
     // 5. Build ranked products with repo-derived reasons + concept explanation + Confidence Layer
     final primary = primaryProduct != null
-        ? _buildRankedProduct(primaryProduct, input.industry!, painPoints, matchedConcepts, input.meetingType, primaryScore, scoreGap)
+        ? _buildRankedProduct(
+            primaryProduct,
+            input.industry!,
+            painPoints,
+            matchedConcepts,
+            input.meetingType,
+            primaryScore,
+            scoreGap,
+          )
         : _fallbackRankedProduct();
 
     final supportingRanked = supportingSlice
-        .map((s) => _buildRankedProduct(s.item, input.industry!, painPoints, matchedConcepts, input.meetingType, s.score, 0))
+        .map(
+          (s) => _buildRankedProduct(
+            s.item,
+            input.industry!,
+            painPoints,
+            matchedConcepts,
+            input.meetingType,
+            s.score,
+            0,
+          ),
+        )
         .toList();
 
     // 6. Meeting strategy
-    final strategy =
-        _buildMeetingStrategy(methodology, challenges, painPoints, industry, input.meetingType);
+    final strategy = _buildMeetingStrategy(
+      methodology,
+      challenges,
+      painPoints,
+      industry,
+      input.meetingType,
+    );
 
     // 7. Next best action
-    final nba = _buildNextBestAction(input.meetingType, input.industry!, primary.productName, matchedConcepts);
+    final nba = _buildNextBestAction(
+      input.meetingType,
+      input.industry!,
+      primary.productName,
+      matchedConcepts,
+    );
 
     // 8. Context summary
-    final contextSummary =
-        _buildContextSummary(input, industry, challenges, methodology, painPoints);
+    final contextSummary = _buildContextSummary(
+      input,
+      industry,
+      challenges,
+      methodology,
+      painPoints,
+    );
 
     // 9. Expansion opportunities (Renewal, Upsell, QBR only)
     List<String>? expansionOpps;
-    if (shape.includeExpansionOpportunities && industry.salesOpportunities.isNotEmpty) {
+    if (shape.includeExpansionOpportunities &&
+        industry.salesOpportunities.isNotEmpty) {
       expansionOpps = industry.salesOpportunities.take(3).toList();
     }
 
@@ -652,7 +837,7 @@ class MeetingPrepIntelligenceEngine {
   List<_SemanticConcept> _extractSemanticConcepts(String? situationNotes) {
     if (situationNotes == null || situationNotes.trim().isEmpty) return [];
     final notesLower = situationNotes.toLowerCase();
-    
+
     final matched = <_SemanticConcept>[];
     for (final concept in _semanticConcepts) {
       for (final phrase in concept.phrases) {
@@ -678,7 +863,9 @@ class MeetingPrepIntelligenceEngine {
       ...industry.businessChallenges,
       ...industry.technologyChallenges,
     ];
-    final canonicalIndustryRecommended = canonicalizeProductNames(industry.recommendedProducts);
+    final canonicalIndustryRecommended = canonicalizeProductNames(
+      industry.recommendedProducts,
+    );
 
     final scored = allProducts.map((product) {
       double score = 0;
@@ -688,7 +875,9 @@ class MeetingPrepIntelligenceEngine {
       // Phase 2.5 -- Semantic Concept Boost (+40 per matched concept, max +80)
       double conceptBoost = 0;
       for (final concept in matchedConcepts) {
-        if (canonicalizeProductNames(concept.products).contains(canonicalProductName)) {
+        if (canonicalizeProductNames(
+          concept.products,
+        ).contains(canonicalProductName)) {
           conceptBoost += 40;
         }
       }
@@ -698,7 +887,8 @@ class MeetingPrepIntelligenceEngine {
       if (product.industries.contains(input.industry)) score += 40;
 
       // Phase 3: Signal 1.5 -- Industry Recommended Product Boost (+30)
-      if (canonicalIndustryRecommended.contains(canonicalProductName)) score += 30;
+      if (canonicalIndustryRecommended.contains(canonicalProductName))
+        score += 30;
 
       // Signal 2 -- Pain point match (dominant when present: +60 or -20)
       if (hasPainPoint) {
@@ -723,7 +913,10 @@ class MeetingPrepIntelligenceEngine {
       double challengeScore = 0;
       for (final pp in product.painPointsSolved) {
         for (final challenge in industryChallenges) {
-          if (_hasSignificantWordOverlap(pp.toLowerCase(), challenge.toLowerCase())) {
+          if (_hasSignificantWordOverlap(
+            pp.toLowerCase(),
+            challenge.toLowerCase(),
+          )) {
             challengeScore += 5;
           }
         }
@@ -735,7 +928,10 @@ class MeetingPrepIntelligenceEngine {
         double affinityScore = 0;
         for (final focus in methodology.focusAreas) {
           for (final pp in product.painPointsSolved) {
-            if (_hasSignificantWordOverlap(focus.toLowerCase(), pp.toLowerCase())) {
+            if (_hasSignificantWordOverlap(
+              focus.toLowerCase(),
+              pp.toLowerCase(),
+            )) {
               affinityScore += 5;
             }
           }
@@ -750,7 +946,9 @@ class MeetingPrepIntelligenceEngine {
 
       // Signal 6 (Phase 2) -- Cross-sell logic for existing products
       if (input.existingAirtelProducts.isNotEmpty) {
-        final ownedCanonical = canonicalizeProductNames(input.existingAirtelProducts);
+        final ownedCanonical = canonicalizeProductNames(
+          input.existingAirtelProducts,
+        );
         if (ownedCanonical.contains(canonicalProductName)) {
           // Customer already owns this -- strong penalty so it won't be re-recommended
           score -= 40;
@@ -762,7 +960,9 @@ class MeetingPrepIntelligenceEngine {
               orElse: () => product, // safe fallback; won't match cross-sell
             );
             if (canonicalizeProductName(owned.name) != canonicalProductName &&
-                canonicalizeProductNames(owned.crossSellOpportunities).contains(canonicalProductName)) {
+                canonicalizeProductNames(
+                  owned.crossSellOpportunities,
+                ).contains(canonicalProductName)) {
               score += 25;
               break;
             }
@@ -783,15 +983,16 @@ class MeetingPrepIntelligenceEngine {
       return (a.item).name.compareTo((b.item).name);
     });
 
-
     return scored;
-
-
   }
 
-  double _companySizeAdjustment(ProductIntelligence product, String companySize) {
+  double _companySizeAdjustment(
+    ProductIntelligence product,
+    String companySize,
+  ) {
     if (companySize.contains('Small')) {
-      final isEnterpriseExclusive = product.idealCustomers.isNotEmpty &&
+      final isEnterpriseExclusive =
+          product.idealCustomers.isNotEmpty &&
           product.idealCustomers.every((c) {
             final lower = c.toLowerCase();
             return lower.contains('large') ||
@@ -828,21 +1029,31 @@ class MeetingPrepIntelligenceEngine {
   ) {
     String reason;
     final hasPainPoint = painPoints.isNotEmpty;
-    final pitch = meetingType == 'Executive Alignment Meeting' ? product.executivePitch : product.elevatorPitch;
+    final pitch = meetingType == 'Executive Alignment Meeting'
+        ? product.executivePitch
+        : product.elevatorPitch;
 
     // Phase 2.5 -- Build concept prefix if product was boosted
     String conceptPrefix = '';
     final canonicalProductName = canonicalizeProductName(product.name);
-    final matchingConcepts = matchedConcepts.where((c) => canonicalizeProductNames(c.products).contains(canonicalProductName)).toList();
+    final matchingConcepts = matchedConcepts
+        .where(
+          (c) => canonicalizeProductNames(
+            c.products,
+          ).contains(canonicalProductName),
+        )
+        .toList();
     if (matchingConcepts.isNotEmpty) {
       final conceptNames = matchingConcepts.map((c) => c.name).join(' and ');
-      conceptPrefix = 'Situation notes indicate $conceptNames concerns which ${product.name} directly addresses. ';
+      conceptPrefix =
+          'Situation notes indicate $conceptNames concerns which ${product.name} directly addresses. ';
     }
 
     // Phase 3 -- Confidence Layer Reason Formatting
     String confidencePrefix = '';
     if (score >= 100 && scoreGap >= 40) {
-      confidencePrefix = 'Strongly aligned with the customer\'s stated challenges. ';
+      confidencePrefix =
+          'Strongly aligned with the customer\'s stated challenges. ';
     } else if (score >= 60) {
       confidencePrefix = 'Good fit based on industry and business context. ';
     } else {
@@ -871,13 +1082,15 @@ class MeetingPrepIntelligenceEngine {
         final outcome = product.businessOutcomes.isNotEmpty
             ? product.businessOutcomes.first
             : pitch;
-        reason = '$confidencePrefix$conceptPrefix${product.name} supports $industry organisations by: $outcome';
+        reason =
+            '$confidencePrefix$conceptPrefix${product.name} supports $industry organisations by: $outcome';
       }
     } else if (product.industries.contains(industry)) {
       final outcome = product.businessOutcomes.isNotEmpty
           ? product.businessOutcomes.first
           : pitch;
-      reason = '$confidencePrefix$conceptPrefix${product.name} serves $industry organisations by: $outcome';
+      reason =
+          '$confidencePrefix$conceptPrefix${product.name} serves $industry organisations by: $outcome';
     } else {
       reason =
           '$confidencePrefix$conceptPrefix${product.name} complements the primary solution -- $pitch';
@@ -891,12 +1104,12 @@ class MeetingPrepIntelligenceEngine {
   }
 
   RankedProduct _fallbackRankedProduct() => const RankedProduct(
-        productName: 'Airtel Corporate Postpaid',
-        selectionReason:
-            'Airtel Corporate Postpaid is Airtel\'s most universally applicable enterprise solution.',
-        elevatorPitch:
-            'Simplifies enterprise mobility through centralised management and better visibility.',
-      );
+    productName: 'Airtel Corporate Postpaid',
+    selectionReason:
+        'Airtel Corporate Postpaid is Airtel\'s most universally applicable enterprise solution.',
+    elevatorPitch:
+        'Simplifies enterprise mobility through centralised management and better visibility.',
+  );
 
   // ---------------------------------------------------------------------------
   // Challenge Ranking
@@ -910,7 +1123,8 @@ class MeetingPrepIntelligenceEngine {
   ) {
     final meetingType = methodology?.meetingType ?? '';
     final isTechFocused =
-        meetingType.contains('Technical') || meetingType.contains('Demonstration');
+        meetingType.contains('Technical') ||
+        meetingType.contains('Demonstration');
     final isExecFocused = meetingType.contains('Executive');
 
     final allChallenges = [
@@ -973,14 +1187,17 @@ class MeetingPrepIntelligenceEngine {
     List<String> noteKeywords,
   ) {
     final meetingType = methodology?.meetingType ?? '';
-    final isDiscovery = meetingType.contains('Discovery') || meetingType.isEmpty;
+    final isDiscovery =
+        meetingType.contains('Discovery') || meetingType.isEmpty;
 
     // Phase 1: tier weights flip by meeting type.
     // Discovery: industry questions dominate (30 vs 20).
     // All other types: methodology questions dominate (35 vs 20).
     final tier1Base = isDiscovery ? 30.0 : 20.0;
     final tier2Base = isDiscovery ? 20.0 : 35.0;
-    final tier3Base = painPoints.isNotEmpty ? 100.0 : 10.0; // Phase 3: Pain Point Lock
+    final tier3Base = painPoints.isNotEmpty
+        ? 100.0
+        : 10.0; // Phase 3: Pain Point Lock
 
     final pool = <_Scored<String>>[];
 
@@ -1000,24 +1217,23 @@ class MeetingPrepIntelligenceEngine {
       // Phase 4.2 -- Quota-based question allocation across multiple pain points
       final selectedQs = <String>{};
       final remainingPool = List.of(pool);
-      
+
       int quotaPerPp = (shape.questionCount / painPoints.length).floor();
       int remainder = shape.questionCount % painPoints.length;
-      
+
       for (int i = 0; i < painPoints.length; i++) {
         final pp = painPoints[i];
         final ppLower = pp.toLowerCase();
         final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
-        
+
         final boosted = remainingPool.map((s) {
           final matches = ppWords.any((w) => s.item.toLowerCase().contains(w));
           return _Scored(s.item, s.score + (matches ? 100 : 0));
-        }).toList()
-          ..sort((a, b) => b.score.compareTo(a.score));
-          
+        }).toList()..sort((a, b) => b.score.compareTo(a.score));
+
         int targetQuota = quotaPerPp + (i < remainder ? 1 : 0);
         int taken = 0;
-        
+
         for (final s in boosted) {
           if (taken >= targetQuota) break;
           // Must match to fill quota, or fallback to highest score if it's the only one left
@@ -1030,7 +1246,7 @@ class MeetingPrepIntelligenceEngine {
           }
         }
       }
-      
+
       // Fill remaining slots if any
       if (selectedQs.length < shape.questionCount) {
         remainingPool.sort((a, b) => b.score.compareTo(a.score));
@@ -1044,13 +1260,18 @@ class MeetingPrepIntelligenceEngine {
 
     // Objective as secondary signal
     if (objective != null && objective.isNotEmpty) {
-      final objWords = objective.toLowerCase().split(' ').where((w) => w.length > 3);
+      final objWords = objective
+          .toLowerCase()
+          .split(' ')
+          .where((w) => w.length > 3);
       final boosted = pool.map((s) {
         final matches = objWords.any((w) => s.item.toLowerCase().contains(w));
         return _Scored(s.item, s.score + (matches ? 10 : 0));
-      }).toList()
-        ..sort((a, b) => b.score.compareTo(a.score));
-      return _deduplicateAndTake(boosted.map((s) => s.item).toList(), shape.questionCount);
+      }).toList()..sort((a, b) => b.score.compareTo(a.score));
+      return _deduplicateAndTake(
+        boosted.map((s) => s.item).toList(),
+        shape.questionCount,
+      );
     }
 
     pool.sort((a, b) => b.score.compareTo(a.score));
@@ -1058,14 +1279,21 @@ class MeetingPrepIntelligenceEngine {
     // Phase 2 Signal 7 -- notes keyword boost when no pain point
     if (noteKeywords.isNotEmpty) {
       final boosted = pool.map((s) {
-        final matches = noteKeywords.any((w) => s.item.toLowerCase().contains(w));
+        final matches = noteKeywords.any(
+          (w) => s.item.toLowerCase().contains(w),
+        );
         return _Scored(s.item, s.score + (matches ? 20 : 0));
-      }).toList()
-        ..sort((a, b) => b.score.compareTo(a.score));
-      return _deduplicateAndTake(boosted.map((s) => s.item).toList(), shape.questionCount);
+      }).toList()..sort((a, b) => b.score.compareTo(a.score));
+      return _deduplicateAndTake(
+        boosted.map((s) => s.item).toList(),
+        shape.questionCount,
+      );
     }
 
-    return _deduplicateAndTake(pool.map((s) => s.item).toList(), shape.questionCount);
+    return _deduplicateAndTake(
+      pool.map((s) => s.item).toList(),
+      shape.questionCount,
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -1090,10 +1318,15 @@ class MeetingPrepIntelligenceEngine {
         final response = i < primary.objectionResponses.length
             ? primary.objectionResponses[i]
             : 'Acknowledge the specific concern. Pivot to Airtel\'s capabilities. Ask a probing question about their current constraints. Position the product with relevant case studies.';
-        pool.add(_Scored(
-          ScoredObjection(objection: primary.objections[i], response: response),
-          30 + boost,
-        ));
+        pool.add(
+          _Scored(
+            ScoredObjection(
+              objection: primary.objections[i],
+              response: response,
+            ),
+            30 + boost,
+          ),
+        );
       }
     }
 
@@ -1103,28 +1336,36 @@ class MeetingPrepIntelligenceEngine {
         final response = i < supporting.objectionResponses.length
             ? supporting.objectionResponses[i]
             : 'Acknowledge the specific concern. Pivot to Airtel\'s capabilities. Ask a probing question about their current constraints. Position the product with relevant case studies.';
-        pool.add(_Scored(
-          ScoredObjection(objection: supporting.objections[i], response: response),
-          20 + boost,
-        ));
+        pool.add(
+          _Scored(
+            ScoredObjection(
+              objection: supporting.objections[i],
+              response: response,
+            ),
+            20 + boost,
+          ),
+        );
       }
     }
 
     // Tier C: industry-level objections
     for (final obj in industry.objections) {
-      pool.add(_Scored(
-        ScoredObjection(
-          objection: obj,
-          response:
-              'Acknowledge the specific concern. Pivot to Airtel\'s industry expertise in ${industry.industryName}. '
-              'Ask a probing question about their current constraints. Position the solution with relevant case studies.',
+      pool.add(
+        _Scored(
+          ScoredObjection(
+            objection: obj,
+            response:
+                'Acknowledge the specific concern. Pivot to Airtel\'s industry expertise in ${industry.industryName}. '
+                'Ask a probing question about their current constraints. Position the solution with relevant case studies.',
+          ),
+          15 + boost,
         ),
-        15 + boost,
-      ));
+      );
     }
 
     final mtLower = (meetingType ?? '').toLowerCase();
-    final isCommercial = mtLower.contains('renewal') ||
+    final isCommercial =
+        mtLower.contains('renewal') ||
         mtLower.contains('negotiation') ||
         mtLower.contains('proposal');
 
@@ -1134,27 +1375,26 @@ class MeetingPrepIntelligenceEngine {
     if (hasPainPoint) {
       final selectedObjs = <ScoredObjection>{};
       final remainingPool = List.of(pool);
-      
+
       int quotaPerPp = (shape.objectionCount / painPoints.length).floor();
       int remainder = shape.objectionCount % painPoints.length;
-      
+
       for (int i = 0; i < painPoints.length; i++) {
         final pp = painPoints[i];
         final ppLower = pp.toLowerCase();
         final ppWords = ppLower.split(' ').where((w) => w.length > 3).toList();
-        
+
         final boosted = remainingPool.map((s) {
           final objLower = s.item.objection.toLowerCase();
           final ppMatch = ppWords.any((w) => objLower.contains(w));
           double sc = s.score + (ppMatch ? 50 : 0);
           if (isCommercial && _isCommercialObjection(objLower)) sc += 20;
           return _Scored(s.item, sc);
-        }).toList()
-          ..sort((a, b) => b.score.compareTo(a.score));
-          
+        }).toList()..sort((a, b) => b.score.compareTo(a.score));
+
         int targetQuota = quotaPerPp + (i < remainder ? 1 : 0);
         int taken = 0;
-        
+
         for (final s in boosted) {
           if (taken >= targetQuota) break;
           if (selectedObjs.add(s.item)) {
@@ -1163,7 +1403,7 @@ class MeetingPrepIntelligenceEngine {
           }
         }
       }
-      
+
       if (selectedObjs.length < shape.objectionCount) {
         remainingPool.sort((a, b) => b.score.compareTo(a.score));
         for (final s in remainingPool) {
@@ -1173,11 +1413,12 @@ class MeetingPrepIntelligenceEngine {
       }
       return selectedObjs.toList();
     }
-    
+
     // Non-pain point flow
     scored = pool.map((s) {
       double sc = s.score;
-      if (isCommercial && _isCommercialObjection(s.item.objection.toLowerCase())) {
+      if (isCommercial &&
+          _isCommercialObjection(s.item.objection.toLowerCase())) {
         sc += 20;
       }
       return _Scored(s.item, sc);
@@ -1188,11 +1429,11 @@ class MeetingPrepIntelligenceEngine {
     // Phase 2 Signal 7 -- notes boost on objections when no explicit pain point
     if (noteKeywords.isNotEmpty && !hasPainPoint) {
       scored = scored.map((s) {
-        final matches =
-            noteKeywords.any((w) => s.item.objection.toLowerCase().contains(w));
+        final matches = noteKeywords.any(
+          (w) => s.item.objection.toLowerCase().contains(w),
+        );
         return _Scored(s.item, s.score + (matches ? 20 : 0));
-      }).toList()
-        ..sort((a, b) => b.score.compareTo(a.score));
+      }).toList()..sort((a, b) => b.score.compareTo(a.score));
     }
 
     return scored.take(shape.objectionCount).map((s) => s.item).toList();
@@ -1221,8 +1462,8 @@ class MeetingPrepIntelligenceEngine {
     final leadBase = isGeneric
         ? 'Explore current business priorities and operational challenges before discussing solutions.'
         : (methodology?.focusAreas.isNotEmpty == true
-            ? methodology!.focusAreas.first
-            : 'Understanding the customer\'s current priorities and business context');
+              ? methodology!.focusAreas.first
+              : 'Understanding the customer\'s current priorities and business context');
 
     final hasPainPoint = painPoints.isNotEmpty;
     final leadWith = (hasPainPoint && !isGeneric)
@@ -1232,39 +1473,48 @@ class MeetingPrepIntelligenceEngine {
     final avoid = isGeneric
         ? 'Jumping into product discussions before validating customer priorities.'
         : (methodology?.risks.isNotEmpty == true
-            ? methodology!.risks.first
-            : 'Presenting solutions before understanding the customer\'s specific challenges');
+              ? methodology!.risks.first
+              : 'Presenting solutions before understanding the customer\'s specific challenges');
 
-    final topChallenge =
-        challenges.isNotEmpty ? challenges.first : 'key operational challenges';
-        
+    final topChallenge = challenges.isNotEmpty
+        ? challenges.first
+        : 'key operational challenges';
+
     // Phase 3: Regulation Injection
     String validate;
     if (hasPainPoint) {
       if (painPoints.length == 1) {
-        validate = 'Confirm with the customer: is "${painPoints[0]}" currently affecting their operations?';
+        validate =
+            'Confirm with the customer: is "${painPoints[0]}" currently affecting their operations?';
       } else {
         final last = painPoints.last;
         final others = painPoints.take(painPoints.length - 1).join(', ');
-        validate = 'Confirm with the customer that $others and $last are currently priority areas for their business.';
+        validate =
+            'Confirm with the customer that $others and $last are currently priority areas for their business.';
       }
     } else {
-      validate = 'Confirm with the customer: is "$topChallenge" currently affecting their operations?';
+      validate =
+          'Confirm with the customer: is "$topChallenge" currently affecting their operations?';
     }
-    
+
     if (industry.keyRegulations.isNotEmpty) {
       final regs = industry.keyRegulations.take(2).join(' and ');
-      validate += ' Additionally, map out their current stance on $regs compliance.';
+      validate +=
+          ' Additionally, map out their current stance on $regs compliance.';
     }
 
     final rawClose = isGeneric
         ? 'Agree on next steps and identify areas where Airtel can provide additional value.'
         : (methodology?.nextBestActions.isNotEmpty == true
-            ? methodology!.nextBestActions.first
-            : 'Agree on clear next steps before ending the meeting');
+              ? methodology!.nextBestActions.first
+              : 'Agree on clear next steps before ending the meeting');
 
-    final closeWith =
-        _enrichNextBestAction(rawClose, meetingType, industry.industryName, '');
+    final closeWith = _enrichNextBestAction(
+      rawClose,
+      meetingType,
+      industry.industryName,
+      '',
+    );
 
     return MeetingStrategy(
       leadWith: leadWith,
@@ -1281,19 +1531,25 @@ class MeetingPrepIntelligenceEngine {
   String _buildNextBestAction(
     String? meetingType,
     String industry,
-    String productName,
-    [List<_SemanticConcept> matchedConcepts = const []]
-  ) {
-    return _enrichNextBestAction('Agree on next steps', meetingType, industry, productName, matchedConcepts);
+    String productName, [
+    List<_SemanticConcept> matchedConcepts = const [],
+  ]) {
+    return _enrichNextBestAction(
+      'Agree on next steps',
+      meetingType,
+      industry,
+      productName,
+      matchedConcepts,
+    );
   }
 
   String _enrichNextBestAction(
     String base,
     String? meetingType,
     String industry,
-    String productName,
-    [List<_SemanticConcept> matchedConcepts = const []]
-  ) {
+    String productName, [
+    List<_SemanticConcept> matchedConcepts = const [],
+  ]) {
     // Phase 2.5: Semantic Concept NBA injection
     String conceptNbaPrefix = '';
     if (matchedConcepts.isNotEmpty) {
@@ -1349,20 +1605,23 @@ class MeetingPrepIntelligenceEngine {
     MeetingMethodology? methodology,
     List<String> painPoints,
   ) {
-    final prefix =
-        input.customerName != null ? 'Meeting with ${input.customerName}. ' : '';
+    final prefix = input.customerName != null
+        ? 'Meeting with ${input.customerName}. '
+        : '';
     final historyNote =
         (input.previousMeetingCount != null && input.previousMeetingCount! > 0)
-            ? '${input.previousMeetingCount} previous engagements on record. '
-            : '';
+        ? '${input.previousMeetingCount} previous engagements on record. '
+        : '';
 
-    final c1 =
-        challenges.isNotEmpty ? challenges[0].toLowerCase() : 'operational challenges';
+    final c1 = challenges.isNotEmpty
+        ? challenges[0].toLowerCase()
+        : 'operational challenges';
     final c2 = challenges.length > 1
         ? challenges[1].toLowerCase()
         : 'infrastructure priorities';
 
-    final purpose = methodology?.purpose ?? 'identify how Airtel can add strategic value';
+    final purpose =
+        methodology?.purpose ?? 'identify how Airtel can add strategic value';
     final meetingLabel = input.meetingType ?? 'this meeting';
 
     // Phase 2: mention existing products when provided
@@ -1380,17 +1639,24 @@ class MeetingPrepIntelligenceEngine {
     }
 
     final isGeneric = input.meetingType == null;
-    final intent = isGeneric 
+    final intent = isGeneric
         ? 'This meeting is intended to understand customer priorities and identify relevant Airtel opportunities.'
         : 'This $meetingLabel is best used to $purpose.';
 
-    final ppText = painPoints.isNotEmpty ? ' dealing with ${painPoints.join(', ')}' : '';
-    
+    final ppText = painPoints.isNotEmpty
+        ? ' dealing with ${painPoints.join(', ')}'
+        : '';
+
     // Formatting polish: strip double spaces and double punctuation
-    String text = '$prefix$historyNote$overviewSentence${industry.industryName} organisations$ppText '
-          'typically face $c1 and $c2.$existingNote $intent';
-    
-    text = text.replaceAll('  ', ' ').replaceAll('..', '.').replaceAll(' .', '.').trim();
+    String text =
+        '$prefix$historyNote$overviewSentence${industry.industryName} organisations$ppText '
+        'typically face $c1 and $c2.$existingNote $intent';
+
+    text = text
+        .replaceAll('  ', ' ')
+        .replaceAll('..', '.')
+        .replaceAll(' .', '.')
+        .trim();
     return text;
   }
 
@@ -1412,8 +1678,24 @@ class MeetingPrepIntelligenceEngine {
   }
 
   bool _hasSignificantWordOverlap(String a, String b) {
-    const stopWords = {'data', 'management', 'system', 'network', 'business', 'risk', 'cost', 'time', 'high', 'low', 'poor', 'lack'};
-    final aWords = a.toLowerCase().split(RegExp(r'\W+')).where((w) => w.length > 3 && !stopWords.contains(w));
+    const stopWords = {
+      'data',
+      'management',
+      'system',
+      'network',
+      'business',
+      'risk',
+      'cost',
+      'time',
+      'high',
+      'low',
+      'poor',
+      'lack',
+    };
+    final aWords = a
+        .toLowerCase()
+        .split(RegExp(r'\W+'))
+        .where((w) => w.length > 3 && !stopWords.contains(w));
     final bLower = b.toLowerCase();
     return aWords.any((w) => bLower.contains(w));
   }

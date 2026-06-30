@@ -7,21 +7,19 @@ enum AuthStatus { initial, unauthenticated, authenticated }
 class AuthState {
   final AuthStatus status;
   final User? user;
-  
+
   AuthState({required this.status, this.user});
-  
+
   AuthState copyWith({AuthStatus? status, User? user}) {
-    return AuthState(
-      status: status ?? this.status,
-      user: user ?? this.user,
-    );
+    return AuthState(status: status ?? this.status, user: user ?? this.user);
   }
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repository;
 
-  AuthNotifier(this._repository) : super(AuthState(status: AuthStatus.initial)) {
+  AuthNotifier(this._repository)
+    : super(AuthState(status: AuthStatus.initial)) {
     _init();
   }
 
@@ -46,7 +44,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       employeeId: employeeId,
       circle: circle,
     );
-    
+
     final user = await _repository.getMe();
     state = state.copyWith(status: AuthStatus.authenticated, user: user);
   }

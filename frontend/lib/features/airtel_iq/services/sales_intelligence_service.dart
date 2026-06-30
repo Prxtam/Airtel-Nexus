@@ -37,28 +37,40 @@ class SalesIntelligenceService {
   final RecommendationEngine _recommendationEngine = RecommendationEngine();
 
   /// Deterministically generate meeting prep based on customer context
-  Future<MeetingPreparationResult> prepareForMeeting(Customer customer, Meeting meeting, List<Meeting> pastMeetings) async {
+  Future<MeetingPreparationResult> prepareForMeeting(
+    Customer customer,
+    Meeting meeting,
+    List<Meeting> pastMeetings,
+  ) async {
     // Simulate slight processing delay
     await Future.delayed(const Duration(seconds: 1));
 
-    final recommendations = _recommendationEngine.generateOpportunityInsights(customer, pastMeetings);
-    
+    final recommendations = _recommendationEngine.generateOpportunityInsights(
+      customer,
+      pastMeetings,
+    );
+
     // Deterministic rules based on customer/meeting state
     final bool isTech = customer.name.toLowerCase().contains('tech');
-    
+
     return MeetingPreparationResult(
-      meetingBrief: "Customer '${customer.name}' has had ${pastMeetings.length} previous engagements. The upcoming meeting '${meeting.title ?? 'Sync'}' is a prime opportunity to align Airtel Enterprise solutions with their current business needs.",
+      meetingBrief:
+          "Customer '${customer.name}' has had ${pastMeetings.length} previous engagements. The upcoming meeting '${meeting.title ?? 'Sync'}' is a prime opportunity to align Airtel Enterprise solutions with their current business needs.",
       discussionTopics: [
         "Review current connectivity infrastructure.",
         "Discuss remote workforce management challenges.",
-        isTech ? "Introduce API integrations with Airtel IQ." : "Discuss cost-saving through unified billing.",
+        isTech
+            ? "Introduce API integrations with Airtel IQ."
+            : "Discuss cost-saving through unified billing.",
       ],
       discoveryQuestions: [
         "How are you currently managing communications for your distributed teams?",
         "What happens to client continuity when a field agent leaves the company?",
         "Are you experiencing any security concerns with employees using personal devices for corporate tasks?",
       ],
-      recommendedSolutions: recommendations.recommendedProducts.map((e) => e.product).toList(),
+      recommendedSolutions: recommendations.recommendedProducts
+          .map((e) => e.product)
+          .toList(),
       potentialRisks: [
         "Decision-maker might push back on perceived migration costs.",
         "Competitor lock-in on existing mobility contracts.",
@@ -67,14 +79,18 @@ class SalesIntelligenceService {
   }
 
   /// Deterministically generate follow-ups based on meeting context
-  Future<FollowUpResult> generateFollowUp(Meeting meeting, Customer customer) async {
+  Future<FollowUpResult> generateFollowUp(
+    Meeting meeting,
+    Customer customer,
+  ) async {
     // Simulate slight processing delay
     await Future.delayed(const Duration(seconds: 1));
 
     final String meetingTitle = meeting.title ?? "Recent Discussion";
 
     return FollowUpResult(
-      executiveSummary: "Productive meeting with ${customer.name} focusing on streamlining their communication channels. Client expressed interest in upgrading their mobility plans provided we can demonstrate cost savings on GST and roaming.",
+      executiveSummary:
+          "Productive meeting with ${customer.name} focusing on streamlining their communication channels. Client expressed interest in upgrading their mobility plans provided we can demonstrate cost savings on GST and roaming.",
       keyDecisions: [
         "Agreed to pilot Airtel Corporate Postpaid for 50 field agents.",
         "Decided to hold off on Airtel IQ Business Connect until Q3.",
@@ -84,7 +100,8 @@ class SalesIntelligenceService {
         "Schedule a technical demo of the Perplexity Pro AI integration.",
         "Provide a roaming cost comparison vs their current provider.",
       ],
-      emailDraft: """Subject: Follow-up from our meeting regarding $meetingTitle
+      emailDraft:
+          """Subject: Follow-up from our meeting regarding $meetingTitle
 
 Hi Team,
 
@@ -100,8 +117,14 @@ Airtel Account Manager""",
   }
 
   /// Expose the recommendation engine for standalone insights
-  Future<RecommendationResult> getOpportunityInsights(Customer customer, List<Meeting> pastMeetings) async {
+  Future<RecommendationResult> getOpportunityInsights(
+    Customer customer,
+    List<Meeting> pastMeetings,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 800));
-    return _recommendationEngine.generateOpportunityInsights(customer, pastMeetings);
+    return _recommendationEngine.generateOpportunityInsights(
+      customer,
+      pastMeetings,
+    );
   }
 }

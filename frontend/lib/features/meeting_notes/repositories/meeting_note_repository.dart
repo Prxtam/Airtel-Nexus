@@ -3,8 +3,7 @@ import 'package:frontend/core/storage/hive_service.dart';
 import 'package:frontend/features/meeting_notes/models/meeting_note.dart';
 import 'package:uuid/uuid.dart';
 
-final meetingNoteRepositoryProvider =
-    Provider<MeetingNoteRepository>((ref) {
+final meetingNoteRepositoryProvider = Provider<MeetingNoteRepository>((ref) {
   return MeetingNoteRepository();
 });
 

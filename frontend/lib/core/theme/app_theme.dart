@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color primary = Color(0xFFE40000); // Airtel Red
-  static const Color primaryLight = Color(0x14E40000); // Airtel Red at 8% opacity
+  static const Color primaryLight = Color(
+    0x14E40000,
+  ); // Airtel Red at 8% opacity
   static const Color surface = Color(0xFFFFFFFF);
   static const Color scaffoldBg = Color(0xFFF5F5F5);
   static const Color textPrimary = Color(0xFF1A1A1A);
@@ -40,25 +42,25 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
-  
+
   static const TextStyle sectionTitle = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
-  
+
   static const TextStyle cardTitle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.textPrimary,
   );
-  
+
   static const TextStyle bodyText = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
   );
-  
+
   static const TextStyle caption = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w400,
@@ -187,10 +189,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppRadius.md),
           borderSide: const BorderSide(color: AppColors.primary),
         ),
-        hintStyle: const TextStyle(
-          color: AppColors.textTertiary,
-          fontSize: 14,
-        ),
+        hintStyle: const TextStyle(color: AppColors.textTertiary, fontSize: 14),
       ),
       cardTheme: const CardThemeData(
         color: AppColors.surface,
@@ -204,7 +203,10 @@ class AppTheme {
       expansionTileTheme: const ExpansionTileThemeData(
         shape: Border(),
         collapsedShape: Border(),
-        tilePadding: EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+        tilePadding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
+        ),
       ),
     );
   }

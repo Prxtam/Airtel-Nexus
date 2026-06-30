@@ -12,7 +12,7 @@ class MeetingNoteListNotifier
   final String meetingId;
 
   MeetingNoteListNotifier(this._repository, this.meetingId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     load();
   }
 
@@ -39,13 +39,15 @@ class MeetingNoteListNotifier
   }
 }
 
-final meetingNoteListProvider = StateNotifierProvider.family<
-    MeetingNoteListNotifier, AsyncValue<List<MeetingNote>>, String>(
-  (ref, meetingId) {
-    final repository = ref.watch(meetingNoteRepositoryProvider);
-    return MeetingNoteListNotifier(repository, meetingId);
-  },
-);
+final meetingNoteListProvider =
+    StateNotifierProvider.family<
+      MeetingNoteListNotifier,
+      AsyncValue<List<MeetingNote>>,
+      String
+    >((ref, meetingId) {
+      final repository = ref.watch(meetingNoteRepositoryProvider);
+      return MeetingNoteListNotifier(repository, meetingId);
+    });
 
 final allMeetingNotesProvider = FutureProvider<List<MeetingNote>>((ref) async {
   final repository = ref.watch(meetingNoteRepositoryProvider);
@@ -56,13 +58,12 @@ final allMeetingNotesProvider = FutureProvider<List<MeetingNote>>((ref) async {
 // Meeting Note Detail Provider (family — keyed by noteId)
 // ---------------------------------------------------------------------------
 
-class MeetingNoteDetailNotifier
-    extends StateNotifier<AsyncValue<MeetingNote>> {
+class MeetingNoteDetailNotifier extends StateNotifier<AsyncValue<MeetingNote>> {
   final MeetingNoteRepository _repository;
   final String noteId;
 
   MeetingNoteDetailNotifier(this._repository, this.noteId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     load();
   }
 
@@ -86,10 +87,12 @@ class MeetingNoteDetailNotifier
   }
 }
 
-final meetingNoteDetailProvider = StateNotifierProvider.family<
-    MeetingNoteDetailNotifier, AsyncValue<MeetingNote>, String>(
-  (ref, noteId) {
-    final repository = ref.watch(meetingNoteRepositoryProvider);
-    return MeetingNoteDetailNotifier(repository, noteId);
-  },
-);
+final meetingNoteDetailProvider =
+    StateNotifierProvider.family<
+      MeetingNoteDetailNotifier,
+      AsyncValue<MeetingNote>,
+      String
+    >((ref, noteId) {
+      final repository = ref.watch(meetingNoteRepositoryProvider);
+      return MeetingNoteDetailNotifier(repository, noteId);
+    });

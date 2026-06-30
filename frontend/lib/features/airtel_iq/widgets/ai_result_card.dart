@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 
-
 class AiResultCard extends StatelessWidget {
   final String title;
   final Widget content;

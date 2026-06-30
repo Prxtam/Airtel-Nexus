@@ -27,17 +27,14 @@ class AppEmptyWidget extends StatelessWidget {
             const Gap(16),
             Text(
               message,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.grey.shade600,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: Colors.grey.shade600),
               textAlign: TextAlign.center,
             ),
             if (actionLabel != null && onAction != null) ...[
               const Gap(24),
-              OutlinedButton(
-                onPressed: onAction,
-                child: Text(actionLabel!),
-              ),
+              OutlinedButton(onPressed: onAction, child: Text(actionLabel!)),
             ],
           ],
         ),

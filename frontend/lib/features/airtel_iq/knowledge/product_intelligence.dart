@@ -4,7 +4,8 @@ final List<ProductIntelligence> productIntelligenceRepo = [
   const ProductIntelligence(
     id: 'prod_corp_postpaid',
     name: 'Airtel Corporate Postpaid',
-    overview: 'Enterprise mobile connectivity solution designed for organizations that require centralized management of employee mobile usage, roaming, communication expenses, and workforce connectivity.',
+    overview:
+        'Enterprise mobile connectivity solution designed for organizations that require centralized management of employee mobile usage, roaming, communication expenses, and workforce connectivity.',
     idealCustomers: [
       'Banking & Financial Services',
       'Retail Chains',
@@ -55,14 +56,17 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Work From Anywhere Solutions',
       'Airtel IoT Connectivity',
     ],
-    elevatorPitch: 'Airtel Corporate Postpaid simplifies enterprise mobility through centralized management, better visibility, and seamless workforce communication.',
-    executivePitch: 'Help your organization manage employee connectivity at scale while reducing administrative effort and improving visibility into telecom spending.',
+    elevatorPitch:
+        'Airtel Corporate Postpaid simplifies enterprise mobility through centralized management, better visibility, and seamless workforce communication.',
+    executivePitch:
+        'Help your organization manage employee connectivity at scale while reducing administrative effort and improving visibility into telecom spending.',
     meetingTalkingPoints: [],
   ),
   const ProductIntelligence(
     id: 'prod_biz_connect',
     name: 'Airtel IQ Business Connect',
-    overview: 'A unified communication and engagement platform enabling organizations to connect with employees, customers, and distributed teams more effectively.',
+    overview:
+        'A unified communication and engagement platform enabling organizations to connect with employees, customers, and distributed teams more effectively.',
     idealCustomers: [
       'Retail Organizations',
       'Banking Institutions',
@@ -109,14 +113,17 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Contact Center as a Service',
       'Airtel CPaaS',
     ],
-    elevatorPitch: 'Business Connect helps organizations communicate consistently across distributed teams while improving engagement and operational effectiveness.',
-    executivePitch: 'Create a single, enterprise-ready communication layer that scales across your workforce and locations securely.',
+    elevatorPitch:
+        'Business Connect helps organizations communicate consistently across distributed teams while improving engagement and operational effectiveness.',
+    executivePitch:
+        'Create a single, enterprise-ready communication layer that scales across your workforce and locations securely.',
     meetingTalkingPoints: [],
   ),
   const ProductIntelligence(
     id: 'prod_sdwan',
     name: 'Airtel SD-WAN',
-    overview: 'Software-Defined Wide Area Network solution providing intelligent routing, centralized management, and secure connectivity across distributed enterprise branches.',
+    overview:
+        'Software-Defined Wide Area Network solution providing intelligent routing, centralized management, and secure connectivity across distributed enterprise branches.',
     idealCustomers: [
       'Multi-branch Retailers',
       'Banking & Financial Institutions',
@@ -164,17 +171,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Public Cloud',
       'Airtel Leased Line (ILL)',
     ],
-    elevatorPitch: 'Airtel SD-WAN intelligently routes your branch traffic to optimize application performance while reducing reliance on expensive legacy links.',
-    executivePitch: 'Modernize your enterprise network architecture to be cloud-first, gaining centralized visibility and agility while driving down total network costs.',
+    elevatorPitch:
+        'Airtel SD-WAN intelligently routes your branch traffic to optimize application performance while reducing reliance on expensive legacy links.',
+    executivePitch:
+        'Modernize your enterprise network architecture to be cloud-first, gaining centralized visibility and agility while driving down total network costs.',
     meetingTalkingPoints: [],
   ),
-
-
 
   const ProductIntelligence(
     id: 'prod_sip_trunking',
     name: 'Airtel SIP Trunking',
-    overview: 'Scalable and secure IP-based voice connectivity solution replacing legacy ISDN/PRI lines for enterprise PBX and contact centers.',
+    overview:
+        'Scalable and secure IP-based voice connectivity solution replacing legacy ISDN/PRI lines for enterprise PBX and contact centers.',
     idealCustomers: [
       'BPO & Call Centers',
       'Large Corporate Offices',
@@ -220,14 +228,17 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Leased Line (ILL)',
       'Airtel SD-WAN',
     ],
-    elevatorPitch: 'Airtel SIP Trunking modernizes your enterprise voice infrastructure, cutting costs and enabling instant scalability.',
-    executivePitch: 'Retire expensive legacy phone lines and migrate to a resilient, IP-based voice architecture that scales dynamically with your business needs.',
+    elevatorPitch:
+        'Airtel SIP Trunking modernizes your enterprise voice infrastructure, cutting costs and enabling instant scalability.',
+    executivePitch:
+        'Retire expensive legacy phone lines and migrate to a resilient, IP-based voice architecture that scales dynamically with your business needs.',
     meetingTalkingPoints: [],
   ),
   const ProductIntelligence(
     id: 'prod_ccaas',
     name: 'Airtel Contact Center as a Service',
-    overview: 'Cloud-based omnichannel contact center solution that eliminates the need for on-premise dialers and PBX hardware.',
+    overview:
+        'Cloud-based omnichannel contact center solution that eliminates the need for on-premise dialers and PBX hardware.',
     idealCustomers: [
       'E-Commerce Support Teams',
       'Banking Helpdesks',
@@ -271,14 +282,17 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Work From Anywhere Solutions',
       'Airtel CPaaS',
     ],
-    elevatorPitch: 'Airtel CCaaS moves your contact center to the cloud, enabling an omnichannel customer experience and empowering agents to work from anywhere.',
-    executivePitch: 'Modernize customer service by replacing rigid on-premise hardware with an agile, scalable cloud contact center that reduces CAPEX and improves customer satisfaction.',
+    elevatorPitch:
+        'Airtel CCaaS moves your contact center to the cloud, enabling an omnichannel customer experience and empowering agents to work from anywhere.',
+    executivePitch:
+        'Modernize customer service by replacing rigid on-premise hardware with an agile, scalable cloud contact center that reduces CAPEX and improves customer satisfaction.',
     meetingTalkingPoints: [],
   ),
   const ProductIntelligence(
     id: 'prod_managed_wifi',
     name: 'Airtel Managed Wi-Fi',
-    overview: 'Enterprise-grade, fully managed wireless networking solution covering hardware provisioning, deployment, monitoring, and guest analytics.',
+    overview:
+        'Enterprise-grade, fully managed wireless networking solution covering hardware provisioning, deployment, monitoring, and guest analytics.',
     idealCustomers: [
       'Universities and Campuses',
       'Hotel Chains and Resorts',
@@ -321,14 +335,17 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel SD-WAN',
       'Airtel Secure Internet',
     ],
-    elevatorPitch: 'Airtel Managed Wi-Fi delivers a flawless wireless experience for employees and guests without burdening your IT staff.',
-    executivePitch: 'Transform your campus or retail spaces with secure, high-density Wi-Fi that provides actionable customer analytics and operates under a single SLA.',
+    elevatorPitch:
+        'Airtel Managed Wi-Fi delivers a flawless wireless experience for employees and guests without burdening your IT staff.',
+    executivePitch:
+        'Transform your campus or retail spaces with secure, high-density Wi-Fi that provides actionable customer analytics and operates under a single SLA.',
     meetingTalkingPoints: [],
   ),
   const ProductIntelligence(
     id: 'prod_mpls',
     name: 'Airtel VPN/MPLS',
-    overview: 'Highly secure, private Multiprotocol Label Switching (MPLS) network connecting enterprise branches with guaranteed latency and Quality of Service (QoS).',
+    overview:
+        'Highly secure, private Multiprotocol Label Switching (MPLS) network connecting enterprise branches with guaranteed latency and Quality of Service (QoS).',
     idealCustomers: [
       'Government Departments',
       'Banks and Financial Institutions',
@@ -371,14 +388,17 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Data Center Services',
       'Airtel SIP Trunking',
     ],
-    elevatorPitch: 'Airtel MPLS provides the most secure, predictable, and private network backbone for your mission-critical enterprise applications.',
-    executivePitch: 'Protect your sensitive data and guarantee ERP performance by running your core business operations on India\'s most robust private enterprise network.',
+    elevatorPitch:
+        'Airtel MPLS provides the most secure, predictable, and private network backbone for your mission-critical enterprise applications.',
+    executivePitch:
+        'Protect your sensitive data and guarantee ERP performance by running your core business operations on India\'s most robust private enterprise network.',
     meetingTalkingPoints: [],
   ),
   const ProductIntelligence(
     id: 'prod_wfa',
     name: 'Airtel Work From Anywhere Solutions',
-    overview: 'Integrated connectivity and security bundles (4G/LTE routers, secure broadband, endpoint security) enabling a secure remote workforce.',
+    overview:
+        'Integrated connectivity and security bundles (4G/LTE routers, secure broadband, endpoint security) enabling a secure remote workforce.',
     idealCustomers: [
       'IT & ITES (BPOs, KPOs)',
       'Consulting Firms',
@@ -420,15 +440,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Corporate Postpaid',
       'Airtel Secure Internet',
     ],
-    elevatorPitch: 'Airtel Work From Anywhere provides secure, managed connectivity directly to your employees\' homes, ensuring corporate security and productivity.',
-    executivePitch: 'Standardize your remote work infrastructure with enterprise-grade connectivity and security, eliminating the risks and inefficiencies of consumer home broadband.',
+    elevatorPitch:
+        'Airtel Work From Anywhere provides secure, managed connectivity directly to your employees\' homes, ensuring corporate security and productivity.',
+    executivePitch:
+        'Standardize your remote work infrastructure with enterprise-grade connectivity and security, eliminating the risks and inefficiencies of consumer home broadband.',
     meetingTalkingPoints: [],
   ),
 
   const ProductIntelligence(
     id: 'prod_private_5g',
     name: 'Airtel 5G for Enterprise',
-    overview: 'Captive Non-Public Network (Private 5G) providing ultra-reliable, low-latency, and high-bandwidth wireless connectivity tailored for industrial automation and IoT.',
+    overview:
+        'Captive Non-Public Network (Private 5G) providing ultra-reliable, low-latency, and high-bandwidth wireless connectivity tailored for industrial automation and IoT.',
     idealCustomers: [
       'Automotive Manufacturers',
       'Mining Operations',
@@ -471,14 +494,17 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Public Cloud',
       'Airtel SD-WAN',
     ],
-    elevatorPitch: 'Airtel Private 5G unleashes Industry 4.0 by providing ultra-low latency, secure, and interference-free wireless connectivity for your critical operations.',
-    executivePitch: 'Future-proof your industrial operations with a dedicated 5G network that enables advanced automation, robotics, and massive IoT scaling.',
+    elevatorPitch:
+        'Airtel Private 5G unleashes Industry 4.0 by providing ultra-low latency, secure, and interference-free wireless connectivity for your critical operations.',
+    executivePitch:
+        'Future-proof your industrial operations with a dedicated 5G network that enables advanced automation, robotics, and massive IoT scaling.',
     meetingTalkingPoints: [],
   ),
   const ProductIntelligence(
     id: 'prod_cpaas',
     name: 'Airtel CPaaS',
-    overview: 'Communications Platform as a Service providing API-driven SMS, Voice, and WhatsApp integration directly into enterprise applications and workflows.',
+    overview:
+        'Communications Platform as a Service providing API-driven SMS, Voice, and WhatsApp integration directly into enterprise applications and workflows.',
     idealCustomers: [
       'E-Commerce Applications',
       'Fintech and Banking Apps',
@@ -521,14 +547,17 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Contact Center as a Service',
       'Airtel Secure Internet',
     ],
-    elevatorPitch: 'Airtel CPaaS embeds powerful SMS, Voice, and WhatsApp capabilities directly into your applications to automate and enhance customer engagement.',
-    executivePitch: 'Drive superior customer experiences and higher transaction completion rates by utilizing Airtel\'s direct, carrier-grade communication APIs.',
+    elevatorPitch:
+        'Airtel CPaaS embeds powerful SMS, Voice, and WhatsApp capabilities directly into your applications to automate and enhance customer engagement.',
+    executivePitch:
+        'Drive superior customer experiences and higher transaction completion rates by utilizing Airtel\'s direct, carrier-grade communication APIs.',
     meetingTalkingPoints: [],
   ),
   const ProductIntelligence(
     id: 'prod_leased_line',
     name: 'Airtel Leased Line (ILL)',
-    overview: 'Internet Leased Line providing dedicated, uncontended, and symmetric internet bandwidth with high uptime SLAs for enterprise offices.',
+    overview:
+        'Internet Leased Line providing dedicated, uncontended, and symmetric internet bandwidth with high uptime SLAs for enterprise offices.',
     idealCustomers: [
       'Corporate Headquarters',
       'Software Development Centers',
@@ -573,17 +602,19 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel SIP Trunking',
       'Airtel Managed Wi-Fi',
     ],
-    elevatorPitch: 'Airtel Internet Leased Line provides the dedicated, high-speed, and reliable foundation necessary for modern cloud-based enterprise operations.',
-    executivePitch: 'Ensure your business never stops running with enterprise-grade, dedicated internet access backed by industry-leading SLAs and dual-path redundancy.',
+    elevatorPitch:
+        'Airtel Internet Leased Line provides the dedicated, high-speed, and reliable foundation necessary for modern cloud-based enterprise operations.',
+    executivePitch:
+        'Ensure your business never stops running with enterprise-grade, dedicated internet access backed by industry-leading SLAs and dual-path redundancy.',
     meetingTalkingPoints: [],
   ),
 
   // â”€â”€ NEW PRODUCTS FROM AIRTEL B2B WEBSITE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
   const ProductIntelligence(
     id: 'prod_colocation',
     name: 'Airtel Colocation (Nxtra)',
-    overview: 'Enterprise-grade data center colocation services delivered through Nxtra by Airtel — one of India\'s largest DC networks with a broad footprint of large core facilities and edge data centers. Businesses host their servers and IT hardware in Airtel-managed, carrier-neutral facilities with guaranteed uptime, AI-enabled operations, and direct cloud on-ramps.',
+    overview:
+        'Enterprise-grade data center colocation services delivered through Nxtra by Airtel — one of India\'s largest DC networks with a broad footprint of large core facilities and edge data centers. Businesses host their servers and IT hardware in Airtel-managed, carrier-neutral facilities with guaranteed uptime, AI-enabled operations, and direct cloud on-ramps.',
     idealCustomers: [
       'Large enterprises with high infrastructure demands',
       'Financial institutions with data sovereignty requirements',
@@ -639,15 +670,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Dedicated Internet (ILL)',
       'Airtel Secure Internet',
     ],
-    elevatorPitch: 'Nxtra by Airtel provides enterprise-grade colocation across India\'s largest data center network, helping businesses eliminate infrastructure CapEx while improving uptime and cloud access.',
-    executivePitch: 'Move your infrastructure to a carrier-neutral, AI-operated facility and redirect capital from data center management to your core business growth.',
+    elevatorPitch:
+        'Nxtra by Airtel provides enterprise-grade colocation across India\'s largest data center network, helping businesses eliminate infrastructure CapEx while improving uptime and cloud access.',
+    executivePitch:
+        'Move your infrastructure to a carrier-neutral, AI-operated facility and redirect capital from data center management to your core business growth.',
     meetingTalkingPoints: [],
   ),
 
   const ProductIntelligence(
     id: 'prod_global_voice',
     name: 'Airtel Global Voice',
-    overview: 'International voice termination and numbering solution connecting enterprises to a broad international carrier footprint. Includes International Toll-Free Services (ITFS), Direct Inward Dialing (DID), intelligent call routing, and fraud protection — all managed through the unified Airtel Advantage platform.',
+    overview:
+        'International voice termination and numbering solution connecting enterprises to a broad international carrier footprint. Includes International Toll-Free Services (ITFS), Direct Inward Dialing (DID), intelligent call routing, and fraud protection — all managed through the unified Airtel Advantage platform.',
     idealCustomers: [
       'BPO and contact center operations with global reach',
       'Multinational corporations with offices in multiple countries',
@@ -699,15 +733,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel CPaaS',
       'Airtel Corporate Postpaid',
     ],
-    elevatorPitch: 'Airtel Global Voice connects your enterprise to 140+ countries with premium quality, intelligent routing, and built-in fraud protection on a single managed platform.',
-    executivePitch: 'Establish global voice presence, reduce international communication costs, and protect your business from voice fraud — all from a single Airtel contract.',
+    elevatorPitch:
+        'Airtel Global Voice connects your enterprise to 140+ countries with premium quality, intelligent routing, and built-in fraud protection on a single managed platform.',
+    executivePitch:
+        'Establish global voice presence, reduce international communication costs, and protect your business from voice fraud — all from a single Airtel contract.',
     meetingTalkingPoints: [],
   ),
 
   const ProductIntelligence(
     id: 'prod_iot_connectivity',
     name: 'Airtel IoT Connectivity',
-    overview: 'End-to-end IoT connectivity and device management platform supporting 5G, 4G, NB-IoT, and 2G technologies. The Airtel IoT Hub provides enterprises a centralized dashboard for managing millions of connected devices across their lifecycle — from provisioning and activation to real-time monitoring, firmware updates, and diagnostics — with telco-grade security via private APNs.',
+    overview:
+        'End-to-end IoT connectivity and device management platform supporting 5G, 4G, NB-IoT, and 2G technologies. The Airtel IoT Hub provides enterprises a centralized dashboard for managing millions of connected devices across their lifecycle — from provisioning and activation to real-time monitoring, firmware updates, and diagnostics — with telco-grade security via private APNs.',
     idealCustomers: [
       'Manufacturing companies deploying predictive maintenance sensors',
       'Logistics and fleet management companies',
@@ -762,15 +799,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Corporate Postpaid',
       'Airtel SD-WAN',
     ],
-    elevatorPitch: 'Airtel IoT Connectivity gives enterprises centralized control over millions of connected devices with telco-grade security, multi-technology support, and a unified management platform.',
-    executivePitch: 'Transform operational visibility — connect your assets, automate monitoring, and eliminate costly unplanned downtime with Airtel\'s enterprise IoT platform.',
+    elevatorPitch:
+        'Airtel IoT Connectivity gives enterprises centralized control over millions of connected devices with telco-grade security, multi-technology support, and a unified management platform.',
+    executivePitch:
+        'Transform operational visibility — connect your assets, automate monitoring, and eliminate costly unplanned downtime with Airtel\'s enterprise IoT platform.',
     meetingTalkingPoints: [],
   ),
 
   const ProductIntelligence(
     id: 'prod_office_internet',
     name: 'Airtel Office Internet',
-    overview: 'High-speed broadband connectivity solution designed specifically for SMEs and small offices, bundling enterprise-grade features like DNS security (Cisco), device protection (Kaspersky), static IP, and unified voice + data in a single managed package. The service is positioned as business broadband with bundled connectivity and security features.',
+    overview:
+        'High-speed broadband connectivity solution designed specifically for SMEs and small offices, bundling enterprise-grade features like DNS security (Cisco), device protection (Kaspersky), static IP, and unified voice + data in a single managed package. The service is positioned as business broadband with bundled connectivity and security features.',
     idealCustomers: [
       'Small and medium businesses (1"“250 employees)',
       'Branch offices of larger enterprises',
@@ -823,15 +863,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Managed Wi-Fi',
       'Airtel SIP Trunking',
     ],
-    elevatorPitch: 'Airtel Office Internet delivers enterprise-grade broadband with built-in security, static IP, and unified voice — designed specifically for SMEs at an affordable price point.',
-    executivePitch: 'Give your business reliable, secure connectivity with built-in protection and GST tax benefits — without the complexity of managing multiple vendors.',
+    elevatorPitch:
+        'Airtel Office Internet delivers enterprise-grade broadband with built-in security, static IP, and unified voice — designed specifically for SMEs at an affordable price point.',
+    executivePitch:
+        'Give your business reliable, secure connectivity with built-in protection and GST tax benefits — without the complexity of managing multiple vendors.',
     meetingTalkingPoints: [],
   ),
 
   const ProductIntelligence(
     id: 'prod_precise_positioning',
     name: 'Airtel Precise Positioning',
-    overview: 'High-precision location service built on Airtel\'s 4G/5G network in partnership with Swift Navigation\'s Skylark cloud platform. It is intended to improve standard GPS performance using GNSS correction signals delivered in real time for use cases such as autonomous vehicles, precision agriculture, drone delivery, and advanced fleet management.',
+    overview:
+        'High-precision location service built on Airtel\'s 4G/5G network in partnership with Swift Navigation\'s Skylark cloud platform. It is intended to improve standard GPS performance using GNSS correction signals delivered in real time for use cases such as autonomous vehicles, precision agriculture, drone delivery, and advanced fleet management.',
     idealCustomers: [
       'Automotive OEMs building ADAS and autonomous vehicles',
       'Logistics companies requiring precision fleet management',
@@ -883,15 +926,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel 5G for Enterprise',
       'Airtel Corporate Postpaid',
     ],
-    elevatorPitch: 'Airtel Precise Positioning delivers high-precision GPS assistance across India using network-assisted GNSS corrections for autonomous, precision, and safety-critical applications.',
-    executivePitch: 'Support fleet, logistics, and autonomous operations with materially better positioning than standard GPS, delivered over Airtel\'s network.',
+    elevatorPitch:
+        'Airtel Precise Positioning delivers high-precision GPS assistance across India using network-assisted GNSS corrections for autonomous, precision, and safety-critical applications.',
+    executivePitch:
+        'Support fleet, logistics, and autonomous operations with materially better positioning than standard GPS, delivered over Airtel\'s network.',
     meetingTalkingPoints: [],
   ),
 
   const ProductIntelligence(
     id: 'prod_public_cloud',
     name: 'Airtel Public Cloud',
-    overview: 'Telco-grade cloud infrastructure built on Airtel\'s network backbone offering compute, storage, backup, and security. Designed with localized data residency to support sovereign requirements across industries. Includes a unified Cloud Management Platform (CMP) for multi-cloud visibility and TCO optimization.',
+    overview:
+        'Telco-grade cloud infrastructure built on Airtel\'s network backbone offering compute, storage, backup, and security. Designed with localized data residency to support sovereign requirements across industries. Includes a unified Cloud Management Platform (CMP) for multi-cloud visibility and TCO optimization.',
     idealCustomers: [
       'Enterprises seeking reliable cloud infrastructure and managed services',
       'Organizations with strict data residency and compliance requirements',
@@ -945,15 +991,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel SD-WAN',
       'Airtel Secure Internet',
     ],
-    elevatorPitch: 'Airtel Public Cloud provides India-sovereign, regulatory-compliant cloud infrastructure with enterprise-grade compute, instant provisioning, and unified multi-cloud management.',
-    executivePitch: 'Move your regulated workloads to a compliant, India-hosted cloud and stop worrying about data residency violations — while cutting infrastructure costs significantly.',
+    elevatorPitch:
+        'Airtel Public Cloud provides India-sovereign, regulatory-compliant cloud infrastructure with enterprise-grade compute, instant provisioning, and unified multi-cloud management.',
+    executivePitch:
+        'Move your regulated workloads to a compliant, India-hosted cloud and stop worrying about data residency violations — while cutting infrastructure costs significantly.',
     meetingTalkingPoints: [],
   ),
 
   const ProductIntelligence(
     id: 'prod_secure_internet',
     name: 'Airtel Secure Internet',
-    overview: 'Managed cybersecurity solution bundling Internet Leased Line connectivity with a Next-Generation Firewall (Fortinet NGFW) and 24/7 Security Operations Centre (SOC) monitoring. Provides Unified Threat Management (UTM) including intrusion prevention, content filtering, DDoS protection, botnet blocking, and deep packet inspection — all managed by Airtel\'s certified security professionals.',
+    overview:
+        'Managed cybersecurity solution bundling Internet Leased Line connectivity with a Next-Generation Firewall (Fortinet NGFW) and 24/7 Security Operations Centre (SOC) monitoring. Provides Unified Threat Management (UTM) including intrusion prevention, content filtering, DDoS protection, botnet blocking, and deep packet inspection — all managed by Airtel\'s certified security professionals.',
     idealCustomers: [
       'Enterprises wanting to consolidate internet and security under one vendor',
       'Financial institutions requiring always-on security monitoring',
@@ -1006,15 +1055,18 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel Public Cloud',
       'Airtel VPN/MPLS',
     ],
-    elevatorPitch: 'Airtel Secure Internet combines enterprise connectivity with managed next-generation firewall and 24/7 SOC monitoring to reduce security and vendor complexity.',
-    executivePitch: 'Protect your business from cyber threats around the clock while simplifying your vendor landscape and converting security hardware into a managed service.',
+    elevatorPitch:
+        'Airtel Secure Internet combines enterprise connectivity with managed next-generation firewall and 24/7 SOC monitoring to reduce security and vendor complexity.',
+    executivePitch:
+        'Protect your business from cyber threats around the clock while simplifying your vendor landscape and converting security hardware into a managed service.',
     meetingTalkingPoints: [],
   ),
 
   const ProductIntelligence(
     id: 'prod_whatsapp_business',
     name: 'Airtel WhatsApp Business',
-    overview: 'Enterprise WhatsApp Business API solution delivered through Airtel IQ CPaaS platform, enabling businesses to engage customers at scale with rich media messaging, AI-powered chatbots, two-way conversations, and seamless CRM/ERP integration. Supports omnichannel orchestration alongside Voice and SMS with real-time analytics and ROI tracking.',
+    overview:
+        'Enterprise WhatsApp Business API solution delivered through Airtel IQ CPaaS platform, enabling businesses to engage customers at scale with rich media messaging, AI-powered chatbots, two-way conversations, and seamless CRM/ERP integration. Supports omnichannel orchestration alongside Voice and SMS with real-time analytics and ROI tracking.',
     idealCustomers: [
       'E-commerce companies managing order updates and delivery notifications',
       'Banking and financial institutions for transaction alerts and KYC',
@@ -1058,7 +1110,7 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Integration complexity: "We don\'t have the technical resources to integrate APIs."',
     ],
     objectionResponses: [
-        'Per-conversation pricing can be efficient when teams need rich media, two-way communication, and better engagement than one-way channels.',
+      'Per-conversation pricing can be efficient when teams need rich media, two-way communication, and better engagement than one-way channels.',
       'WhatsApp requires customer opt-in for business communication — you can only message customers who have consented, which actually improves trust and engagement quality.',
       'Airtel IQ can support integration with common CRM and helpdesk tools through Airtel\'s technical team.',
     ],
@@ -1068,13 +1120,10 @@ final List<ProductIntelligence> productIntelligenceRepo = [
       'Airtel IQ Business Connect',
       'Airtel Corporate Postpaid',
     ],
-    elevatorPitch: 'Airtel WhatsApp Business enables enterprises to engage millions of customers at scale with AI chatbots, rich messaging, and seamless CRM integration on India\'s most-used messaging platform.',
-    executivePitch: 'Convert WhatsApp from a personal app into your most powerful customer engagement channel — with enterprise-grade API access, automation, and measurable ROI.',
+    elevatorPitch:
+        'Airtel WhatsApp Business enables enterprises to engage millions of customers at scale with AI chatbots, rich messaging, and seamless CRM integration on India\'s most-used messaging platform.',
+    executivePitch:
+        'Convert WhatsApp from a personal app into your most powerful customer engagement channel — with enterprise-grade API access, automation, and measurable ROI.',
     meetingTalkingPoints: [],
   ),
 ];
-
-
-
-
-

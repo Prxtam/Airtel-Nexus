@@ -12,10 +12,13 @@ class ProfileScreen extends ConsumerWidget {
 
   String _formatRole(String role) {
     if (role.isEmpty || role == 'No Role') return role;
-    return role.split('_').map((word) {
-      if (word.isEmpty) return '';
-      return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
-    }).join(' ');
+    return role
+        .split('_')
+        .map((word) {
+          if (word.isEmpty) return '';
+          return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
+        })
+        .join(' ');
   }
 
   String _formatRoleForInput(String internalRole) {
@@ -27,7 +30,13 @@ class ProfileScreen extends ConsumerWidget {
     final user = ref.watch(authProvider).user;
 
     final initials = (user?.fullName?.isNotEmpty ?? false)
-        ? user!.fullName!.trim().split(' ').map((p) => p[0]).take(2).join().toUpperCase()
+        ? user!.fullName!
+              .trim()
+              .split(' ')
+              .map((p) => p[0])
+              .take(2)
+              .join()
+              .toUpperCase()
         : 'U';
 
     return Scaffold(
@@ -48,10 +57,15 @@ class ProfileScreen extends ConsumerWidget {
             Center(
               child: CircleAvatar(
                 radius: 48,
-                backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
+                backgroundColor: AppConstants.primaryColor.withValues(
+                  alpha: 0.1,
+                ),
                 child: Text(
                   initials,
-                  style: AppTypography.pageTitle.copyWith(fontSize: 36, color: AppConstants.primaryColor),
+                  style: AppTypography.pageTitle.copyWith(
+                    fontSize: 36,
+                    color: AppConstants.primaryColor,
+                  ),
                 ),
               ),
             ),
@@ -64,7 +78,11 @@ class ProfileScreen extends ConsumerWidget {
                 Text('Personal Information', style: AppTypography.sectionTitle),
                 if (user != null)
                   IconButton(
-                    icon: Icon(Icons.edit_outlined, color: AppConstants.primaryColor, size: 20),
+                    icon: Icon(
+                      Icons.edit_outlined,
+                      color: AppConstants.primaryColor,
+                      size: 20,
+                    ),
                     onPressed: () => _showEditProfileSheet(context, ref, user),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -85,7 +103,14 @@ class ProfileScreen extends ConsumerWidget {
                   children: [
                     _buildInfoRow('Name', user?.fullName ?? 'Unknown User'),
                     const Divider(height: AppSpacing.lg),
-                    _buildInfoRow('Role', _formatRole(user != null && user.roles.isNotEmpty ? user.roles.first : 'No Role')),
+                    _buildInfoRow(
+                      'Role',
+                      _formatRole(
+                        user != null && user.roles.isNotEmpty
+                            ? user.roles.first
+                            : 'No Role',
+                      ),
+                    ),
                     const Divider(height: AppSpacing.lg),
                     _buildInfoRow('Employee ID', user?.employeeId ?? 'Not set'),
                     const Divider(height: AppSpacing.lg),
@@ -100,7 +125,10 @@ class ProfileScreen extends ConsumerWidget {
             // Workspace Information
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Workspace Information', style: AppTypography.sectionTitle),
+              child: Text(
+                'Workspace Information',
+                style: AppTypography.sectionTitle,
+              ),
             ),
             const Gap(AppSpacing.md),
             Card(
@@ -129,7 +157,10 @@ class ProfileScreen extends ConsumerWidget {
             // About Airtel Nexus
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('About Airtel Nexus', style: AppTypography.sectionTitle),
+              child: Text(
+                'About Airtel Nexus',
+                style: AppTypography.sectionTitle,
+              ),
             ),
             const Gap(AppSpacing.md),
             Card(
@@ -143,7 +174,10 @@ class ProfileScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Text(
                   'Airtel Nexus is a productivity and sales enablement platform designed to help Account Managers organize customer relationships, meetings, tasks, and enterprise knowledge in a single workspace.',
-                  style: AppTypography.bodyText.copyWith(color: Colors.grey.shade700, height: 1.4),
+                  style: AppTypography.bodyText.copyWith(
+                    color: Colors.grey.shade700,
+                    height: 1.4,
+                  ),
                 ),
               ),
             ),
@@ -165,7 +199,10 @@ class ProfileScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
                   ),
-                  child: const Text('Logout', style: TextStyle(fontWeight: FontWeight.normal)),
+                  child: const Text(
+                    'Logout',
+                    style: TextStyle(fontWeight: FontWeight.normal),
+                  ),
                 ),
               ),
             ),
@@ -181,11 +218,14 @@ class ProfileScreen extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTypography.bodyText.copyWith(color: Colors.grey.shade600)),
+        Text(
+          label,
+          style: AppTypography.bodyText.copyWith(color: Colors.grey.shade600),
+        ),
         const Gap(AppSpacing.md),
         Expanded(
           child: Text(
-            value, 
+            value,
             style: AppTypography.bodyText.copyWith(fontWeight: FontWeight.w500),
             textAlign: TextAlign.right,
           ),
@@ -196,7 +236,9 @@ class ProfileScreen extends ConsumerWidget {
 
   void _showEditProfileSheet(BuildContext context, WidgetRef ref, User user) {
     final nameController = TextEditingController(text: user.fullName);
-    final roleValue = user.roles.isNotEmpty ? _formatRoleForInput(user.roles.first) : 'Account Manager';
+    final roleValue = user.roles.isNotEmpty
+        ? _formatRoleForInput(user.roles.first)
+        : 'Account Manager';
     final roleController = TextEditingController(text: roleValue);
     final employeeIdController = TextEditingController(text: user.employeeId);
     final circleController = TextEditingController(text: user.circle);
@@ -223,7 +265,10 @@ class ProfileScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Edit Personal Information', style: AppTypography.sectionTitle),
+                  Text(
+                    'Edit Personal Information',
+                    style: AppTypography.sectionTitle,
+                  ),
                   IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () => Navigator.pop(sheetContext),
@@ -237,7 +282,9 @@ class ProfileScreen extends ConsumerWidget {
                 controller: nameController,
                 decoration: InputDecoration(
                   labelText: 'Full Name',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
                 ),
               ),
               const Gap(AppSpacing.md),
@@ -251,7 +298,9 @@ class ProfileScreen extends ConsumerWidget {
                 },
                 decoration: InputDecoration(
                   labelText: 'Role',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
                 ),
               ),
               const Gap(AppSpacing.md),
@@ -259,7 +308,9 @@ class ProfileScreen extends ConsumerWidget {
                 controller: employeeIdController,
                 decoration: InputDecoration(
                   labelText: 'Employee ID (Optional)',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
                 ),
               ),
               const Gap(AppSpacing.md),
@@ -267,28 +318,44 @@ class ProfileScreen extends ConsumerWidget {
                 controller: circleController,
                 decoration: InputDecoration(
                   labelText: 'Circle (Optional)',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
                 ),
               ),
               const Gap(AppSpacing.xl),
               ElevatedButton(
                 onPressed: () async {
-                  await ref.read(authProvider.notifier).updateUser(
-                    fullName: nameController.text.trim(),
-                    role: roleController.text,
-                    employeeId: employeeIdController.text.trim().isEmpty ? null : employeeIdController.text.trim(),
-                    circle: circleController.text.trim().isEmpty ? null : circleController.text.trim(),
-                  );
+                  await ref
+                      .read(authProvider.notifier)
+                      .updateUser(
+                        fullName: nameController.text.trim(),
+                        role: roleController.text,
+                        employeeId: employeeIdController.text.trim().isEmpty
+                            ? null
+                            : employeeIdController.text.trim(),
+                        circle: circleController.text.trim().isEmpty
+                            ? null
+                            : circleController.text.trim(),
+                      );
                   if (sheetContext.mounted) Navigator.pop(sheetContext);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.primaryColor,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                  ),
                   elevation: 0,
                 ),
-                child: Text('Save Changes', style: AppTypography.bodyText.copyWith(color: Colors.white, fontWeight: FontWeight.w600)),
+                child: Text(
+                  'Save Changes',
+                  style: AppTypography.bodyText.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
               const Gap(AppSpacing.xl),
             ],

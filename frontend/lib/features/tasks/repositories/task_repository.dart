@@ -11,11 +11,11 @@ class TaskRepository {
   Future<List<Task>> listTasks({String? status}) async {
     final box = HiveService.tasksBox;
     var tasks = box.values.toList();
-    
+
     if (status != null) {
       tasks = tasks.where((t) => t.status.name == status).toList();
     }
-    
+
     // Sort by due date (closest first), nulls at the end
     tasks.sort((a, b) {
       if (a.dueAt == null && b.dueAt == null) return 0;
@@ -23,7 +23,7 @@ class TaskRepository {
       if (b.dueAt == null) return -1;
       return a.dueAt!.compareTo(b.dueAt!);
     });
-    
+
     return tasks;
   }
 
@@ -50,10 +50,16 @@ class TaskRepository {
     // Map string priority back to enum safely
     TaskPriority mappedPriority;
     switch (priority.toLowerCase()) {
-      case 'low': mappedPriority = TaskPriority.low; break;
-      case 'high': mappedPriority = TaskPriority.high; break;
-      case 'medium': 
-      default: mappedPriority = TaskPriority.medium; break;
+      case 'low':
+        mappedPriority = TaskPriority.low;
+        break;
+      case 'high':
+        mappedPriority = TaskPriority.high;
+        break;
+      case 'medium':
+      default:
+        mappedPriority = TaskPriority.medium;
+        break;
     }
 
     final newTask = Task(
@@ -77,7 +83,7 @@ class TaskRepository {
   Future<Task> completeTask(String id) async {
     final box = HiveService.tasksBox;
     final existing = box.get(id);
-    
+
     if (existing == null) {
       throw Exception('Task not found');
     }
@@ -103,7 +109,7 @@ class TaskRepository {
   Future<Task> toggleTaskStatus(String id) async {
     final box = HiveService.tasksBox;
     final existing = box.get(id);
-    
+
     if (existing == null) {
       throw Exception('Task not found');
     }

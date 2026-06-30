@@ -10,13 +10,15 @@ final taskSearchProvider = StateProvider.autoDispose<String>((ref) => '');
 // Priority filter state
 final taskPriorityFilterProvider =
     StateProvider.autoDispose<TaskPriorityFilter>(
-        (ref) => TaskPriorityFilter.all);
+      (ref) => TaskPriorityFilter.all,
+    );
 
 // Team filter removed as app is now offline-first for individual AM.
 
 // Derived filtered list
-final filteredTaskListProvider =
-    Provider.autoDispose<AsyncValue<List<Task>>>((ref) {
+final filteredTaskListProvider = Provider.autoDispose<AsyncValue<List<Task>>>((
+  ref,
+) {
   final rawAsync = ref.watch(taskListProvider);
   final search = ref.watch(taskSearchProvider);
   final priority = ref.watch(taskPriorityFilterProvider);

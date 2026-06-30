@@ -27,9 +27,10 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
       'Airtel Public Cloud',
       'Airtel SIP Trunking',
       'Airtel Global Voice',
-    
+
       'Airtel Colocation (Nxtra)',
-      'Airtel VPN/MPLS',],
+      'Airtel VPN/MPLS',
+    ],
     discoveryQuestions: [
       'How are your branches currently connected to the core banking application?',
       'What happens when a branch experiences a network outage during peak hours?',
@@ -359,7 +360,8 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     recommendedProducts: [
       'Airtel Public Cloud',
       'Airtel WhatsApp Business',
-      'Airtel Dedicated Internet (ILL)',],
+      'Airtel Dedicated Internet (ILL)',
+    ],
     discoveryQuestions: [
       'How does your infrastructure handle traffic surges during major festival sales?',
       'What is the impact on revenue if your platform experiences 15 minutes of downtime?',
@@ -512,11 +514,11 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
   ),
 
   // â”€â”€ NEW INDUSTRIES FROM AIRTEL B2B WEBSITE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
   const IndustryIntelligence(
     id: 'ind_automotive',
     industryName: 'Automotive',
-    overview: 'The Indian automotive industry is undergoing rapid transformation driven by connected vehicles, EV adoption, and smart manufacturing. Airtel partners with OEMs, component manufacturers, and dealership networks to deliver IoT telematics, Private 5G factory automation, and AIS-140 compliant fleet connectivity.',
+    overview:
+        'The Indian automotive industry is undergoing rapid transformation driven by connected vehicles, EV adoption, and smart manufacturing. Airtel partners with OEMs, component manufacturers, and dealership networks to deliver IoT telematics, Private 5G factory automation, and AIS-140 compliant fleet connectivity.',
     businessChallenges: [
       'Connected vehicle and EV ecosystem management at scale',
       'AIS-140 compliance for commercial vehicle fleets',
@@ -570,7 +572,8 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
   const IndustryIntelligence(
     id: 'ind_media_entertainment',
     industryName: 'Media & Entertainment',
-    overview: 'Indian media and entertainment companies from OTT platforms and production houses to broadcasters and gaming firms require ultra-low latency content delivery, elastic cloud compute for rendering, and resilient global connectivity for live events. Airtel provides edge data centers, CDN infrastructure, and managed security for content protection.',
+    overview:
+        'Indian media and entertainment companies from OTT platforms and production houses to broadcasters and gaming firms require ultra-low latency content delivery, elastic cloud compute for rendering, and resilient global connectivity for live events. Airtel provides edge data centers, CDN infrastructure, and managed security for content protection.',
     businessChallenges: [
       'Massive traffic spikes during live streaming events (sports, awards)',
       'Content delivery latency affecting viewer experience and churn',
@@ -625,7 +628,8 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
   const IndustryIntelligence(
     id: 'ind_travel_tourism',
     industryName: 'Travel & Tourism',
-    overview: 'The travel and hospitality industry in India requires always-on connectivity across distributed properties, real-time customer engagement, and smart energy management. Airtel enables hotel chains, airlines, travel agencies, and OTAs to deliver seamless guest experiences, personalized communications, and IoT-based operational efficiency.',
+    overview:
+        'The travel and hospitality industry in India requires always-on connectivity across distributed properties, real-time customer engagement, and smart energy management. Airtel enables hotel chains, airlines, travel agencies, and OTAs to deliver seamless guest experiences, personalized communications, and IoT-based operational efficiency.',
     businessChallenges: [
       'Maintaining consistent network uptime across geographically dispersed properties',
       'Personalizing guest communication across pre-booking, stay, and post-stay journeys',
@@ -680,7 +684,8 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
   const IndustryIntelligence(
     id: 'ind_telecom_carriers',
     industryName: 'Telecom & Carriers',
-    overview: 'Airtel\'s wholesale division serves a large global carrier interconnect footprint and is one of Asia\'s largest wholesale voice and data providers, built on 400,000+ route KM fiber and 34+ submarine cable systems. For Indian ISPs, MVNOs, international carriers entering India, and OTT platforms needing transport capacity, Airtel\'s carrier digital platform and infrastructure represent a compelling network partnership.',
+    overview:
+        'Airtel\'s wholesale division serves a large global carrier interconnect footprint and is one of Asia\'s largest wholesale voice and data providers, built on 400,000+ route KM fiber and 34+ submarine cable systems. For Indian ISPs, MVNOs, international carriers entering India, and OTT platforms needing transport capacity, Airtel\'s carrier digital platform and infrastructure represent a compelling network partnership.',
     businessChallenges: [
       'Declining international voice revenue from OTT bypass (WhatsApp, Teams)',
       'IUC regime uncertainty creating P&L volatility for carrier interconnect businesses',
@@ -733,4 +738,3 @@ final List<IndustryIntelligence> industryIntelligenceRepo = [
     ],
   ),
 ];
-

@@ -20,7 +20,9 @@ class AiLoadingIndicator extends StatelessWidget {
               child: CircularProgressIndicator(
                 color: AppConstants.primaryColor,
                 strokeWidth: 3,
-                backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
+                backgroundColor: AppConstants.primaryColor.withValues(
+                  alpha: 0.1,
+                ),
               ),
             ),
             const SizedBox(height: 24),

@@ -8,10 +8,12 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class MeetingNotificationService {
-  static final MeetingNotificationService _instance = MeetingNotificationService._internal();
+  static final MeetingNotificationService _instance =
+      MeetingNotificationService._internal();
   factory MeetingNotificationService() => _instance;
 
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   bool _initialized = false;
 
   MeetingNotificationService._internal();
@@ -23,18 +25,19 @@ class MeetingNotificationService {
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-        
+
     const DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
-    
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsDarwin,
-    );
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
+        );
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsDarwin,
+        );
 
     await _flutterLocalNotificationsPlugin.initialize(
       settings: initializationSettings,
@@ -42,22 +45,22 @@ class MeetingNotificationService {
         log('Notification clicked: ${response.payload}');
       },
     );
-    
+
     _initialized = true;
   }
 
   Future<void> requestPermissions() async {
     if (Platform.isIOS) {
       await _flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
     } else if (Platform.isAndroid) {
       final androidImplementation = _flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       await androidImplementation?.requestNotificationsPermission();
       await androidImplementation?.requestExactAlarmsPermission();
     }
@@ -71,13 +74,18 @@ class MeetingNotificationService {
     return int.parse(hexString, radix: 16) % 2147483647;
   }
 
-  Future<void> scheduleMeetingReminder(Meeting meeting, Customer? customer) async {
+  Future<void> scheduleMeetingReminder(
+    Meeting meeting,
+    Customer? customer,
+  ) async {
     if (meeting.meetingAt.isBefore(DateTime.now())) {
       return; // Do not schedule for past meetings
     }
 
-    final reminderTime = meeting.meetingAt.subtract(const Duration(minutes: 30));
-    
+    final reminderTime = meeting.meetingAt.subtract(
+      const Duration(minutes: 30),
+    );
+
     if (reminderTime.isBefore(DateTime.now())) {
       return; // Reminder time has already passed
     }
@@ -89,12 +97,14 @@ class MeetingNotificationService {
 
     final title = 'Meeting Reminder';
     final customerName = customer?.name ?? 'Unknown Customer';
-    
+
     final localTime = meeting.meetingAt.toLocal();
-    final timeString = '${localTime.hour > 12 ? localTime.hour - 12 : (localTime.hour == 0 ? 12 : localTime.hour)}:${localTime.minute.toString().padLeft(2, '0')} ${localTime.hour >= 12 ? 'PM' : 'AM'}';
-    
+    final timeString =
+        '${localTime.hour > 12 ? localTime.hour - 12 : (localTime.hour == 0 ? 12 : localTime.hour)}:${localTime.minute.toString().padLeft(2, '0')} ${localTime.hour >= 12 ? 'PM' : 'AM'}';
+
     final meetingTitle = meeting.title ?? 'Meeting';
-    final body = '$meetingTitle - $customerName\nStarts in 30 minutes at $timeString';
+    final body =
+        '$meetingTitle - $customerName\nStarts in 30 minutes at $timeString';
 
     await _flutterLocalNotificationsPlugin.zonedSchedule(
       id: notificationId,
@@ -116,7 +126,7 @@ class MeetingNotificationService {
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
       payload: meeting.id,
     );
-    
+
     log('Scheduled notification for meeting ${meeting.id} at $reminderTime');
   }
 

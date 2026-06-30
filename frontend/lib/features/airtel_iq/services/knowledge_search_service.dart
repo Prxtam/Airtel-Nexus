@@ -39,27 +39,47 @@ class KnowledgeSearchService {
 
     final lowerQuery = query.toLowerCase();
 
-    final products = AirtelIqMockData.products.where((p) =>
-        p.name.toLowerCase().contains(lowerQuery) ||
-        p.category.toLowerCase().contains(lowerQuery) ||
-        p.overview.toLowerCase().contains(lowerQuery)).toList();
+    final products = AirtelIqMockData.products
+        .where(
+          (p) =>
+              p.name.toLowerCase().contains(lowerQuery) ||
+              p.category.toLowerCase().contains(lowerQuery) ||
+              p.overview.toLowerCase().contains(lowerQuery),
+        )
+        .toList();
 
-    final faqs = AirtelIqMockData.faqs.where((f) =>
-        f.question.toLowerCase().contains(lowerQuery) ||
-        f.answer.toLowerCase().contains(lowerQuery)).toList();
+    final faqs = AirtelIqMockData.faqs
+        .where(
+          (f) =>
+              f.question.toLowerCase().contains(lowerQuery) ||
+              f.answer.toLowerCase().contains(lowerQuery),
+        )
+        .toList();
 
-    final articles = AirtelIqMockData.articles.where((a) =>
-        a.title.toLowerCase().contains(lowerQuery) ||
-        a.summary.toLowerCase().contains(lowerQuery)).toList();
+    final articles = AirtelIqMockData.articles
+        .where(
+          (a) =>
+              a.title.toLowerCase().contains(lowerQuery) ||
+              a.summary.toLowerCase().contains(lowerQuery),
+        )
+        .toList();
 
-    final playbooks = AirtelIqMockData.playbooks.where((pb) =>
-        pb.industry.toLowerCase().contains(lowerQuery) ||
-        pb.overview.toLowerCase().contains(lowerQuery)).toList();
+    final playbooks = AirtelIqMockData.playbooks
+        .where(
+          (pb) =>
+              pb.industry.toLowerCase().contains(lowerQuery) ||
+              pb.overview.toLowerCase().contains(lowerQuery),
+        )
+        .toList();
 
-    final objections = AirtelIqMockData.objections.where((o) =>
-        o.objection.toLowerCase().contains(lowerQuery) ||
-        o.category.toLowerCase().contains(lowerQuery) ||
-        o.recommendedResponse.toLowerCase().contains(lowerQuery)).toList();
+    final objections = AirtelIqMockData.objections
+        .where(
+          (o) =>
+              o.objection.toLowerCase().contains(lowerQuery) ||
+              o.category.toLowerCase().contains(lowerQuery) ||
+              o.recommendedResponse.toLowerCase().contains(lowerQuery),
+        )
+        .toList();
 
     return KnowledgeSearchResult(
       products: products,

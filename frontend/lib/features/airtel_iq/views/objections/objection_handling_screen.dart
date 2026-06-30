@@ -92,8 +92,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final allProducts =
@@ -105,8 +103,7 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
         title: 'Objection Coach',
         automaticallyImplyLeading: true,
       ),
-      body: SelectionArea(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -289,7 +286,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
               ),
           ],
         ),
-      ),
       ),
     );
   }

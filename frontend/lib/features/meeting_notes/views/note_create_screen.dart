@@ -64,10 +64,7 @@ class _NoteCreateScreenState extends ConsumerState<NoteCreateScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Note Information',
-                style: AppTypography.sectionTitle,
-              ),
+              Text('Note Information', style: AppTypography.sectionTitle),
               const Gap(AppSpacing.lg),
               Container(
                 decoration: BoxDecoration(
@@ -78,13 +75,14 @@ class _NoteCreateScreenState extends ConsumerState<NoteCreateScreen> {
                       color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
-                    )
+                    ),
                   ],
                 ),
                 child: TextFormField(
                   controller: _noteController,
                   decoration: const InputDecoration(
-                    hintText: 'Capture key discussion points, decisions and follow-up actions.',
+                    hintText:
+                        'Capture key discussion points, decisions and follow-up actions.',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(AppSpacing.lg),
                   ),
@@ -111,12 +109,17 @@ class _NoteCreateScreenState extends ConsumerState<NoteCreateScreen> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.error_outline,
-                          color: Colors.red, size: 20),
+                      const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 20,
+                      ),
                       const Gap(8),
                       Expanded(
-                        child: Text(_errorMessage!,
-                            style: const TextStyle(color: Colors.red)),
+                        child: Text(
+                          _errorMessage!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
                       ),
                     ],
                   ),
@@ -130,19 +133,30 @@ class _NoteCreateScreenState extends ConsumerState<NoteCreateScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppConstants.primaryColor,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xxl,
+                      vertical: AppSpacing.md,
+                    ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.md)),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                    ),
                   ),
                   child: _isLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                              color: Colors.white, strokeWidth: 2),
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
                         )
-                      : const Text('Save Note',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      : const Text(
+                          'Save Note',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
               ),
             ],

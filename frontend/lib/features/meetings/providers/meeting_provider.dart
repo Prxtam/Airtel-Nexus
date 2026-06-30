@@ -45,12 +45,12 @@ class MeetingListNotifier extends StateNotifier<AsyncValue<List<Meeting>>> {
 }
 
 final meetingListProvider =
-    StateNotifierProvider<MeetingListNotifier, AsyncValue<List<Meeting>>>(
-  (ref) {
-    final repository = ref.watch(meetingRepositoryProvider);
-    return MeetingListNotifier(repository);
-  },
-);
+    StateNotifierProvider<MeetingListNotifier, AsyncValue<List<Meeting>>>((
+      ref,
+    ) {
+      final repository = ref.watch(meetingRepositoryProvider);
+      return MeetingListNotifier(repository);
+    });
 
 // ---------------------------------------------------------------------------
 // Meeting Detail Provider (family — keyed by meeting ID)
@@ -61,7 +61,7 @@ class MeetingDetailNotifier extends StateNotifier<AsyncValue<Meeting>> {
   final String meetingId;
 
   MeetingDetailNotifier(this._repository, this.meetingId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     load();
   }
 
@@ -75,7 +75,11 @@ class MeetingDetailNotifier extends StateNotifier<AsyncValue<Meeting>> {
     }
   }
 
-  Future<void> update({String? title, DateTime? meetingAt, MeetingStatus? status}) async {
+  Future<void> update({
+    String? title,
+    DateTime? meetingAt,
+    MeetingStatus? status,
+  }) async {
     try {
       final updated = await _repository.updateMeeting(
         meetingId,
@@ -90,10 +94,12 @@ class MeetingDetailNotifier extends StateNotifier<AsyncValue<Meeting>> {
   }
 }
 
-final meetingDetailProvider = StateNotifierProvider.family<
-    MeetingDetailNotifier, AsyncValue<Meeting>, String>(
-  (ref, meetingId) {
-    final repository = ref.watch(meetingRepositoryProvider);
-    return MeetingDetailNotifier(repository, meetingId);
-  },
-);
+final meetingDetailProvider =
+    StateNotifierProvider.family<
+      MeetingDetailNotifier,
+      AsyncValue<Meeting>,
+      String
+    >((ref, meetingId) {
+      final repository = ref.watch(meetingRepositoryProvider);
+      return MeetingDetailNotifier(repository, meetingId);
+    });

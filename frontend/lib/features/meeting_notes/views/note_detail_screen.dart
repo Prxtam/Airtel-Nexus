@@ -12,8 +12,11 @@ import 'package:gap/gap.dart';
 class NoteDetailScreen extends ConsumerWidget {
   final String meetingId;
   final String noteId;
-  const NoteDetailScreen(
-      {super.key, required this.meetingId, required this.noteId});
+  const NoteDetailScreen({
+    super.key,
+    required this.meetingId,
+    required this.noteId,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,8 +46,11 @@ class _NoteDetailBody extends ConsumerStatefulWidget {
   final MeetingNote note;
   final String noteId;
   final String meetingId;
-  const _NoteDetailBody(
-      {required this.note, required this.noteId, required this.meetingId});
+  const _NoteDetailBody({
+    required this.note,
+    required this.noteId,
+    required this.meetingId,
+  });
 
   @override
   ConsumerState<_NoteDetailBody> createState() => _NoteDetailBodyState();
@@ -85,8 +91,7 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
       ref.invalidate(meetingNoteListProvider(widget.meetingId));
       if (mounted) setState(() => _isEditing = false);
     } catch (e) {
-      setState(() =>
-          _editError = e.toString().replaceAll('Exception: ', ''));
+      setState(() => _editError = e.toString().replaceAll('Exception: ', ''));
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }
@@ -99,11 +104,15 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         title: const Text('Delete Note', style: TextStyle(color: Colors.black)),
-        content: const Text('This note will be permanently deleted.', style: TextStyle(color: Colors.grey)),
+        content: const Text(
+          'This note will be permanently deleted.',
+          style: TextStyle(color: Colors.grey),
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
@@ -122,10 +131,12 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
       if (mounted) context.pop();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(e.toString().replaceAll('Exception: ', '')),
-          backgroundColor: Colors.red,
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _isDeleting = false);
@@ -144,7 +155,8 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
             color: Colors.white,
             surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -155,9 +167,13 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
                       const Icon(Icons.note, color: Colors.purple, size: 28),
                       const Gap(12),
                       const Expanded(
-                        child: Text('Note Content',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16)),
+                        child: Text(
+                          'Note Content',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                       if (!_isEditing)
                         IconButton(
@@ -169,9 +185,9 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
                   ),
                   const Gap(12),
                   if (!_isEditing)
-                    SelectionArea(
-                      child: Text(widget.note.noteText,
-                          style: const TextStyle(height: 1.6)),
+                    Text(
+                      widget.note.noteText,
+                      style: const TextStyle(height: 1.6),
                     )
                   else ...[
                     TextField(
@@ -192,8 +208,7 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
                           onPressed: _isSaving
                               ? null
                               : () {
-                                  _noteController.text =
-                                      widget.note.noteText;
+                                  _noteController.text = widget.note.noteText;
                                   setState(() {
                                     _isEditing = false;
                                     _editError = null;
@@ -213,7 +228,9 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
                                   height: 18,
                                   width: 18,
                                   child: CircularProgressIndicator(
-                                      color: Colors.white, strokeWidth: 2),
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : const Text('Save'),
                         ),
@@ -230,29 +247,33 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
             color: Colors.white,
             surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Details',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16)),
+                  const Text(
+                    'Details',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
                   const Gap(12),
                   _InfoRow(
-                      label: 'Created',
-                      value: _formatDate(widget.note.createdAt)),
+                    label: 'Created',
+                    value: _formatDate(widget.note.createdAt),
+                  ),
                   const Divider(height: 24),
                   _InfoRow(
-                      label: 'Updated',
-                      value: _formatDate(widget.note.updatedAt)),
+                    label: 'Updated',
+                    value: _formatDate(widget.note.updatedAt),
+                  ),
                 ],
               ),
             ),
           ),
           const Gap(48),
-          
+
           // Delete Button (Standalone)
           Align(
             alignment: Alignment.center,
@@ -263,18 +284,32 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
                       height: 16,
                       width: 16,
                       child: CircularProgressIndicator(
-                          color: Colors.red, strokeWidth: 2),
+                        color: Colors.red,
+                        strokeWidth: 2,
+                      ),
                     )
-                  : const Icon(Icons.delete_outline, color: Colors.red, size: 18),
+                  : const Icon(
+                      Icons.delete_outline,
+                      color: Colors.red,
+                      size: 18,
+                    ),
               label: Text(
                 _isDeleting ? 'Deleting...' : 'Delete Note',
-                style: const TextStyle(color: Colors.red, fontSize: 13, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red, width: 0.5),
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -299,14 +334,16 @@ class _InfoRow extends StatelessWidget {
       children: [
         SizedBox(
           width: 80,
-          child: Text(label,
-              style:
-                  const TextStyle(color: Colors.grey, fontSize: 13)),
+          child: Text(
+            label,
+            style: const TextStyle(color: Colors.grey, fontSize: 13),
+          ),
         ),
         Expanded(
-          child: Text(value,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w500, fontSize: 13)),
+          child: Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+          ),
         ),
       ],
     );

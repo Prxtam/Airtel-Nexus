@@ -35,7 +35,7 @@ class MeetingRepository {
     if (customerId != null) {
       meetings = meetings.where((m) => m.customerId == customerId).toList();
     }
-    
+
     // Sort by meeting date ascending (closest upcoming first)
     meetings.sort((a, b) => a.meetingAt.compareTo(b.meetingAt));
     return meetings;
@@ -48,7 +48,8 @@ class MeetingRepository {
       throw Exception('Meeting not found');
     }
 
-    if (meeting.status == MeetingStatus.scheduled && meeting.meetingAt.isBefore(DateTime.now())) {
+    if (meeting.status == MeetingStatus.scheduled &&
+        meeting.meetingAt.isBefore(DateTime.now())) {
       meeting = Meeting(
         id: meeting.id,
         customerId: meeting.customerId,
@@ -96,7 +97,7 @@ class MeetingRepository {
   }) async {
     final box = HiveService.meetingsBox;
     final existing = box.get(id);
-    
+
     if (existing == null) {
       throw Exception('Meeting not found');
     }

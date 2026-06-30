@@ -23,17 +23,18 @@ class TaskListScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      appBar: hideAppBar ? null : const AirtelHeader(
-        title: 'Tasks',
-        automaticallyImplyLeading: true,
-      ),
+      appBar: hideAppBar
+          ? null
+          : const AirtelHeader(title: 'Tasks', automaticallyImplyLeading: true),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/tasks/create'),
         backgroundColor: Colors.white,
         foregroundColor: AppConstants.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
+          side: BorderSide(
+            color: AppConstants.primaryColor.withValues(alpha: 0.5),
+          ),
         ),
         child: const Icon(Icons.add),
       ),
@@ -49,7 +50,8 @@ class TaskListScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             child: TextField(
-              onChanged: (val) => ref.read(taskSearchProvider.notifier).state = val,
+              onChanged: (val) =>
+                  ref.read(taskSearchProvider.notifier).state = val,
               decoration: InputDecoration(
                 hintText: 'Search tasks...',
                 prefixIcon: const Icon(Icons.search),
@@ -63,7 +65,10 @@ class TaskListScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Colors.grey.shade300),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 0,
+                ),
               ),
             ),
           ),
@@ -84,8 +89,12 @@ class TaskListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildList(BuildContext context, WidgetRef ref, List<Task> tasks,
-      TaskListNotifier notifier) {
+  Widget _buildList(
+    BuildContext context,
+    WidgetRef ref,
+    List<Task> tasks,
+    TaskListNotifier notifier,
+  ) {
     if (tasks.isEmpty) {
       final rawTasksAsync = ref.read(taskListProvider);
       final hasNoTasksAtAll = rawTasksAsync.maybeWhen(
@@ -107,7 +116,7 @@ class TaskListScreen extends ConsumerWidget {
               : null,
         );
       } else {
-         return const Center(
+        return const Center(
           child: Text(
             'No tasks match your search or filters.',
             style: TextStyle(color: Colors.grey),
@@ -154,11 +163,15 @@ class _FilterBar extends ConsumerWidget {
               selectedColor: AppConstants.primaryColor.withValues(alpha: 0.15),
               checkmarkColor: AppConstants.primaryColor,
               labelStyle: TextStyle(
-                color: isSelected ? AppConstants.primaryColor : Colors.grey.shade700,
+                color: isSelected
+                    ? AppConstants.primaryColor
+                    : Colors.grey.shade700,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
               side: BorderSide(
-                color: isSelected ? AppConstants.primaryColor : Colors.grey.shade300,
+                color: isSelected
+                    ? AppConstants.primaryColor
+                    : Colors.grey.shade300,
               ),
             ),
           );
@@ -180,11 +193,19 @@ class _PriorityFilterBar extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       child: Row(
         children: [
-           const Text('Priority:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.grey)),
-           const Gap(8),
-           ...TaskPriorityFilter.values.map((priority) {
+          const Text(
+            'Priority:',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+              color: Colors.grey,
+            ),
+          ),
+          const Gap(8),
+          ...TaskPriorityFilter.values.map((priority) {
             final isSelected = currentPriority == priority;
-            String label = priority.name[0].toUpperCase() + priority.name.substring(1);
+            String label =
+                priority.name[0].toUpperCase() + priority.name.substring(1);
             return Padding(
               padding: const EdgeInsets.only(right: 6),
               child: ChoiceChip(
@@ -192,22 +213,27 @@ class _PriorityFilterBar extends ConsumerWidget {
                 selected: isSelected,
                 onSelected: (selected) {
                   if (selected) {
-                     ref.read(taskPriorityFilterProvider.notifier).state = priority;
+                    ref.read(taskPriorityFilterProvider.notifier).state =
+                        priority;
                   }
                 },
                 selectedColor: Colors.blue.withValues(alpha: 0.15),
                 labelStyle: TextStyle(
-                  color: isSelected ? Colors.blue.shade700 : Colors.grey.shade700,
+                  color: isSelected
+                      ? Colors.blue.shade700
+                      : Colors.grey.shade700,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
                 side: BorderSide(
-                  color: isSelected ? Colors.blue.shade300 : Colors.grey.shade300,
+                  color: isSelected
+                      ? Colors.blue.shade300
+                      : Colors.grey.shade300,
                 ),
                 padding: EdgeInsets.zero,
               ),
             );
           }),
-        ]
+        ],
       ),
     );
   }
@@ -233,7 +259,9 @@ class _TaskTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: (isCompleted ? Colors.green : Colors.orange).withValues(alpha: 0.1),
+            color: (isCompleted ? Colors.green : Colors.orange).withValues(
+              alpha: 0.1,
+            ),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -262,7 +290,10 @@ class _TaskTile extends StatelessWidget {
                     const Gap(2),
                     Text(
                       _formatDate(task.dueAt!),
-                      style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.grey.shade500,
+                      ),
                     ),
                   ],
                 ],
@@ -300,7 +331,11 @@ class _PriorityBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600),
+        style: TextStyle(
+          fontSize: 11,
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

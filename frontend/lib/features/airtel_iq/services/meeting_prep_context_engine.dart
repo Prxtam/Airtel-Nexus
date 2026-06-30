@@ -36,14 +36,20 @@ class MeetingPrepContextEngine {
     await Future.delayed(const Duration(seconds: 1));
 
     final indKnowledge = _knowledgeService.getIndustryByName(industry);
-    final methKnowledge = _knowledgeService.getMethodologyByMeetingType(meetingType);
+    final methKnowledge = _knowledgeService.getMethodologyByMeetingType(
+      meetingType,
+    );
     final products = _knowledgeService.getAllProducts();
 
     // 1. Executive Brief
-    String execBrief = "Industry Context: $industry organizations often struggle with ${indKnowledge?.businessChallenges.join(', ') ?? painPoint}.\n\n";
-    if (companySize != null) execBrief += "Target Segment: $companySize enterprises require scalable solutions.\n";
+    String execBrief =
+        "Industry Context: $industry organizations often struggle with ${indKnowledge?.businessChallenges.join(', ') ?? painPoint}.\n\n";
+    if (companySize != null)
+      execBrief +=
+          "Target Segment: $companySize enterprises require scalable solutions.\n";
     if (objective != null) execBrief += "Primary Objective: $objective.\n";
-    execBrief += "Meeting Focus: This $meetingType is an opportunity to position Airtel as a strategic partner addressing '$painPoint'.";
+    execBrief +=
+        "Meeting Focus: This $meetingType is an opportunity to position Airtel as a strategic partner addressing '$painPoint'.";
 
     // 2. Discussion Topics
     List<String> topics = [];
@@ -64,14 +70,20 @@ class MeetingPrepContextEngine {
     }
     if (discovery.isEmpty) {
       discovery.add("How is your team currently handling $painPoint?");
-      discovery.add("What would a successful resolution to this challenge look like?");
+      discovery.add(
+        "What would a successful resolution to this challenge look like?",
+      );
     }
 
     // 4. Recommended Airtel Products
     List<String> recs = [];
     // Filter products that solve the pain point or belong to the industry
     for (var p in products) {
-      if (p.painPointsSolved.any((pp) => pp.toLowerCase().contains(painPoint.toLowerCase().split(' ').last)) ||
+      if (p.painPointsSolved.any(
+            (pp) => pp.toLowerCase().contains(
+              painPoint.toLowerCase().split(' ').last,
+            ),
+          ) ||
           p.industries.contains(industry)) {
         recs.add(p.name);
       }
@@ -84,10 +96,13 @@ class MeetingPrepContextEngine {
     // 5 & 6. Likely Objections & Responses
     List<String> objections = [];
     List<String> responses = [];
-    
+
     // Gather from recommended products
     for (var pName in recs) {
-      final p = products.firstWhere((prod) => prod.name == pName, orElse: () => products.first);
+      final p = products.firstWhere(
+        (prod) => prod.name == pName,
+        orElse: () => products.first,
+      );
       objections.addAll(p.objections);
       responses.addAll(p.objectionResponses);
     }
@@ -97,9 +112,11 @@ class MeetingPrepContextEngine {
     }
 
     // 7. Next Best Action
-    String nba = "Uncover root causes of $painPoint and secure commitment for a follow-up demonstration.";
+    String nba =
+        "Uncover root causes of $painPoint and secure commitment for a follow-up demonstration.";
     if (methKnowledge != null && methKnowledge.successIndicators.isNotEmpty) {
-      nba = "Goal: ${methKnowledge.successIndicators.first}. Ensure all stakeholders agree on next steps.";
+      nba =
+          "Goal: ${methKnowledge.successIndicators.first}. Ensure all stakeholders agree on next steps.";
     }
 
     return MeetingPrepContextResult(
@@ -122,26 +139,32 @@ class MeetingPrepContextEngine {
     // we fall back to a generic Scenario call. The prompt says:
     // "Do NOT infer industry from customer names. Never use logic such as 'ABC Bank' -> Banking. This behavior must be removed."
     // "If sufficient customer context does not exist, use explicit user-selected Scenario inputs instead."
-    // Since our Customer model does not have a reliable `industry` or `painPoint` field right now, 
+    // Since our Customer model does not have a reliable `industry` or `painPoint` field right now,
     // we will generate a baseline brief using the meeting type and fallback values.
-    
+
     // We can extract meeting type from the title loosely, or just default to Discovery Meeting
     String meetingType = 'Discovery Meeting';
     if (meeting.title != null) {
-      if (meeting.title!.toLowerCase().contains('proposal')) meetingType = 'Proposal Discussion';
-      if (meeting.title!.toLowerCase().contains('renewal')) meetingType = 'Renewal Discussion';
+      if (meeting.title!.toLowerCase().contains('proposal'))
+        meetingType = 'Proposal Discussion';
+      if (meeting.title!.toLowerCase().contains('renewal'))
+        meetingType = 'Renewal Discussion';
     }
 
     // Since we can't infer industry, we will rely purely on Meeting Methodology and generic product intelligence
     await Future.delayed(const Duration(seconds: 1));
 
-    final methKnowledge = _knowledgeService.getMethodologyByMeetingType(meetingType);
+    final methKnowledge = _knowledgeService.getMethodologyByMeetingType(
+      meetingType,
+    );
     final products = _knowledgeService.getAllProducts();
 
     String execBrief = "Customer: ${customer.name}\n";
     execBrief += "Meeting: ${meeting.title ?? 'Sync'}\n";
-    execBrief += "History: ${previousMeetings.length} previous engagements.\n\n";
-    execBrief += "Note: Explicit industry context is unavailable. Relying on baseline meeting methodology. Consider using Scenario Mode for more targeted intelligence.";
+    execBrief +=
+        "History: ${previousMeetings.length} previous engagements.\n\n";
+    execBrief +=
+        "Note: Explicit industry context is unavailable. Relying on baseline meeting methodology. Consider using Scenario Mode for more targeted intelligence.";
 
     List<String> topics = [];
     if (methKnowledge != null && methKnowledge.focusAreas.isNotEmpty) {
@@ -154,12 +177,19 @@ class MeetingPrepContextEngine {
     if (methKnowledge != null && methKnowledge.keyQuestions.isNotEmpty) {
       discovery.addAll(methKnowledge.keyQuestions);
     } else {
-      discovery.add("What are your primary operational priorities this quarter?");
-      discovery.add("How can Airtel better support your communication infrastructure?");
+      discovery.add(
+        "What are your primary operational priorities this quarter?",
+      );
+      discovery.add(
+        "How can Airtel better support your communication infrastructure?",
+      );
     }
 
-    List<String> recs = ["Airtel Corporate Postpaid", "Airtel IQ Business Connect"];
-    
+    List<String> recs = [
+      "Airtel Corporate Postpaid",
+      "Airtel IQ Business Connect",
+    ];
+
     List<String> objections = [];
     List<String> responses = [];
     for (var p in products) {
@@ -167,7 +197,8 @@ class MeetingPrepContextEngine {
       responses.addAll(p.objectionResponses);
     }
 
-    String nba = "Identify explicit pain points and industry requirements to unlock deeper Airtel IQ recommendations.";
+    String nba =
+        "Identify explicit pain points and industry requirements to unlock deeper Airtel IQ recommendations.";
     if (methKnowledge != null && methKnowledge.successIndicators.isNotEmpty) {
       nba = "Goal: ${methKnowledge.successIndicators.first}.";
     }

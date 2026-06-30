@@ -5,6 +5,7 @@ import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/industry_intelligence.dart';
 import 'package:frontend/features/airtel_iq/services/industry_playbook_adapter.dart';
+
 class PlaybooksListScreen extends StatefulWidget {
   const PlaybooksListScreen({super.key});
 
@@ -19,7 +20,8 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
 
   IconData _iconForIndustry(String name) {
     if (name.contains('Banking')) return Icons.account_balance_outlined;
-    if (name.contains('Manufacturing')) return Icons.precision_manufacturing_outlined;
+    if (name.contains('Manufacturing'))
+      return Icons.precision_manufacturing_outlined;
     if (name.contains('Retail')) return Icons.storefront_outlined;
     if (name.contains('Healthcare')) return Icons.local_hospital_outlined;
     if (name.contains('IT')) return Icons.computer_outlined;
@@ -82,26 +84,30 @@ class _PlaybooksListScreenState extends State<PlaybooksListScreen> {
           const SizedBox(height: AirtelHeaderConstants.searchBodyTopPadding),
           Expanded(
             child: _filtered.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'No industries match your search.',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                        itemCount: _filtered.length,
-                        itemBuilder: (context, index) {
-                          final pb = _filtered[index];
-                          final icon = _iconForIndustry(pb.industryName);
-                          return _IndustryCard(
-                            playbook: pb,
-                            icon: icon,
-                            onTap: () => context.push('/airtel-iq/playbooks/${pb.id}'),
-                          );
-                        },
-                      ),
-              ),
+                ? const Center(
+                    child: Text(
+                      'No industries match your search.',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    itemCount: _filtered.length,
+                    itemBuilder: (context, index) {
+                      final pb = _filtered[index];
+                      final icon = _iconForIndustry(pb.industryName);
+                      return _IndustryCard(
+                        playbook: pb,
+                        icon: icon,
+                        onTap: () =>
+                            context.push('/airtel-iq/playbooks/${pb.id}'),
+                      );
+                    },
+                  ),
+          ),
         ],
       ),
     );
@@ -147,8 +153,8 @@ class _IndustryCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
-                      icon, 
-                      color: AppConstants.primaryColor, 
+                      icon,
+                      color: AppConstants.primaryColor,
                       size: 28,
                     ),
                   ),
@@ -160,12 +166,19 @@ class _IndustryCard extends StatelessWidget {
                       children: [
                         Text(
                           playbook.industryName,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           '${playbook.relevantSolutions.length} Solutions Available',
-                          style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
@@ -182,13 +195,17 @@ class _IndustryCard extends StatelessWidget {
                     Text(
                       'Open Playbook',
                       style: TextStyle(
-                        color: AppConstants.primaryColor, 
+                        color: AppConstants.primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Icon(Icons.arrow_forward, size: 16, color: AppConstants.primaryColor),
+                    Icon(
+                      Icons.arrow_forward,
+                      size: 16,
+                      color: AppConstants.primaryColor,
+                    ),
                   ],
                 ),
               ),

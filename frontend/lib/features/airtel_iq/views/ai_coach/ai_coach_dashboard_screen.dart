@@ -5,7 +5,6 @@ import 'package:frontend/core/theme/app_theme.dart';
 import 'package:gap/gap.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 
-
 class AiCoachDashboardScreen extends StatelessWidget {
   const AiCoachDashboardScreen({super.key});
 
@@ -20,7 +19,10 @@ class AiCoachDashboardScreen extends StatelessWidget {
         variant: HeaderVariant.large,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xl),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.xl,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -94,14 +96,16 @@ class AiCoachDashboardScreen extends StatelessWidget {
                       Text(
                         title,
                         style: AppTypography.cardTitle.copyWith(
-                          fontWeight: FontWeight.w700, 
+                          fontWeight: FontWeight.w700,
                           color: Colors.black87,
                         ),
                       ),
                       const Gap(AppSpacing.sm),
                       Text(
                         subtitle,
-                        style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+                        style: AppTypography.caption.copyWith(
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ],
                   ),

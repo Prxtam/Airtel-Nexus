@@ -20,6 +20,7 @@ class UserAdmin {
     required this.roles,
   });
 
-  factory UserAdmin.fromJson(Map<String, dynamic> json) => _$UserAdminFromJson(json);
+  factory UserAdmin.fromJson(Map<String, dynamic> json) =>
+      _$UserAdminFromJson(json);
   Map<String, dynamic> toJson() => _$UserAdminToJson(this);
 }

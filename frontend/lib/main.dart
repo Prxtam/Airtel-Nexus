@@ -9,14 +9,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize notification service
   final notificationService = MeetingNotificationService();
   await notificationService.initialize();
-  
+
   // Initialize Hive storage
   await HiveService.init();
-  
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -27,7 +27,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Request permissions on startup
     MeetingNotificationService().requestPermissions();
-    
+
     // Start observing meetings for notifications at the root level
     ref.watch(notificationSyncProvider);
 

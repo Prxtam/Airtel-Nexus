@@ -25,7 +25,10 @@ class CustomerDetailScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: AirtelHeader(
-        title: customerAsync.maybeWhen(data: (c) => c.name, orElse: () => 'Customer'),
+        title: customerAsync.maybeWhen(
+          data: (c) => c.name,
+          orElse: () => 'Customer',
+        ),
         automaticallyImplyLeading: true,
         variant: HeaderVariant.medium,
       ),
@@ -36,10 +39,8 @@ class CustomerDetailScreen extends ConsumerWidget {
           onRetry: () =>
               ref.read(customerDetailProvider(customerId).notifier).load(),
         ),
-        data: (customer) => _CustomerDetailBody(
-          customer: customer,
-          customerId: customerId,
-        ),
+        data: (customer) =>
+            _CustomerDetailBody(customer: customer, customerId: customerId),
       ),
     );
   }
@@ -49,10 +50,7 @@ class _CustomerDetailBody extends ConsumerStatefulWidget {
   final Customer customer;
   final String customerId;
 
-  const _CustomerDetailBody({
-    required this.customer,
-    required this.customerId,
-  });
+  const _CustomerDetailBody({required this.customer, required this.customerId});
 
   @override
   ConsumerState<_CustomerDetailBody> createState() =>
@@ -71,7 +69,9 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.customer.name);
-    _industryController = TextEditingController(text: widget.customer.industry ?? '');
+    _industryController = TextEditingController(
+      text: widget.customer.industry ?? '',
+    );
   }
 
   @override
@@ -107,7 +107,9 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
           .read(customerDetailProvider(widget.customerId).notifier)
           .update(
             name,
-            industry: _industryController.text.trim().isEmpty ? null : _industryController.text.trim(),
+            industry: _industryController.text.trim().isEmpty
+                ? null
+                : _industryController.text.trim(),
           );
       // Also refresh the list so it stays in sync
       ref.invalidate(customerListProvider);
@@ -176,12 +178,14 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
 
     // 2. Filter data
     final customerMeetings = meetingsAsync.maybeWhen(
-      data: (list) => list.where((m) => m.customerId == widget.customerId).toList(),
+      data: (list) =>
+          list.where((m) => m.customerId == widget.customerId).toList(),
       orElse: () => [],
     );
 
     final customerTasks = tasksAsync.maybeWhen(
-      data: (list) => list.where((t) => t.customerId == widget.customerId).toList(),
+      data: (list) =>
+          list.where((t) => t.customerId == widget.customerId).toList(),
       orElse: () => [],
     );
 
@@ -196,8 +200,9 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
             color: Colors.white,
             surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppRadius.lg),
-                side: BorderSide(color: Colors.grey.shade200)),
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              side: BorderSide(color: Colors.grey.shade200),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: Column(
@@ -210,16 +215,16 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                         children: [
                           CircleAvatar(
                             radius: 26,
-                            backgroundColor:
-                                AppConstants.primaryColor.withValues(alpha: 0.1),
+                            backgroundColor: AppConstants.primaryColor
+                                .withValues(alpha: 0.1),
                             child: Text(
                               widget.customer.name.isNotEmpty
                                   ? widget.customer.name[0].toUpperCase()
                                   : '?',
-                                style: AppTypography.pageTitle.copyWith(
-                                  color: AppConstants.primaryColor,
-                                  fontSize: 24,
-                                ),
+                              style: AppTypography.pageTitle.copyWith(
+                                color: AppConstants.primaryColor,
+                                fontSize: 24,
+                              ),
                             ),
                           ),
                           const Gap(AppSpacing.lg),
@@ -228,17 +233,25 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                             children: [
                               Text(
                                 widget.customer.name,
-                                style: AppTypography.pageTitle.copyWith(fontSize: 20),
+                                style: AppTypography.pageTitle.copyWith(
+                                  fontSize: 20,
+                                ),
                               ),
                               const Gap(4),
                               Text(
-                                widget.customer.industry?.isNotEmpty == true ? widget.customer.industry! : 'Industry not specified',
-                                style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+                                widget.customer.industry?.isNotEmpty == true
+                                    ? widget.customer.industry!
+                                    : 'Industry not specified',
+                                style: AppTypography.caption.copyWith(
+                                  color: Colors.grey.shade600,
+                                ),
                               ),
                               const Gap(2),
                               Text(
                                 'Created on ${AppDateFormatter.format(widget.customer.createdAt)}',
-                                style: AppTypography.caption.copyWith(color: Colors.grey.shade500),
+                                style: AppTypography.caption.copyWith(
+                                  color: Colors.grey.shade500,
+                                ),
                               ),
                             ],
                           ),
@@ -257,7 +270,10 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                     const Gap(AppSpacing.xl),
                     const Divider(),
                     const Gap(AppSpacing.md),
-                    Text('Edit Customer Name', style: AppTypography.sectionTitle),
+                    Text(
+                      'Edit Customer Name',
+                      style: AppTypography.sectionTitle,
+                    ),
                     const Gap(AppSpacing.md),
                     TextField(
                       controller: _nameController,
@@ -290,7 +306,8 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                               ? null
                               : () {
                                   _nameController.text = widget.customer.name;
-                                  _industryController.text = widget.customer.industry ?? '';
+                                  _industryController.text =
+                                      widget.customer.industry ?? '';
                                   setState(() {
                                     _isEditing = false;
                                     _editError = null;
@@ -313,7 +330,9 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                                   height: 18,
                                   width: 18,
                                   child: CircularProgressIndicator(
-                                      color: Colors.white, strokeWidth: 2),
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : const Text('Save'),
                         ),
@@ -343,7 +362,10 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStatColumn('Meetings', customerMeetings.length.toString()),
+                  _buildStatColumn(
+                    'Meetings',
+                    customerMeetings.length.toString(),
+                  ),
                   _buildStatColumn('Tasks', customerTasks.length.toString()),
                 ],
               ),
@@ -367,7 +389,11 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
           ),
           const Gap(AppSpacing.sm),
           if (customerMeetings.isEmpty)
-            _buildEmptyState(Icons.event_outlined, 'No meetings yet.', () => context.push('/meetings/create'))
+            _buildEmptyState(
+              Icons.event_outlined,
+              'No meetings yet.',
+              () => context.push('/meetings/create'),
+            )
           else
             Card(
               elevation: AppElevation.flat,
@@ -378,16 +404,31 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                 side: BorderSide(color: Colors.grey.shade200),
               ),
               child: Column(
-                children: customerMeetings.map((meeting) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
-                    child: const Icon(Icons.event, color: AppConstants.primaryColor, size: 20),
-                  ),
-                  title: Text(meeting.title ?? 'Meeting', style: const TextStyle(fontWeight: FontWeight.w500)),
-                  subtitle: Text(AppDateFormatter.format(meeting.meetingAt)),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push('/meetings/${meeting.id}'),
-                )).toList(),
+                children: customerMeetings
+                    .map(
+                      (meeting) => ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: AppConstants.primaryColor.withValues(
+                            alpha: 0.1,
+                          ),
+                          child: const Icon(
+                            Icons.event,
+                            color: AppConstants.primaryColor,
+                            size: 20,
+                          ),
+                        ),
+                        title: Text(
+                          meeting.title ?? 'Meeting',
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        subtitle: Text(
+                          AppDateFormatter.format(meeting.meetingAt),
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => context.push('/meetings/${meeting.id}'),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
 
@@ -408,7 +449,11 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
           ),
           const Gap(AppSpacing.sm),
           if (customerTasks.isEmpty)
-            _buildEmptyState(Icons.check_circle_outline, 'No pending tasks.', () => context.push('/tasks/create'))
+            _buildEmptyState(
+              Icons.check_circle_outline,
+              'No pending tasks.',
+              () => context.push('/tasks/create'),
+            )
           else
             Card(
               elevation: AppElevation.flat,
@@ -419,23 +464,42 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                 side: BorderSide(color: Colors.grey.shade200),
               ),
               child: Column(
-                children: customerTasks.map((task) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: task.status == TaskStatus.completed ? Colors.green.withValues(alpha: 0.1) : Colors.orange.withValues(alpha: 0.1),
-                    child: Icon(
-                      task.status == TaskStatus.completed ? Icons.check : Icons.circle_outlined,
-                      color: task.status == TaskStatus.completed ? Colors.green : Colors.orange,
-                      size: 20,
-                    ),
-                  ),
-                  title: Text(task.title, style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    decoration: task.status == TaskStatus.completed ? TextDecoration.lineThrough : null,
-                  )),
-                  subtitle: Text(task.dueAt != null ? 'Due ${AppDateFormatter.format(task.dueAt!)}' : 'No due date'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push('/tasks/${task.id}'),
-                )).toList(),
+                children: customerTasks
+                    .map(
+                      (task) => ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: task.status == TaskStatus.completed
+                              ? Colors.green.withValues(alpha: 0.1)
+                              : Colors.orange.withValues(alpha: 0.1),
+                          child: Icon(
+                            task.status == TaskStatus.completed
+                                ? Icons.check
+                                : Icons.circle_outlined,
+                            color: task.status == TaskStatus.completed
+                                ? Colors.green
+                                : Colors.orange,
+                            size: 20,
+                          ),
+                        ),
+                        title: Text(
+                          task.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            decoration: task.status == TaskStatus.completed
+                                ? TextDecoration.lineThrough
+                                : null,
+                          ),
+                        ),
+                        subtitle: Text(
+                          task.dueAt != null
+                              ? 'Due ${AppDateFormatter.format(task.dueAt!)}'
+                              : 'No due date',
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => context.push('/tasks/${task.id}'),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
 
@@ -450,16 +514,25 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
                       height: 16,
                       width: 16,
                       child: CircularProgressIndicator(
-                          color: Colors.red, strokeWidth: 2),
+                        color: Colors.red,
+                        strokeWidth: 2,
+                      ),
                     )
-                  : const Icon(Icons.delete_outline, color: Colors.red, size: 18),
+                  : const Icon(
+                      Icons.delete_outline,
+                      color: Colors.red,
+                      size: 18,
+                    ),
               label: Text(
                 _isDeleting ? 'Deleting...' : 'Delete Customer',
                 style: const TextStyle(color: Colors.red),
               ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red),
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.sm,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppRadius.md),
                 ),
@@ -472,9 +545,11 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
     );
   }
 
-
-
-  Widget _buildEmptyState(IconData icon, String message, VoidCallback? onAction) {
+  Widget _buildEmptyState(
+    IconData icon,
+    String message,
+    VoidCallback? onAction,
+  ) {
     return Card(
       elevation: AppElevation.flat,
       color: Colors.white,
@@ -485,12 +560,17 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
       ),
       child: ListTile(
         leading: Icon(icon, color: Colors.grey),
-        title: Text(message, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+        title: Text(
+          message,
+          style: const TextStyle(color: Colors.grey, fontSize: 14),
+        ),
         trailing: onAction != null
             ? TextButton(
                 onPressed: onAction,
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.sm,
+                  ),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
@@ -504,8 +584,16 @@ class _CustomerDetailBodyState extends ConsumerState<_CustomerDetailBody> {
   Widget _buildStatColumn(String label, String value) {
     return Column(
       children: [
-        Text(value, style: AppTypography.pageTitle.copyWith(color: AppConstants.primaryColor)),
-        Text(label, style: AppTypography.caption.copyWith(color: Colors.grey.shade600)),
+        Text(
+          value,
+          style: AppTypography.pageTitle.copyWith(
+            color: AppConstants.primaryColor,
+          ),
+        ),
+        Text(
+          label,
+          style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+        ),
       ],
     );
   }

@@ -12,8 +12,7 @@ class AboutAirtelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      body: SelectionArea(
-        child: CustomScrollView(
+      body: CustomScrollView(
         slivers: [
           // ── Header ────────────────────────────────────────────────────────
           const AirtelSliverHeader(
@@ -72,7 +71,6 @@ class AboutAirtelScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
       ),
     );
   }
@@ -322,7 +320,10 @@ class _EcosystemCard extends StatelessWidget {
       children: [
         _buildInfoBlock('WHAT IT IS', category.whatItIs),
         const SizedBox(height: 16),
-        _buildInfoBlock('WHY ENTERPRISES NEED IT', category.whyEnterprisesNeedIt),
+        _buildInfoBlock(
+          'WHY ENTERPRISES NEED IT',
+          category.whyEnterprisesNeedIt,
+        ),
         const SizedBox(height: 16),
         _buildInfoBlock('HOW AIRTEL SOLVES IT', category.howAirtelSolvesIt),
         const SizedBox(height: 20),
@@ -351,7 +352,10 @@ class _EcosystemCard extends StatelessWidget {
                     }
                   : null,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: isResolvable
                       ? AppConstants.primaryColor.withValues(alpha: 0.08)

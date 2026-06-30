@@ -27,7 +27,9 @@ class AirtelIqFeatureCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.lg),
         side: BorderSide(
-          color: isFeatured ? iconColor.withValues(alpha: 0.5) : Colors.grey.shade200,
+          color: isFeatured
+              ? iconColor.withValues(alpha: 0.5)
+              : Colors.grey.shade200,
           width: isFeatured ? 1.5 : 1.0,
         ),
       ),
@@ -57,7 +59,9 @@ class AirtelIqFeatureCard extends StatelessWidget {
               const SizedBox(height: AppSpacing.sm),
               Text(
                 subtitle,
-                style: AppTypography.caption.copyWith(color: Colors.grey.shade600),
+                style: AppTypography.caption.copyWith(
+                  color: Colors.grey.shade600,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

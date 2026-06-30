@@ -275,12 +275,39 @@ class _OpportunityInsightsScreenState extends State<OpportunityInsightsScreen> {
         const SizedBox(height: 20),
 
         // Pain Points (optional, max 3)
-        _buildSectionLabel(
-          'Pain Points',
-          'Select up to 3 pain points — improves recommendations',
+        Card(
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.grey.shade400),
+          ),
+          child: ExpansionTile(
+            title: const Text(
+              'Pain Points',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(
+              'Select up to 3 pain points — improves recommendations',
+              style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+            ),
+            collapsedIconColor: Colors.grey.shade600,
+            iconColor: AppConstants.primaryColor,
+            shape: const Border(),
+            childrenPadding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: 16,
+            ),
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: _buildPainPointChips(),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 8),
-        _buildPainPointChips(),
         const SizedBox(height: 20),
 
         // Extra context (collapsible)
@@ -510,47 +537,45 @@ class _OpportunityInsightsScreenState extends State<OpportunityInsightsScreen> {
   // ── Results ────────────────────────────────────────────────────────────────
 
   Widget _buildResults(OpportunityInsightsResult r) {
-    return SelectionArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // ── Growth Potential ───────────────────────────────────────────────
-          _buildGrowthPotentialCard(r.growthPotential),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // ── Growth Potential ───────────────────────────────────────────────
+        _buildGrowthPotentialCard(r.growthPotential),
+        const SizedBox(height: 12),
+
+        // ── Suggested Next Move ────────────────────────────────────────────
+        _buildNextMoveCard(r.suggestedNextMove),
+        const SizedBox(height: 12),
+
+        // ── Best Opportunities ─────────────────────────────────────────────
+        if (r.bestOpportunities.isNotEmpty) ...[
+          _buildResultSectionHeader('🎯 Best Opportunities'),
+          const SizedBox(height: 8),
+          ...r.bestOpportunities.map(_buildOpportunityCard),
           const SizedBox(height: 12),
-
-          // ── Suggested Next Move ────────────────────────────────────────────
-          _buildNextMoveCard(r.suggestedNextMove),
-          const SizedBox(height: 12),
-
-          // ── Best Opportunities ─────────────────────────────────────────────
-          if (r.bestOpportunities.isNotEmpty) ...[
-            _buildResultSectionHeader('🎯 Best Opportunities'),
-            const SizedBox(height: 8),
-            ...r.bestOpportunities.map(_buildOpportunityCard),
-            const SizedBox(height: 12),
-          ],
-
-          // ── White Space Analysis ───────────────────────────────────────────
-          _buildWhiteSpaceCard(r),
-          const SizedBox(height: 12),
-
-          // ── Strategic Risks ────────────────────────────────────────────────
-          if (r.strategicRisks.isNotEmpty) ...[
-            _buildResultSectionHeader('⚠️ Strategic Risks'),
-            const SizedBox(height: 8),
-            _buildRisksCard(r.strategicRisks),
-            const SizedBox(height: 12),
-          ],
-
-          // ── Conversation Areas ─────────────────────────────────────────────
-          if (r.conversationAreas.isNotEmpty) ...[
-            _buildResultSectionHeader('🗣️ Conversation Areas'),
-            const SizedBox(height: 8),
-            _buildConversationAreasCard(r.conversationAreas),
-            const SizedBox(height: 32),
-          ],
         ],
-      ),
+
+        // ── White Space Analysis ───────────────────────────────────────────
+        _buildWhiteSpaceCard(r),
+        const SizedBox(height: 12),
+
+        // ── Strategic Risks ────────────────────────────────────────────────
+        if (r.strategicRisks.isNotEmpty) ...[
+          _buildResultSectionHeader('⚠️ Strategic Risks'),
+          const SizedBox(height: 8),
+          _buildRisksCard(r.strategicRisks),
+          const SizedBox(height: 12),
+        ],
+
+        // ── Conversation Areas ─────────────────────────────────────────────
+        if (r.conversationAreas.isNotEmpty) ...[
+          _buildResultSectionHeader('🗣️ Conversation Areas'),
+          const SizedBox(height: 8),
+          _buildConversationAreasCard(r.conversationAreas),
+          const SizedBox(height: 32),
+        ],
+      ],
     );
   }
 

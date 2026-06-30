@@ -42,7 +42,9 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
           .read(customerListProvider.notifier)
           .createCustomer(
             _nameController.text.trim(),
-            industry: _industryController.text.trim().isEmpty ? null : _industryController.text.trim(),
+            industry: _industryController.text.trim().isEmpty
+                ? null
+                : _industryController.text.trim(),
           );
 
       if (mounted) {
@@ -75,10 +77,7 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Company Information',
-                style: AppTypography.sectionTitle,
-              ),
+              Text('Company Information', style: AppTypography.sectionTitle),
               const Gap(AppSpacing.lg),
               TextFormField(
                 controller: _nameController,
@@ -123,8 +122,11 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.error_outline,
-                          color: Colors.red, size: 20),
+                      const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 20,
+                      ),
                       const Gap(8),
                       Expanded(
                         child: Text(
@@ -144,8 +146,13 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: AppConstants.primaryColor,
-                    side: BorderSide(color: AppConstants.primaryColor.withValues(alpha: 0.5)),
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
+                    side: BorderSide(
+                      color: AppConstants.primaryColor.withValues(alpha: 0.5),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xxl,
+                      vertical: AppSpacing.md,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
@@ -155,10 +162,17 @@ class _CustomerCreateScreenState extends ConsumerState<CustomerCreateScreen> {
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                              color: AppConstants.primaryColor, strokeWidth: 2),
+                            color: AppConstants.primaryColor,
+                            strokeWidth: 2,
+                          ),
                         )
-                      : const Text('Add Customer',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      : const Text(
+                          'Add Customer',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
               ),
             ],

@@ -191,14 +191,12 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => SelectionArea(
-        child: _TerminologySheet(
-          term: t,
-          onProductTap: (name) {
-            Navigator.pop(ctx);
-            _openProductByName(ctx, name);
-          },
-        ),
+      builder: (_) => _TerminologySheet(
+        term: t,
+        onProductTap: (name) {
+          Navigator.pop(ctx);
+          _openProductByName(ctx, name);
+        },
       ),
     );
   }
@@ -210,7 +208,7 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => SelectionArea(child: _MeetingTypeSheet(meeting: m)),
+      builder: (_) => _MeetingTypeSheet(meeting: m),
     );
   }
 
@@ -221,18 +219,16 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => SelectionArea(
-        child: _IndustrySheet(
-          industry: ind,
-          onOpenPlaybook: () {
-            Navigator.pop(ctx);
-            _openIndustry(ctx, ind);
-          },
-          onProductTap: (name) {
-            Navigator.pop(ctx);
-            _openProductByName(ctx, name);
-          },
-        ),
+      builder: (_) => _IndustrySheet(
+        industry: ind,
+        onOpenPlaybook: () {
+          Navigator.pop(ctx);
+          _openIndustry(ctx, ind);
+        },
+        onProductTap: (name) {
+          Navigator.pop(ctx);
+          _openProductByName(ctx, name);
+        },
       ),
     );
   }
@@ -253,19 +249,17 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => SelectionArea(
-        child: _ProductSheet(
-          product: p,
-          relatedIndustries: relatedIndustries,
-          onOpenProduct: () {
-            Navigator.pop(ctx);
-            _openProduct(ctx, p);
-          },
-          onIndustryTap: (ind) {
-            Navigator.pop(ctx);
-            _openIndustry(ctx, ind);
-          },
-        ),
+      builder: (_) => _ProductSheet(
+        product: p,
+        relatedIndustries: relatedIndustries,
+        onOpenProduct: () {
+          Navigator.pop(ctx);
+          _openProduct(ctx, p);
+        },
+        onIndustryTap: (ind) {
+          Navigator.pop(ctx);
+          _openIndustry(ctx, ind);
+        },
       ),
     );
   }
@@ -278,7 +272,8 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
 
   IconData _iconForIndustry(String name) {
     if (name.contains('Banking')) return Icons.account_balance_outlined;
-    if (name.contains('Manufacturing')) return Icons.precision_manufacturing_outlined;
+    if (name.contains('Manufacturing'))
+      return Icons.precision_manufacturing_outlined;
     if (name.contains('Retail')) return Icons.storefront_outlined;
     if (name.contains('Healthcare')) return Icons.local_hospital_outlined;
     if (name.contains('IT')) return Icons.computer_outlined;
@@ -703,7 +698,7 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
         } else {
           content = _QuickRefSheet(refs: hubQuickRefs);
         }
-        return SelectionArea(child: content);
+        return content;
       },
     );
   }
@@ -942,9 +937,7 @@ class _IndustryGatewayCard extends StatelessWidget {
                   color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Center(
-                  child: Icon(icon, color: color, size: 24),
-                ),
+                child: Center(child: Icon(icon, color: color, size: 24)),
               ),
               const SizedBox(width: 12),
               Expanded(

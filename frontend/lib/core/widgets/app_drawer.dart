@@ -65,11 +65,12 @@ class AppDrawer extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    _formatRole(user != null && user.roles.isNotEmpty ? user.roles.first : 'No Role'),
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 13,
+                    _formatRole(
+                      user != null && user.roles.isNotEmpty
+                          ? user.roles.first
+                          : 'No Role',
                     ),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ],
               ),
@@ -176,10 +177,13 @@ class AppDrawer extends ConsumerWidget {
 
   String _formatRole(String role) {
     if (role.isEmpty || role == 'No Role') return role;
-    return role.split('_').map((word) {
-      if (word.isEmpty) return '';
-      return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
-    }).join(' ');
+    return role
+        .split('_')
+        .map((word) {
+          if (word.isEmpty) return '';
+          return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
+        })
+        .join(' ');
   }
 
   Widget _buildSectionHeader(String title) {
@@ -208,7 +212,10 @@ class AppDrawer extends ConsumerWidget {
       leading: Icon(icon, color: iconColor ?? Colors.grey.shade700, size: 24),
       title: Text(
         title,
-        style: TextStyle(color: textColor ?? Colors.grey.shade900, fontWeight: FontWeight.w500),
+        style: TextStyle(
+          color: textColor ?? Colors.grey.shade900,
+          fontWeight: FontWeight.w500,
+        ),
       ),
       dense: true,
       horizontalTitleGap: 8,

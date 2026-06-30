@@ -15,18 +15,20 @@ class AuthRepository {
     String? circle,
   }) async {
     final userBox = HiveService.userBox;
-    
+
     String internalRole = 'account_manager';
 
     final user = User(
       id: const Uuid().v4(),
-      email: employeeId ?? '${fullName.replaceAll(' ', '.').toLowerCase()}@airtel.com',
+      email:
+          employeeId ??
+          '${fullName.replaceAll(' ', '.').toLowerCase()}@airtel.com',
       fullName: fullName,
       roles: [internalRole],
       employeeId: employeeId,
       circle: circle,
     );
-    
+
     await userBox.put('current_user', user);
   }
 
