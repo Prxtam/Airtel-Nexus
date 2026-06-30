@@ -90,9 +90,11 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             const Divider(),
                             const SizedBox(height: 8),
-                            Text(
-                              faq.answer,
-                              style: TextStyle(color: Colors.grey.shade700, height: 1.4, fontSize: 15),
+                            SelectionArea(
+                              child: Text(
+                                faq.answer,
+                                style: TextStyle(color: Colors.grey.shade700, height: 1.4, fontSize: 15),
+                              ),
                             ),
                           ],
                         ),

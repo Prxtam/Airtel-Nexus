@@ -191,12 +191,14 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => _TerminologySheet(
-        term: t,
-        onProductTap: (name) {
-          Navigator.pop(ctx);
-          _openProductByName(ctx, name);
-        },
+      builder: (_) => SelectionArea(
+        child: _TerminologySheet(
+          term: t,
+          onProductTap: (name) {
+            Navigator.pop(ctx);
+            _openProductByName(ctx, name);
+          },
+        ),
       ),
     );
   }
@@ -208,7 +210,7 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => _MeetingTypeSheet(meeting: m),
+      builder: (_) => SelectionArea(child: _MeetingTypeSheet(meeting: m)),
     );
   }
 
@@ -219,16 +221,18 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => _IndustrySheet(
-        industry: ind,
-        onOpenPlaybook: () {
-          Navigator.pop(ctx);
-          _openIndustry(ctx, ind);
-        },
-        onProductTap: (name) {
-          Navigator.pop(ctx);
-          _openProductByName(ctx, name);
-        },
+      builder: (_) => SelectionArea(
+        child: _IndustrySheet(
+          industry: ind,
+          onOpenPlaybook: () {
+            Navigator.pop(ctx);
+            _openIndustry(ctx, ind);
+          },
+          onProductTap: (name) {
+            Navigator.pop(ctx);
+            _openProductByName(ctx, name);
+          },
+        ),
       ),
     );
   }
@@ -249,17 +253,19 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => _ProductSheet(
-        product: p,
-        relatedIndustries: relatedIndustries,
-        onOpenProduct: () {
-          Navigator.pop(ctx);
-          _openProduct(ctx, p);
-        },
-        onIndustryTap: (ind) {
-          Navigator.pop(ctx);
-          _openIndustry(ctx, ind);
-        },
+      builder: (_) => SelectionArea(
+        child: _ProductSheet(
+          product: p,
+          relatedIndustries: relatedIndustries,
+          onOpenProduct: () {
+            Navigator.pop(ctx);
+            _openProduct(ctx, p);
+          },
+          onIndustryTap: (ind) {
+            Navigator.pop(ctx);
+            _openIndustry(ctx, ind);
+          },
+        ),
       ),
     );
   }
@@ -683,8 +689,9 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) {
+        Widget content;
         if (type == 'terminology') {
-          return _TerminologyListSheet(
+          content = _TerminologyListSheet(
             terminologies: hubTerminologies,
             onProductTap: (name) {
               Navigator.pop(ctx);
@@ -692,10 +699,11 @@ class _KnowledgeExplorerScreenState extends State<KnowledgeExplorerScreen> {
             },
           );
         } else if (type == 'meetings') {
-          return _MeetingListSheet(meetings: hubMeetingTypes);
+          content = _MeetingListSheet(meetings: hubMeetingTypes);
         } else {
-          return _QuickRefSheet(refs: hubQuickRefs);
+          content = _QuickRefSheet(refs: hubQuickRefs);
         }
+        return SelectionArea(child: content);
       },
     );
   }

@@ -4,7 +4,6 @@ import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/airtel_iq/widgets/airtel_iq_feature_card.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
-import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
 import 'package:gap/gap.dart';
 
 class AirtelIqDashboardScreen extends StatelessWidget {
@@ -57,14 +56,7 @@ class AirtelIqDashboardScreen extends StatelessWidget {
               subtitle: 'Airtel reference encyclopedia',
               icon: Icons.hub_outlined,
               iconColor: AppConstants.primaryColor,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const KnowledgeExplorerScreen(),
-                  ),
-                );
-              },
+              onTap: () => context.push('/airtel-iq/knowledge-hub'),
             ),
             const Gap(AppSpacing.md),
             AirtelIqFeatureCard(

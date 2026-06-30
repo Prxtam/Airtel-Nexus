@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/features/auth/providers/auth_provider.dart';
-import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
-import 'package:frontend/features/airtel_iq/views/about_airtel/about_airtel_screen.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -145,12 +143,7 @@ class AppDrawer extends ConsumerWidget {
             title: 'Knowledge Hub',
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const KnowledgeExplorerScreen(),
-                ),
-              );
+              context.push('/airtel-iq/knowledge-hub');
             },
           ),
           _buildDrawerItem(
@@ -158,12 +151,7 @@ class AppDrawer extends ConsumerWidget {
             title: 'About Airtel',
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AboutAirtelScreen(),
-                ),
-              );
+              context.push('/airtel-iq/about');
             },
           ),
           const Divider(),

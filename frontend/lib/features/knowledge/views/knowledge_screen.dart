@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
-import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
-import 'package:frontend/features/airtel_iq/views/about_airtel/about_airtel_screen.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 
 class KnowledgeScreen extends StatelessWidget {
@@ -111,23 +109,9 @@ class KnowledgeScreen extends StatelessWidget {
             } else if (title == 'Sales Coach') {
               context.push('/airtel-iq/ai-coach');
             } else if (title == 'Knowledge Hub') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const KnowledgeExplorerScreen(),
-                ),
-              );
+              context.push('/airtel-iq/knowledge-hub');
             } else if (title == 'About Airtel') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AboutAirtelScreen(),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('$title coming in Phase 8B')),
-              );
+              context.push('/airtel-iq/about');
             }
           },
           child: Padding(

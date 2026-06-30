@@ -304,93 +304,56 @@ class DashboardScreen extends ConsumerWidget {
     AsyncValue<dynamic> tasksAsync,
   ) {
     final now = DateTime.now();
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: AppSpacing.md,
-      crossAxisSpacing: AppSpacing.md,
-      childAspectRatio: 1.5,
+    return Row(
       children: [
-        _buildAnalyticsCard(
-          'Customers Added',
-          customersAsync.maybeWhen(
-            data: (list) => '${list.where((c) => c.createdAt.year == now.year && c.createdAt.month == now.month).length}', 
-            orElse: () => '…'
+        Expanded(
+          child: _buildAnalyticsCard(
+            'Customers\nAdded',
+            customersAsync.maybeWhen(
+              data: (list) => '${list.where((c) => c.createdAt.year == now.year && c.createdAt.month == now.month).length}',
+              orElse: () => '…'
+            ),
+            Icons.people_outline,
+            onTap: () => context.push('/customers'),
           ),
-          Icons.people_outline,
-          onTap: () => context.push('/customers'),
         ),
-        _buildAnalyticsCard(
-          'Meetings Conducted',
-          meetingsAsync.maybeWhen(
-            data: (list) => '${list.where((m) => m.status == MeetingStatus.conducted && m.meetingAt.year == now.year && m.meetingAt.month == now.month).length}', 
-            orElse: () => '…'
+        const Gap(AppSpacing.md),
+        Expanded(
+          child: _buildAnalyticsCard(
+            'Meetings\nConducted',
+            meetingsAsync.maybeWhen(
+              data: (list) => '${list.where((m) => m.status == MeetingStatus.conducted && m.meetingAt.year == now.year && m.meetingAt.month == now.month).length}',
+              orElse: () => '…'
+            ),
+            Icons.event_note,
+            onTap: () {
+              try {
+                ref.read(meetingTimeFilterProvider.notifier).state = MeetingTimeFilter.past;
+              } catch (_) {}
+              context.push('/activities');
+            },
           ),
-          Icons.event_note,
-          onTap: () {
-            try {
-              ref.read(meetingTimeFilterProvider.notifier).state = MeetingTimeFilter.past;
-            } catch (_) {}
-            context.push('/activities');
-          },
         ),
-        _buildAnalyticsCard(
-          'Tasks Completed',
-          tasksAsync.maybeWhen(
-            data: (list) => '${list.where((t) => t.status == TaskStatus.completed && t.updatedAt.year == now.year && t.updatedAt.month == now.month).length}', 
-            orElse: () => '…'
+        const Gap(AppSpacing.md),
+        Expanded(
+          child: _buildAnalyticsCard(
+            'Tasks\nCompleted',
+            tasksAsync.maybeWhen(
+              data: (list) => '${list.where((t) => t.status == TaskStatus.completed && t.updatedAt.year == now.year && t.updatedAt.month == now.month).length}',
+              orElse: () => '…'
+            ),
+            Icons.task_alt,
+            onTap: () {
+              try {
+                ref.read(taskListProvider.notifier).setFilter(TaskStatusFilter.completed);
+              } catch (_) {}
+              context.push('/tasks');
+            },
           ),
-          Icons.task_alt,
-          onTap: () {
-            try {
-              ref.read(taskListProvider.notifier).setFilter(TaskStatusFilter.completed);
-            } catch (_) {}
-            context.push('/tasks');
-          },
         ),
       ],
     );
   }
-
-  /* Preserved for future Profile page
-  Widget _buildLifetimeAnalyticsGrid(
-    AsyncValue<List<Customer>> customersAsync,
-    AsyncValue<List<Meeting>> meetingsAsync,
-    AsyncValue<dynamic> tasksAsync,
-  ) {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 1.5,
-      children: [
-        _buildAnalyticsCard(
-          'Total Customers',
-          customersAsync.maybeWhen(data: (list) => '${list.length}', orElse: () => '…'),
-          Icons.people_outline,
-        ),
-        _buildAnalyticsCard(
-          'Total Meetings',
-          meetingsAsync.maybeWhen(data: (list) => '${list.length}', orElse: () => '…'),
-          Icons.event_note,
-        ),
-        _buildAnalyticsCard(
-          'Pending Tasks',
-          tasksAsync.maybeWhen(data: (list) => '${list.where((t) => t.status == TaskStatus.pending).length}', orElse: () => '…'),
-          Icons.pending_actions,
-        ),
-        _buildAnalyticsCard(
-          'Completed Tasks',
-          tasksAsync.maybeWhen(data: (list) => '${list.where((t) => t.status == TaskStatus.completed).length}', orElse: () => '…'),
-          Icons.task_alt,
-        ),
-      ],
-    );
-  }
-  */
 
   Widget _buildAnalyticsCard(String title, String value, IconData icon, {VoidCallback? onTap}) {
     return Card(

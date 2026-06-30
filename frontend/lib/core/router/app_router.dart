@@ -8,8 +8,6 @@ import 'package:frontend/features/auth/views/login_screen.dart';
 import 'package:frontend/features/airtel_iq/views/airtel_iq_dashboard_screen.dart';
 import 'package:frontend/features/airtel_iq/views/products/products_list_screen.dart';
 import 'package:frontend/features/airtel_iq/views/products/product_detail_screen.dart';
-import 'package:frontend/features/airtel_iq/views/knowledge/knowledge_list_screen.dart';
-import 'package:frontend/features/airtel_iq/views/knowledge/knowledge_detail_screen.dart';
 import 'package:frontend/features/airtel_iq/views/faq/faq_screen.dart';
 import 'package:frontend/features/airtel_iq/views/playbooks/playbooks_list_screen.dart';
 import 'package:frontend/features/airtel_iq/views/playbooks/playbook_detail_screen.dart';
@@ -18,6 +16,8 @@ import 'package:frontend/features/airtel_iq/views/ai_coach/ai_coach_dashboard_sc
 import 'package:frontend/features/airtel_iq/views/ai_coach/meeting_prep_screen.dart';
 import 'package:frontend/features/airtel_iq/views/ai_coach/opportunity_insights_screen.dart';
 import 'package:frontend/features/airtel_iq/views/ai_coach/ask_airtel_iq_screen.dart';
+import 'package:frontend/features/airtel_iq/views/knowledge_explorer/knowledge_explorer_screen.dart';
+import 'package:frontend/features/airtel_iq/views/about_airtel/about_airtel_screen.dart';
 
 import 'package:frontend/features/dashboard/views/dashboard_screen.dart';
 import 'package:frontend/features/customers/views/customer_list_screen.dart';
@@ -122,7 +122,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
-      // Airtel IQ Routes (Outside Shell for full-screen focus)
+      // Airtel Assist Routes (Outside Shell for full-screen focus)
       GoRoute(
         path: '/airtel-iq',
         builder: (context, state) => const AirtelIqDashboardScreen(),
@@ -140,16 +140,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
-            path: 'knowledge',
-            builder: (context, state) => const KnowledgeListScreen(),
-            routes: [
-              GoRoute(
-                path: ':id',
-                builder: (context, state) => KnowledgeDetailScreen(
-                  articleId: state.pathParameters['id']!,
-                ),
-              ),
-            ],
+            path: 'knowledge-hub',
+            builder: (context, state) => const KnowledgeExplorerScreen(),
+          ),
+          GoRoute(
+            path: 'about',
+            builder: (context, state) => const AboutAirtelScreen(),
           ),
           GoRoute(
             path: 'faq',

@@ -34,7 +34,7 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
       appBar: const AirtelHeader(
-        title: 'Ask Airtel IQ',
+        title: 'Ask Airtel Assist',
         automaticallyImplyLeading: true,
       ),
       body: Column(
@@ -88,7 +88,7 @@ class _AskAirtelIqScreenState extends State<AskAirtelIqScreen> {
           children: [
             Icon(Icons.search_off, size: 64, color: Colors.grey.shade400),
             const SizedBox(height: 16),
-            const Text('No relevant Airtel IQ knowledge found.', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text('No relevant Airtel Assist knowledge found.', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ],
         ),
       );

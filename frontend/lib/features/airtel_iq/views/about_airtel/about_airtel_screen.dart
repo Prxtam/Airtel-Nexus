@@ -12,7 +12,8 @@ class AboutAirtelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      body: CustomScrollView(
+      body: SelectionArea(
+        child: CustomScrollView(
         slivers: [
           // ── Header ────────────────────────────────────────────────────────
           const AirtelSliverHeader(
@@ -71,6 +72,7 @@ class AboutAirtelScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -251,18 +253,16 @@ class _PremiumExpandableChapter extends StatelessWidget {
   }
 }
 
-// ─── Ecosystem Custom Card ───────────────────────────────────────────────────
+class _PremiumExpansionTile extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+  final List<Widget> children;
 
-class _EcosystemCard extends StatefulWidget {
-  final EcosystemCategory category;
-  const _EcosystemCard({required this.category});
-
-  @override
-  State<_EcosystemCard> createState() => _EcosystemCardState();
-}
-
-class _EcosystemCardState extends State<_EcosystemCard> {
-  bool _expanded = false;
+  const _PremiumExpansionTile({
+    required this.title,
+    this.subtitle,
+    required this.children,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -270,145 +270,127 @@ class _EcosystemCardState extends State<_EcosystemCard> {
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => setState(() => _expanded = !_expanded),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.category.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.category.summary,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    _expanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: Colors.grey.shade400,
-                  ),
-                ],
-              ),
-              if (_expanded) ...[
-                const SizedBox(height: 20),
-                _buildInfoBlock('WHAT IT IS', widget.category.whatItIs),
-                const SizedBox(height: 16),
-                _buildInfoBlock(
-                  'WHY ENTERPRISES NEED IT',
-                  widget.category.whyEnterprisesNeedIt,
-                ),
-                const SizedBox(height: 16),
-                _buildInfoBlock(
-                  'HOW AIRTEL SOLVES IT',
-                  widget.category.howAirtelSolvesIt,
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'ASSOCIATED PRODUCTS',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.grey,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: widget.category.products.map((productName) {
-                    final isResolvable = ProductAliasResolver.isResolvable(
-                      productName,
-                    );
-                    return GestureDetector(
-                      onTap: isResolvable
-                          ? () {
-                              final id = ProductAliasResolver.resolveToId(
-                                productName,
-                              );
-                              if (id != null) {
-                                context.push('/airtel-iq/products/$id');
-                              }
-                            }
-                          : null,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isResolvable
-                              ? AppConstants.primaryColor.withValues(
-                                  alpha: 0.08,
-                                )
-                              : Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: isResolvable
-                                ? AppConstants.primaryColor.withValues(
-                                    alpha: 0.2,
-                                  )
-                                : Colors.grey.shade300,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              productName,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: isResolvable
-                                    ? AppConstants.primaryColor
-                                    : Colors.grey.shade700,
-                              ),
-                            ),
-                            if (isResolvable) ...[
-                              const SizedBox(width: 4),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 9,
-                                color: AppConstants.primaryColor,
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ],
+      child: ExpansionTile(
+        tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        childrenPadding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+        shape: const RoundedRectangleBorder(side: BorderSide.none),
+        collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
           ),
         ),
+        subtitle: subtitle != null
+            ? Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  subtitle!,
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                ),
+              )
+            : null,
+        children: children,
       ),
+    );
+  }
+}
+
+// ─── Ecosystem Custom Card ───────────────────────────────────────────────────
+
+class _EcosystemCard extends StatelessWidget {
+  final EcosystemCategory category;
+  const _EcosystemCard({required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    return _PremiumExpansionTile(
+      title: category.name,
+      subtitle: category.summary,
+      children: [
+        _buildInfoBlock('WHAT IT IS', category.whatItIs),
+        const SizedBox(height: 16),
+        _buildInfoBlock('WHY ENTERPRISES NEED IT', category.whyEnterprisesNeedIt),
+        const SizedBox(height: 16),
+        _buildInfoBlock('HOW AIRTEL SOLVES IT', category.howAirtelSolvesIt),
+        const SizedBox(height: 20),
+        const Text(
+          'ASSOCIATED PRODUCTS',
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w800,
+            color: Colors.grey,
+            letterSpacing: 1.0,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: category.products.map((productName) {
+            final isResolvable = ProductAliasResolver.isResolvable(productName);
+            return GestureDetector(
+              onTap: isResolvable
+                  ? () {
+                      final id = ProductAliasResolver.resolveToId(productName);
+                      if (id != null) {
+                        context.push('/airtel-iq/products/$id');
+                      }
+                    }
+                  : null,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: isResolvable
+                      ? AppConstants.primaryColor.withValues(alpha: 0.08)
+                      : Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: isResolvable
+                        ? AppConstants.primaryColor.withValues(alpha: 0.2)
+                        : Colors.grey.shade300,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      productName,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: isResolvable
+                            ? AppConstants.primaryColor
+                            : Colors.grey.shade700,
+                      ),
+                    ),
+                    if (isResolvable) ...[
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 9,
+                        color: AppConstants.primaryColor,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 
@@ -441,107 +423,26 @@ class _EcosystemCardState extends State<_EcosystemCard> {
 
 // ─── Partnership Custom Card ────────────────────────────────────────────────
 
-class _PartnershipCard extends StatefulWidget {
+class _PartnershipCard extends StatelessWidget {
   final AirtelPartnership partnership;
   const _PartnershipCard({required this.partnership});
 
   @override
-  State<_PartnershipCard> createState() => _PartnershipCardState();
-}
-
-class _PartnershipCardState extends State<_PartnershipCard> {
-  bool _expanded = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => setState(() => _expanded = !_expanded),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.blue.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.handshake_outlined,
-                      color: Colors.blue,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.partnership.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          widget.partnership.summary,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    _expanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: Colors.grey.shade400,
-                  ),
-                ],
-              ),
-              if (_expanded) ...[
-                const SizedBox(height: 20),
-                const Divider(height: 1),
-                const SizedBox(height: 16),
-                _buildField(
-                  'WHY WE PARTNERED',
-                  widget.partnership.whyPartnered,
-                ),
-                const SizedBox(height: 12),
-                _buildField('WHAT IT SOLVES', widget.partnership.whatItSolves),
-                const SizedBox(height: 12),
-                _buildField(
-                  'WHAT AIRTEL GAINED',
-                  widget.partnership.whatAirtelGained,
-                ),
-                const SizedBox(height: 12),
-                _buildField(
-                  'WHAT CUSTOMERS GAINED',
-                  widget.partnership.whatCustomersGained,
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
+    return _PremiumExpansionTile(
+      title: partnership.name,
+      subtitle: partnership.summary,
+      children: [
+        const Divider(height: 1),
+        const SizedBox(height: 16),
+        _buildField('WHY WE PARTNERED', partnership.whyPartnered),
+        const SizedBox(height: 12),
+        _buildField('WHAT IT SOLVES', partnership.whatItSolves),
+        const SizedBox(height: 12),
+        _buildField('WHAT AIRTEL GAINED', partnership.whatAirtelGained),
+        const SizedBox(height: 12),
+        _buildField('WHAT CUSTOMERS GAINED', partnership.whatCustomersGained),
+      ],
     );
   }
 
@@ -574,104 +475,24 @@ class _PartnershipCardState extends State<_PartnershipCard> {
 
 // ─── Milestone Custom Card ──────────────────────────────────────────────────
 
-class _MilestoneCard extends StatefulWidget {
+class _MilestoneCard extends StatelessWidget {
   final AirtelMilestone milestone;
   const _MilestoneCard({required this.milestone});
 
   @override
-  State<_MilestoneCard> createState() => _MilestoneCardState();
-}
-
-class _MilestoneCardState extends State<_MilestoneCard> {
-  bool _expanded = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => setState(() => _expanded = !_expanded),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppConstants.primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      widget.milestone.year,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
-                        color: AppConstants.primaryColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.milestone.title,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.milestone.summary,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    _expanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: Colors.grey.shade400,
-                  ),
-                ],
-              ),
-              if (_expanded) ...[
-                const SizedBox(height: 20),
-                const Divider(height: 1),
-                const SizedBox(height: 16),
-                _buildField('WHAT HAPPENED', widget.milestone.whatHappened),
-                const SizedBox(height: 12),
-                _buildField(
-                  'WHY IT WAS IMPORTANT',
-                  widget.milestone.whyImportant,
-                ),
-                const SizedBox(height: 12),
-                _buildField('THE IMPACT', widget.milestone.impact),
-              ],
-            ],
-          ),
-        ),
-      ),
+    return _PremiumExpansionTile(
+      title: '${milestone.year}: ${milestone.title}',
+      subtitle: milestone.summary,
+      children: [
+        const Divider(height: 1),
+        const SizedBox(height: 16),
+        _buildField('WHAT HAPPENED', milestone.whatHappened),
+        const SizedBox(height: 12),
+        _buildField('WHY IT WAS IMPORTANT', milestone.whyImportant),
+        const SizedBox(height: 12),
+        _buildField('THE IMPACT', milestone.impact),
+      ],
     );
   }
 
@@ -704,75 +525,26 @@ class _MilestoneCardState extends State<_MilestoneCard> {
 
 // ─── Did You Know Card ──────────────────────────────────────────────────────
 
-class _DidYouKnowCard extends StatefulWidget {
+class _DidYouKnowCard extends StatelessWidget {
   final DidYouKnowFact fact;
   const _DidYouKnowCard({required this.fact});
 
   @override
-  State<_DidYouKnowCard> createState() => _DidYouKnowCardState();
-}
-
-class _DidYouKnowCardState extends State<_DidYouKnowCard> {
-  bool _expanded = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.purple.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.purple.withValues(alpha: 0.1)),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => setState(() => _expanded = !_expanded),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(Icons.lightbulb, color: Colors.purple, size: 20),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      widget.fact.fact,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    _expanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: Colors.grey.shade400,
-                  ),
-                ],
-              ),
-              if (_expanded) ...[
-                const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.only(left: 32),
-                  child: Text(
-                    widget.fact.detail,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey.shade700,
-                      height: 1.4,
-                    ),
-                  ),
-                ),
-              ],
-            ],
+    return _PremiumExpansionTile(
+      title: fact.fact,
+      children: [
+        const Divider(height: 1),
+        const SizedBox(height: 16),
+        Text(
+          fact.detail,
+          style: TextStyle(
+            fontSize: 13,
+            color: Colors.grey.shade700,
+            height: 1.4,
           ),
         ),
-      ),
+      ],
     );
   }
 }

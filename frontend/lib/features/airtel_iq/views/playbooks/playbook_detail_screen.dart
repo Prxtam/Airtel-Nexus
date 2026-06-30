@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
@@ -37,16 +36,6 @@ class PlaybookDetailScreen extends StatelessWidget {
     return AppConstants.primaryColor;
   }
 
-  void _copyToClipboard(BuildContext context, String text) {
-    Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Copied to clipboard'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final industry = industryIntelligenceRepo.firstWhere(
@@ -58,7 +47,8 @@ class PlaybookDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppConstants.scaffoldBackgroundColor,
-      body: CustomScrollView(
+      body: SelectionArea(
+        child: CustomScrollView(
         slivers: [
           // Header
           AirtelSliverHeader(
@@ -87,10 +77,6 @@ class PlaybookDetailScreen extends StatelessWidget {
                   emoji: '⚠️',
                   title: 'Common Concerns',
                   accentColor: const Color(0xFFEF4444),
-                  onCopy: () => _copyToClipboard(
-                    context,
-                    playbook.commonConcerns.map((c) => '• $c').join('\n'),
-                  ),
                   child: _BulletList(
                     items: playbook.commonConcerns,
                     color: const Color(0xFFEF4444),
@@ -104,10 +90,6 @@ class PlaybookDetailScreen extends StatelessWidget {
                   emoji: '❓',
                   title: 'Discovery Questions',
                   accentColor: const Color(0xFF3B82F6),
-                  onCopy: () => _copyToClipboard(
-                    context,
-                    playbook.discoveryQuestions.map((q) => '• $q').join('\n'),
-                  ),
                   child: _QuestionList(questions: playbook.discoveryQuestions),
                 ),
                 const SizedBox(height: 12),
@@ -162,6 +144,7 @@ class PlaybookDetailScreen extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
   }
 }
@@ -173,14 +156,12 @@ class _PlaybookSection extends StatelessWidget {
   final String title;
   final Color accentColor;
   final Widget child;
-  final VoidCallback? onCopy;
 
   const _PlaybookSection({
     required this.emoji,
     required this.title,
     required this.accentColor,
     required this.child,
-    this.onCopy,
   });
 
   @override
@@ -225,46 +206,9 @@ class _PlaybookSection extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (onCopy != null)
-                          InkWell(
-                            onTap: onCopy,
-                            borderRadius: BorderRadius.circular(6),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: accentColor.withValues(alpha: 0.08),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: accentColor.withValues(alpha: 0.2),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.copy_outlined,
-                                    size: 11,
-                                    color: accentColor,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    'Copy',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: accentColor,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                     child,
                   ],
                 ),

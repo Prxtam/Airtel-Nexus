@@ -169,8 +169,10 @@ class _NoteDetailBodyState extends ConsumerState<_NoteDetailBody> {
                   ),
                   const Gap(12),
                   if (!_isEditing)
-                    Text(widget.note.noteText,
-                        style: const TextStyle(height: 1.6))
+                    SelectionArea(
+                      child: Text(widget.note.noteText,
+                          style: const TextStyle(height: 1.6)),
+                    )
                   else ...[
                     TextField(
                       controller: _noteController,

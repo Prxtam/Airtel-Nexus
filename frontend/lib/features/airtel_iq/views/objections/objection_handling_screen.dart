@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:frontend/core/constants/app_constants.dart';
 import 'package:frontend/core/widgets/airtel_header.dart';
 import 'package:frontend/features/airtel_iq/knowledge/product_enrichment_repository.dart';
@@ -87,16 +86,13 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
     });
   }
 
-  void _copySection(String content) {
-    Clipboard.setData(ClipboardData(text: content.trimRight()));
-    _showSnack('Copied to clipboard');
-  }
-
   void _showSnack(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),
     );
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +105,8 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
         title: 'Objection Coach',
         automaticallyImplyLeading: true,
       ),
-      body: SingleChildScrollView(
+      body: SelectionArea(
+        child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -293,6 +290,7 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
           ],
         ),
       ),
+      ),
     );
   }
 
@@ -429,7 +427,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
           emoji: '🎯',
           title: 'Core Concern',
           accentColor: const Color(0xFF6B7280),
-          onCopy: () => _copySection(r.coreConcern),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
@@ -454,7 +451,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
           emoji: '💬',
           title: 'Recommended Response',
           accentColor: const Color(0xFF10B981),
-          onCopy: () => _copySection(r.recommendedResponse),
           child: Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -480,8 +476,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
           emoji: '❓',
           title: 'Questions To Ask',
           accentColor: const Color(0xFF3B82F6),
-          onCopy: () =>
-              _copySection(r.questionsToAsk.map((q) => '• $q').join('\n')),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: r.questionsToAsk.map((q) {
@@ -523,8 +517,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
           emoji: '💡',
           title: 'How To Position Airtel',
           accentColor: const Color(0xFFF59E0B),
-          onCopy: () =>
-              _copySection(r.positionAirtel.map((b) => '• $b').join('\n')),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: r.positionAirtel.map((b) {
@@ -565,7 +557,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
           emoji: '🔄',
           title: 'Reframe The Conversation',
           accentColor: const Color(0xFF8B5CF6),
-          onCopy: () => _copySection(r.reframe),
           child: Text(
             r.reframe,
             style: TextStyle(
@@ -583,8 +574,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
           emoji: '🚫',
           title: 'Avoid Saying This',
           accentColor: const Color(0xFFEF4444),
-          onCopy: () =>
-              _copySection(r.avoidSaying.map((b) => '• $b').join('\n')),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: r.avoidSaying.map((b) {
@@ -626,7 +615,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
     required String emoji,
     required String title,
     required Color accentColor,
-    required VoidCallback onCopy,
     required Widget child,
   }) {
     return Container(
@@ -666,42 +654,6 @@ class _ObjectionHandlingScreenState extends State<ObjectionHandlingScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: onCopy,
-                          borderRadius: BorderRadius.circular(6),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: accentColor.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(
-                                color: accentColor.withValues(alpha: 0.2),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.copy_outlined,
-                                  size: 12,
-                                  color: accentColor,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Copy',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: accentColor,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
                             ),
                           ),
                         ),

@@ -102,6 +102,11 @@ class AppTheme {
         bodyMedium: AppTypography.bodyText,
         labelSmall: AppTypography.caption,
       ),
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: AppColors.primary,
+        selectionColor: AppColors.primaryLight,
+        selectionHandleColor: AppColors.primary,
+      ),
       // 5. Buttons
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
