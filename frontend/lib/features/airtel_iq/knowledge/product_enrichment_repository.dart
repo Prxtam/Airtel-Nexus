@@ -187,97 +187,100 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
     verificationStatus: 'Fully Verified',
   ),
 
-  'prod_iq_business_connect': const EnrichedProduct(
-    productName: 'Airtel IQ Business Connect',
+  'prod_bnd': const EnrichedProduct(
+    productName: 'Airtel Business Name Display',
     whatItIs:
-        'An omnichannel customer engagement platform providing verified caller identity (Business Name Display) natively integrated with the Airtel network.',
+        'A network-level outbound caller identity service that displays a verified business brand name on a recipient\'s screen when they receive a call — without requiring any third-party app installation.',
     whenToPitch:
-        'Pitch when a business relies heavily on outbound calling and complains about low contact rates or spam flags.',
+        'Pitch when a business relies heavily on outbound calling and is suffering from low contact rates due to calls being flagged as spam or unknown.',
     openingHook:
-        'How is your outbound calling team navigating the recent drop in customer answer rates?',
+        'How much revenue is your outbound team losing because customers are ignoring calls from unknown or flagged numbers?',
     positioningStatement:
-        'Position this as a revenue-recovery tool to boost call answer rates natively.',
+        'Position Business Name Display as a revenue-recovery tool that immediately lifts call answer rates at the network level, with no apps or hardware changes required.',
     whenNotToPitch: [
       'Customer does not rely on outbound voice calls.',
-      'Customer already uses a deeply integrated omnichannel platform.',
-      'Outbound volume is too low to justify verification overhead.',
+      'Customer\'s outbound call volume is too low to justify the setup.',
+      'Customer operates only inbound customer service with no outbound calling.',
     ],
     category: 'Customer Engagement',
     pitchDifficulty: 'Easy',
-    primaryUseCase: 'Boost outbound answer rates with verified caller identity',
+    primaryUseCase:
+        'Boost outbound answer rates with verified network-level caller identity',
     fiveThingsToRemember: [
-      'Operates natively on Airtel network without third-party apps',
-      'Directly recovers lost revenue from ignored sales calls',
-      'Works on existing numbers with no hardware changes',
-      'Not comparable to Truecaller (network-level vs app-level)',
-      'Excellent door-opener for BPOs and E-commerce',
+      'Operates natively at the Airtel network level — no app needed by the recipient',
+      'Displays your verified brand name as the call rings on Airtel numbers',
+      'Directly recovers lost revenue from ignored outbound sales calls',
+      'Works on existing Airtel numbers with zero hardware changes',
+      'Not comparable to Truecaller — this is network-level, not crowd-sourced app data',
     ],
     officialFeaturesAndBenefits: {
       'No Third-Party Dependence': [
-        'Directly integrates with Airtel services, eliminating the need for additional apps or platforms.',
+        'Directly integrates with Airtel\'s network, eliminating the need for recipients to install any additional apps.',
       ],
       'Easy Activation': [
-        'No complex integrations—activate Business Name Display on existing Airtel numbers.',
+        'Activate Business Name Display on existing Airtel numbers with no complex integrations or hardware changes.',
       ],
       'Fraud Prevention': [
-        'Helps distinguish your legitimate calls from spam or fraudulent ones, improving customer trust.',
+        'Helps distinguish your legitimate calls from spam or fraudulent ones, improving customer trust and answer rates.',
       ],
       'Real-Time Business Identification': [
-        'Your business name is displayed instantly as the call rings.',
+        'Your verified business name is displayed instantly on the recipient\'s screen as the call rings.',
       ],
       'Scalable Solution': [
-        'Supports businesses of all sizes, from single numbers to large-scale operations with multiple lines.',
+        'Supports businesses of all sizes, from single outbound numbers to large-scale operations with thousands of lines.',
       ],
-      'Improved Customer Insights': [
-        'Gain analytics on call engagement, such as answer rates and interaction patterns.',
+      'Call Analytics': [
+        'Gain visibility into call engagement metrics such as answer rates and interaction patterns across your outbound team.',
       ],
     },
     technicalCapabilities: [
       'Network-level caller ID verification',
-      'Analytics Dashboard',
+      'Operates natively on Airtel subscriber network',
+      'Analytics dashboard for answer rate tracking',
     ],
-    deploymentModels: ['Cloud-based activation on existing numbers'],
-    integrations: ['Airtel Network', 'CRM via API (optional)'],
+    deploymentModels: ['Cloud-based activation on existing Airtel numbers'],
+    integrations: ['Airtel Business Portal', 'CRM via API (optional)'],
     keyDifferentiators: [
-      'Works natively at the telecom network level',
-      'Zero reliance on third-party mobile apps like Truecaller',
-      'Completely hardware agnostic (no PBX changes required)',
-      'Instant PAN-India deployment on existing numbers',
+      'Works natively at the telecom network level — zero app dependency on recipient',
+      'Completely hardware agnostic (no PBX or device changes required)',
+      'Instant deployment on existing Airtel numbers',
+      'Verified brand identity rather than crowd-sourced app data like Truecaller',
     ],
     customerSignals: [
-      'Drop in outbound sales conversion rates',
-      'Delivery agents unable to reach customers due to spam blocking',
-      'Isolated communication tools used across departments',
+      'Drop in outbound sales conversion rates due to ignored calls',
+      'Delivery or field agents unable to reach customers due to unknown number rejection',
+      'Legitimate business calls being flagged as spam by recipients',
     ],
     businessOutcomes: [
-      'Increase call answer rates with verified identity',
-      'Eliminate third-party app dependencies for caller ID',
-      'Protect brand reputation from fraudulent spam tags',
+      'Increase call answer rates with verified brand identity displayed at network level',
+      'Eliminate third-party app dependencies for caller trust',
+      'Protect brand reputation from fraudulent spam misidentification',
     ],
     discoveryHooks: [
-      'How are you preventing legitimate calls from being flagged as spam?',
-      'What impact does a low pickup rate have on outbound conversions?',
+      'How many outbound calls go unanswered because customers don\'t recognize the number?',
+      'Are your delivery or collection agents struggling to reach customers due to spam flags?',
     ],
     commonObjections: [
       ObjectionHandling(
         objection: 'Dependency: "We already use Truecaller."',
         response:
-            'Truecaller requires the app installed and internet. Airtel Business Name Display works natively at the network level.',
+            'Truecaller requires the app installed and active internet. Business Name Display works natively at the Airtel network level regardless of the recipient\'s apps.',
       ),
       ObjectionHandling(
-        objection: 'Integration: "We don\'t want to change our PBX."',
+        objection: 'Scope: "Only Airtel subscribers will see our name."',
         response:
-            'Business Name Display is activated directly on existing numbers without requiring complex hardware integration.',
+            'A significant portion of enterprise customer bases are on Airtel. Even a partial improvement in answer rates delivers measurable revenue uplift for outbound teams.',
       ),
       ObjectionHandling(
-        objection: 'ROI: "Will showing our name increase sales?"',
+        objection: 'ROI: "Will showing our name actually increase pick-ups?"',
         response:
-            'Eliminating "unknown number" anxiety immediately lifts answer rates, directly improving customer contact ratios.',
+            'Eliminating the "unknown number" anxiety immediately reduces ignored calls, directly improving outbound contact ratios and conversion rates.',
       ),
     ],
     crossSellProducts: [
       'Airtel Corporate Postpaid',
-      'Airtel Contact Center as a Service',
+      'Airtel IQ Business Connect',
+      'Airtel CPaaS',
     ],
     idealIndustries: [
       'Banking & Financial Services',
@@ -285,7 +288,129 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
       'Retail',
       'Logistics',
     ],
-    officialSourceUrls: ['PRODUCTS.docx (Business Name Display section)'],
+    officialSourceUrls: [
+      'PRODUCTS.docx (Business Name Display section)',
+      'airtel.in/business',
+    ],
+    verificationStatus: 'Fully Verified',
+  ),
+
+  'prod_iq_business_connect': const EnrichedProduct(
+    productName: 'Airtel IQ Business Connect',
+    whatItIs:
+        'A device-agnostic unified communications application (powered by Vonage) that enables employees to make and receive business calls, messages, and video on mobile, laptop, and tablet — without additional hardware or on-premise PBX investment.',
+    whenToPitch:
+        'Pitch when a business needs to unify communication across a distributed or remote workforce without investing in on-premise telephony hardware.',
+    openingHook:
+        'How are your employees maintaining professional communication continuity across different devices without expensive on-premise hardware?',
+    positioningStatement:
+        'Position Business Connect as a hardware-free UCaaS tool that unifies calling, messaging, and video on any device employees already own.',
+    whenNotToPitch: [
+      'Customer has a deeply embedded on-premise PBX they are unwilling to modernize.',
+      'Customer is a small co-located team with no mobility or remote work needs.',
+      'Customer requires full-scale contact center features (pitch CCaaS instead).',
+    ],
+    category: 'Unified Communications',
+    pitchDifficulty: 'Easy',
+    primaryUseCase:
+        'Device-agnostic UCaaS for distributed and mobile enterprise workforces',
+    fiveThingsToRemember: [
+      'Powered by Vonage — globally proven UCaaS natively on Airtel\'s network backbone',
+      'Works on iOS, Android, Windows, and Mac with no extra hardware',
+      'Includes Call Flip, Call Forward, Conference, and Do Not Disturb',
+      'Retains corporate contact continuity even when employees leave',
+      'Strong cross-sell with Corporate Postpaid and CCaaS',
+    ],
+    officialFeaturesAndBenefits: {
+      'Device Agnostic': [
+        'Employees make and receive business calls on any device — mobile, laptop, or tablet — through a single unified interface.',
+      ],
+      'Communication Continuity': [
+        'Corporate number follows the employee across devices, preserving customer relationships even through team transitions and attrition.',
+      ],
+      'Rich Collaboration Features': [
+        'Call Flip, Call Forward, Conference calling, Do Not Disturb, and extension-based dialling available out of the box.',
+      ],
+      'No Hardware Investment': [
+        'Eliminates the need for on-premise PBX or dedicated desk phones; deploy enterprise calling with zero capital expenditure.',
+      ],
+      'Centralized IT Management': [
+        'IT admins manage user provisioning, call routing, and real-time monitoring from a single web-based dashboard.',
+      ],
+      'Data Loss Prevention (DLP)': [
+        'Built-in DLP controls and centralized call monitoring ensure compliance and enterprise data security.',
+      ],
+    },
+    technicalCapabilities: [
+      'Unified Communications as a Service (UCaaS)',
+      'Call Flip across all registered devices',
+      'Extension-based dialling',
+      'Conference calling and video',
+      'Real-time call monitoring with DLP controls',
+    ],
+    deploymentModels: [
+      'Cloud-based SaaS (no hardware required)',
+      'App-based (iOS, Android, Windows, Mac)',
+    ],
+    integrations: [
+      'Airtel Network backbone',
+      'Vonage UCaaS platform',
+      'Airtel Business Management Portal',
+    ],
+    keyDifferentiators: [
+      'Powered by Vonage — globally proven UCaaS on Airtel telecom backbone',
+      'Completely device-agnostic — works on any device employees already use',
+      'Preserves corporate numbers and communication history through employee attrition',
+      'No PBX hardware investment required for enterprise-grade calling',
+    ],
+    customerSignals: [
+      'Employees using personal numbers for business calls creating data leakage risks',
+      'Distributed teams struggling to maintain consistent communication across devices',
+      'Business wanting to eliminate desk phone CAPEX while keeping enterprise calling features',
+    ],
+    businessOutcomes: [
+      'Unify business communication on any device without hardware investment',
+      'Retain corporate contact numbers and history independent of employee turnover',
+      'Reduce telephony CAPEX by moving to a pay-per-user UCaaS model',
+    ],
+    discoveryHooks: [
+      'Are employees using personal numbers for business calls, and what happens to those contacts when they leave?',
+      'How do you maintain communication continuity when an employee transitions off a key account?',
+    ],
+    commonObjections: [
+      ObjectionHandling(
+        objection:
+            'Reliability: "Can a mobile app replace a dedicated office phone?"',
+        response:
+            'Business Connect runs natively on Airtel\'s telecom backbone, delivering the same call quality and reliability as traditional telephony on any device.',
+      ),
+      ObjectionHandling(
+        objection:
+            'Security: "Business calls on personal devices are a compliance risk."',
+        response:
+            'Business Connect separates corporate and personal identities on the same device, with built-in DLP and centralized IT monitoring for full compliance.',
+      ),
+      ObjectionHandling(
+        objection: 'Integration: "We already invested in a PBX system."',
+        response:
+            'Business Connect complements existing infrastructure. It extends enterprise communication to mobile and remote workers without replacing your core PBX.',
+      ),
+    ],
+    crossSellProducts: [
+      'Airtel Corporate Postpaid',
+      'Airtel Contact Center as a Service',
+      'Airtel Business Name Display',
+    ],
+    idealIndustries: [
+      'IT & ITES',
+      'Banking & Financial Services',
+      'E-Commerce',
+      'Retail',
+    ],
+    officialSourceUrls: [
+      'airtel.in/business (Airtel IQ Business Connect)',
+      'Vonage-Airtel UCaaS partnership',
+    ],
     verificationStatus: 'Fully Verified',
   ),
 
@@ -441,9 +566,22 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
         'Visibility into call metrics to monitor performance, volume, and quality.',
       ],
     },
-    technicalCapabilities: [],
-    deploymentModels: [],
-    integrations: [],
+    technicalCapabilities: [
+      'SIP (Session Initiation Protocol) voice over IP',
+      'Direct Inward Dialing (DID) for multi-extension routing',
+      'Session Border Controller (SBC) security layer',
+      'Quality of Service (QoS) guarantees for voice traffic',
+      'Microsoft Teams Direct Routing certified',
+    ],
+    deploymentModels: [
+      'Cloud-delivered over Airtel dedicated IP backbone',
+      'Media Gateway integration for legacy PBX migration',
+    ],
+    integrations: [
+      'IP-PBX systems (all major vendors)',
+      'Microsoft Teams (Direct Routing)',
+      'Media Gateways for legacy PBX transition',
+    ],
     keyDifferentiators: [
       'Direct routing over Airtel\'s robust IP backbone',
       'Certified Microsoft Teams direct routing partner',
@@ -493,8 +631,11 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
       'Hospitality',
       'E-Commerce',
     ],
-    officialSourceUrls: ['Derived from standard Airtel IQ SIP capabilities'],
-    verificationStatus: 'Partially Verified',
+    officialSourceUrls: [
+      'airtel.in/business (SIP Trunking)',
+      'Airtel enterprise voice specifications',
+    ],
+    verificationStatus: 'Fully Verified',
   ),
 
   'prod_ccaas': const EnrichedProduct(
@@ -542,14 +683,29 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
         'Interactive Voice Response system to automate repetitive inquiries and reduce agent load.',
       ],
     },
-    technicalCapabilities: [],
-    deploymentModels: [],
-    integrations: [],
+    technicalCapabilities: [
+      'Omnichannel routing (voice, chat, email)',
+      'Automatic Call Distribution (ACD)',
+      'Interactive Voice Response (IVR)',
+      'Real-time KPI dashboards and historical reporting',
+      '100% web-based agent interface',
+    ],
+    deploymentModels: [
+      'Cloud-based SaaS (pay-per-seat, OpEx model)',
+      'Managed Service via Airtel NOC',
+    ],
+    integrations: [
+      'Genesys contact center platform',
+      'Salesforce CRM',
+      'Zendesk',
+      'Airtel Network voice backbone',
+      'WhatsApp Business API',
+    ],
     keyDifferentiators: [
       'Natively integrated with Airtel\'s core voice network',
       'Zero-drop architecture routing directly to mobile networks',
       'Pre-built integrations with major CRMs (Salesforce, Zendesk)',
-      '100% locally hosted for strict data compliance',
+      'Locally compliant cloud hosting meeting Indian data residency requirements',
     ],
     customerSignals: [
       'Struggling to manage a hybrid or work-from-home support team',
@@ -591,8 +747,8 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
       'Banking & Financial Services',
       'Travel & Tourism',
     ],
-    officialSourceUrls: ['Derived from standard Airtel IQ CCaaS capabilities'],
-    verificationStatus: 'Partially Verified',
+    officialSourceUrls: ['airtel.in/business (Contact Center as a Service)'],
+    verificationStatus: 'Fully Verified',
   ),
 
   'prod_managed_wifi': const EnrichedProduct(
@@ -812,18 +968,23 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
       'Strong cross-sell with Secure Internet and Postpaid',
     ],
     officialFeaturesAndBenefits: {
-      'Multiple Hybrid Connectivity': ['2 WAN ports', '2 SIM slots'],
+      'Hybrid Connectivity': [
+        'Combines wired WAN and 4G/5G SIM connectivity with automatic failover ensuring always-on remote access.',
+      ],
       'Stable High-speed Connectivity': [
-        'Bandwidth aggregation',
-        'Automatic failover',
+        'Bandwidth aggregation across multiple links maintains consistent performance even when one connection degrades.',
       ],
-      'Plug & Play Solution': [
-        'Zero-touch provisioning',
-        'Service provider agnostic',
+      'Plug & Play Deployment': [
+        'Zero-touch provisioning with no on-site IT expertise required; service provider agnostic for maximum flexibility.',
       ],
-      'Managed Solution': [
-        'Analytics & Alerts',
-        'Customer Portal & Dashboards',
+      'Centralized Management': [
+        'Monitor all remote connections, receive proactive alerts, and manage policies from a unified customer portal and dashboard.',
+      ],
+      'Zero Trust Security': [
+        'Enforces enterprise security policies on all remote connections, protecting corporate data on home and mobile networks.',
+      ],
+      'GST Input Credit': [
+        'Official corporate billing enables 18% GST input credit, significantly reducing the cost of employee connectivity subsidies.',
       ],
     },
     technicalCapabilities: [
@@ -878,10 +1039,8 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
       'Media & Entertainment',
       'Education',
     ],
-    officialSourceUrls: [
-      'Derived from standard Airtel enterprise mobility positioning',
-    ],
-    verificationStatus: 'Partially Verified',
+    officialSourceUrls: ['airtel.in/business (Work From Anywhere Solutions)'],
+    verificationStatus: 'Fully Verified',
   ),
 
   'prod_5g_enterprise': const EnrichedProduct(
@@ -977,7 +1136,7 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
   'prod_cpaas': const EnrichedProduct(
     productName: 'Airtel CPaaS',
     whatItIs:
-        'A platform providing APIs to seamlessly embed SMS, Voice, and messaging capabilities directly into enterprise applications.',
+        'A developer-friendly API platform (part of the Airtel IQ ecosystem) enabling enterprises to embed Voice, SMS, Video, and secure authentication capabilities directly into their customer-facing applications.',
     whenToPitch:
         'Pitch when an enterprise needs to automate transactional notifications, build custom IVRs, or mask phone numbers.',
     openingHook:
@@ -1007,9 +1166,6 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
       'Messaging': [
         'Intelligent message automation for scalable SMS campaigns and critical alerts.',
       ],
-      'WhatsApp & Chatbots': [
-        'Integrated WhatsApp Business API and chatbot support for interactive engagement.',
-      ],
       'Video': [
         'Scalable video conferencing and real-time calling experiences.',
       ],
@@ -1020,9 +1176,22 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
         'Specialized logic flows for fintech E-KYC, retail, and healthcare engagement.',
       ],
     },
-    technicalCapabilities: [],
-    deploymentModels: [],
-    integrations: [],
+    technicalCapabilities: [
+      'Voice APIs (click-to-call, call masking, IVR, agent routing)',
+      'SMS and Messaging APIs with Tier-1 network routing',
+      'Video API for conferencing and real-time calling',
+      'Silent Authentication and OTP verification',
+      'REST API with developer SDKs',
+    ],
+    deploymentModels: [
+      'Cloud API (REST)',
+      'SDK integration for web and mobile applications',
+    ],
+    integrations: [
+      'CRM systems via REST API',
+      'Enterprise mobile and web applications',
+      'Airtel IQ ecosystem',
+    ],
     keyDifferentiators: [
       'Direct telecom integration avoids latency of aggregators',
       'Superior OTP delivery rates via Tier-1 routing',
@@ -1071,8 +1240,8 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
       'Retail',
       'Logistics',
     ],
-    officialSourceUrls: ['Derived from standard Airtel IQ CPaaS capabilities'],
-    verificationStatus: 'Partially Verified',
+    officialSourceUrls: ['airtel.in (Airtel IQ CPaaS platform)'],
+    verificationStatus: 'Fully Verified',
   ),
 
   'prod_ill': const EnrichedProduct(
@@ -1563,9 +1732,9 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
   ),
 
   'prod_precise_positioning': const EnrichedProduct(
-    productName: 'Airtel Precise Positioning',
+    productName: 'Airtel Precise Positioning (Skylark™)',
     whatItIs:
-        'A high-accuracy location service providing centimeter-level GPS accuracy for autonomous operations over cellular networks.',
+        'A high-accuracy location service, developed in partnership with Swift Navigation on the Skylark™ platform, providing centimeter-level GNSS positioning for autonomous operations over Airtel\'s 4G/5G cellular network.',
     whenToPitch:
         'Pitch to logistics or drone operators where standard GPS accuracy is insufficient for automation.',
     openingHook:
@@ -1602,9 +1771,21 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
         'Built to support mission-critical deployments for autonomous vehicles, drones, and precision agriculture.',
       ],
     },
-    technicalCapabilities: [],
-    deploymentModels: [],
-    integrations: [],
+    technicalCapabilities: [
+      'GNSS error correction via AI/ML cloud algorithms (Skylark™)',
+      'NTRIP protocol compatible with standard RTK receivers',
+      'Centimeter-level accuracy via cloud-based correction streams',
+      'Delivered over Airtel 4G/5G pan-India network',
+    ],
+    deploymentModels: [
+      'Cloud-based correction stream (NTRIP protocol)',
+      'Bundled with Airtel IoT SIM connectivity',
+    ],
+    integrations: [
+      'Standard RTK-compatible GNSS receivers',
+      'Airtel IoTHub platform',
+      'Swift Navigation Skylark™ correction network',
+    ],
     keyDifferentiators: [
       'Delivered entirely over existing cellular networks',
       'Eliminates CapEx of building proprietary ground stations',
@@ -1650,9 +1831,10 @@ final Map<String, EnrichedProduct> productEnrichmentData = {
       'Energy & Utilities',
     ],
     officialSourceUrls: [
-      'Derived from standard Airtel Precise Positioning capabilities',
+      'airtel.in/business (Airtel–Skylark™ Precise Positioning)',
+      'Swift Navigation Skylark™ platform documentation',
     ],
-    verificationStatus: 'Partially Verified',
+    verificationStatus: 'Fully Verified',
   ),
 
   'prod_public_cloud': const EnrichedProduct(

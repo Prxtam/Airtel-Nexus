@@ -18,7 +18,9 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     'Mobility',
     'Connectivity',
     'Customer Engagement',
+    'Unified Communications',
     'Cloud',
+    'IoT',
     'Security',
   ];
   String _searchQuery = '';
@@ -36,6 +38,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     if (cat.contains('cloud')) return Icons.cloud_outlined;
     if (cat.contains('security')) return Icons.security_outlined;
     if (cat.contains('unified')) return Icons.phone_in_talk_outlined;
+    if (cat.contains('iot')) return Icons.memory_outlined;
     return Icons.business_outlined;
   }
 
